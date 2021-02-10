@@ -1,9 +1,9 @@
 #include "mouse.h"
 // #include "../screen/screen.h"
 // #include "../screen/screen_c.h"
-#include "../base/deadbeef_rand_c.h"
+#include "../../base/deadbeef_rand_c.h"
 // #include "../deadbeef_rand.h"
-#include "../base/microsleep.h"
+#include "../../base/microsleep.h"
 
 #include <math.h> /* For floor() */
 
@@ -404,7 +404,7 @@ static double crude_hypot(double x, double y){
 
 bool smoothlyMoveMouse(MMPointInt32 endPoint, double lowSpeed, double highSpeed){
 	MMPointInt32 pos = getMousePos();
-	MMSizeInt32 screenSize = getMainDisplaySize();
+	// MMSizeInt32 screenSize = getMainDisplaySize();
 	double velo_x = 0.0, velo_y = 0.0;
 	double distance;
 
@@ -428,9 +428,9 @@ bool smoothlyMoveMouse(MMPointInt32 endPoint, double lowSpeed, double highSpeed)
 
 		/* Make sure we are in the screen boundaries!
 		 * (Strange things will happen if we are not.) */
-		if (pos.x >= screenSize.w || pos.y >= screenSize.h) {
-			return false;
-		}
+		// if (pos.x >= screenSize.w || pos.y >= screenSize.h) {
+		// 	return false;
+		// }
 
 		moveMouse(pos);
 

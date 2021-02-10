@@ -7,12 +7,12 @@ import (
 )
 
 // CreateNotification create a new notification with presets
-func CreateNotification(title string, message string, actions []toast.Action, loop bool) toast.Notification {
+func CreateNotification(title, message string, actions []toast.Action, loop bool) toast.Notification {
 	createdNotif := toast.Notification{
 		AppID:   "Gotomate",
 		Title:   title,
 		Message: message,
-		Icon:    "C:/Users/lhopi/go/src/piproto/notification/favicon.ico",
+		Icon:    "C:/Users/lhopi/go/src/piproto/notification/gotomate.png",
 		Actions: actions,
 		Loop:    loop,
 	}

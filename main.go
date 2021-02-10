@@ -5,8 +5,8 @@ import (
 	"piproto/clipboard"
 	"piproto/convert"
 	"piproto/log"
+	"piproto/mouse"
 	"piproto/notification"
-	"piproto/robotgo"
 	"piproto/systime"
 
 	toast "gopkg.in/toast.v1"
@@ -43,6 +43,6 @@ func main() {
 	clipboardValue, err := clipboard.ReadClipboard()
 	log.Print(clipboardValue)
 
-	robotgo.MoveMouse(250, 250)
+	mouse.MoveMouse(250, 250)
 
 }
