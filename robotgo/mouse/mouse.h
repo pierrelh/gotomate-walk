@@ -2,11 +2,11 @@
 #ifndef MOUSE_H
 #define MOUSE_H
 
-#include "../../base/os.h"
-#include "../../base/types.h"
+#include "../base/os.h"
+#include "../base/types.h"
 
 #if defined(_MSC_VER)
-	#include "../../base/ms_stdbool.h"
+	#include "../base/ms_stdbool.h"
 #else
 	#include <stdbool.h>
 #endif

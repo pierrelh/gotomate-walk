@@ -8,7 +8,7 @@
 // option. This file may not be copied, modified, or distributed
 // except according to those terms.
 
-#include "../../base/types.h"
+#include "../base/types.h"
 #include "mouse_c.h"
 
 // Global delays.

@@ -3,7 +3,6 @@ module piproto
 go 1.15
 
 require (
-	github.com/go-vgo/robotgo v0.93.1
 	github.com/lxn/win v0.0.0-20201111105847-2a20daff6a55
 	github.com/nu7hatch/gouuid v0.0.0-20131221200532-179d4d0c4d8d // indirect
 	github.com/robotn/gohook v0.30.5
