@@ -10,8 +10,17 @@ import (
 // CreateApp Initiate the app
 func CreateApp() {
 	var inTE, outTE *walk.TextEdit
+	/*
+	   Use:
+	   Databinding
+	   listbox
+	   log view
+	   multipage
+	   notifyicon
+	*/
 
 	MainWindow{
+		Icon:    "img/icon.ico",
 		Title:   "Gotomate",
 		MinSize: Size{600, 400},
 		Layout:  VBox{},

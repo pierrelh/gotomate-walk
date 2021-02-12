@@ -12,7 +12,7 @@ func CreateNotification(title, message string, actions []toast.Action, loop bool
 		AppID:   "Gotomate",
 		Title:   title,
 		Message: message,
-		Icon:    "C:/Users/lhopi/go/src/piproto/notification/gotomate.png",
+		Icon:    "C:/Users/lhopi/go/src/piproto/img/gotomate.png",
 		Actions: actions,
 		Loop:    loop,
 	}
