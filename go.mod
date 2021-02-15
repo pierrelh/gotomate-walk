@@ -1,4 +1,4 @@
-module piproto
+module gotomate
 
 go 1.15
 

@@ -1,7 +1,7 @@
 package main
 
 import (
-	"piproto/lxn"
+	"gotomate/lxn"
 )
 
 func main() {
