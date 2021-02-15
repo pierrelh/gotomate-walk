@@ -1,8 +1,8 @@
 package lxn
 
 import (
+	"gotomate/automate"
 	"log"
-	"piproto/automate"
 	"strconv"
 	"strings"
 
@@ -101,14 +101,9 @@ func (aw *AutomateWindow) slbItemActivated() {
 	item := &aw.slbmodel.items[i]
 	value := item.name
 	a, _ := walk.NewTextEdit(aw.sv)
-	// a.SetParent(aw.c)
-	// a.SetHeight(50)
 	a.SetCompactHeight(true)
 	a.SetTextAlignment(walk.AlignCenter)
 	a.SetText(value)
-	// value := mw.model.items[mw.slb.CurrentIndex()].value
-
-	// walk.MsgBox(mw, "Value", value, walk.MsgBoxIconInformation)
 }
 
 // AutomateItem Setting automate packages items

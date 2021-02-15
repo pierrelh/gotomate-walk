@@ -1,12 +1,12 @@
 package automate
 
 import (
-	"piproto/battery"
-	"piproto/clipboard"
-	"piproto/convert"
-	"piproto/log"
-	"piproto/notification"
-	"piproto/systime"
+	"gotomate/battery"
+	"gotomate/clipboard"
+	"gotomate/convert"
+	"gotomate/log"
+	"gotomate/notification"
+	"gotomate/systime"
 
 	"github.com/go-vgo/robotgo"
 
