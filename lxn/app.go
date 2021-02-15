@@ -21,40 +21,50 @@ import (
 
 // CreateApp Initiate the app
 func CreateApp() {
-	mw := &AutomateWindow{model: NewAutomateModel()}
+	aw := &AutomateWindow{}
+	aw.plbmodel = NewAutomateModel()
 
 	if _, err := (MainWindow{
-		AssignTo:   &mw.MainWindow,
-		Icon:       "img/icon.ico",
-		Title:      "Gotomate",
-		Background: SolidColorBrush{Color: walk.RGB(0, 0, 0)},
-		MinSize:    Size{240, 320},
-		Size:       Size{600, 800},
-		Layout:     VBox{MarginsZero: true},
+		AssignTo: &aw.MainWindow,
+		Icon:     "img/icon.ico",
+		Title:    "Gotomate",
+		// Background: SolidColorBrush{Color: walk.RGB(0, 0, 0)},
+		MinSize: Size{Width: 320, Height: 240},
+		Size:    Size{Width: 800, Height: 600},
+		Layout:  VBox{MarginsZero: true},
 		Children: []Widget{
 			HSplitter{
+				MaxSize: Size{Width: 600, Height: 100},
 				Children: []Widget{
-					TextEdit{
-						AssignTo: &mw.te,
-						ReadOnly: true,
+					ListBox{
+						Name:            "PrimaryList",
+						Font:            Font{Family: "Segoe UI", PointSize: 9},
+						MaxSize:         Size{Width: 600, Height: 100},
+						AssignTo:        &aw.plb,
+						Model:           aw.plbmodel,
+						OnItemActivated: aw.plbItemActivated,
 					},
 					ListBox{
-						Font:                  Font{Family: "Segoe UI", PointSize: 9},
-						AssignTo:              &mw.slb,
-						OnCurrentIndexChanged: mw.slbItemActivated,
-						OnItemActivated:       mw.slbItemActivated,
-					},
-					ListBox{
-						Font:                  Font{Family: "Segoe UI", PointSize: 9},
-						AssignTo:              &mw.plb,
-						Model:                 mw.model,
-						OnCurrentIndexChanged: mw.plbItemActivated,
-						OnItemActivated:       mw.plbItemActivated,
+						Name:            "SecondaryList",
+						Font:            Font{Family: "Segoe UI", PointSize: 9},
+						MaxSize:         Size{Width: 600, Height: 100},
+						AssignTo:        &aw.slb,
+						OnItemActivated: aw.slbItemActivated,
+						BindingMember:   "test",
+						DisplayMember:   "test",
 					},
 				},
 			},
+			ScrollView{
+				AssignTo:        &aw.sv,
+				MinSize:         Size{Width: 600, Height: 200},
+				MaxSize:         Size{Width: 600, Height: 800},
+				HorizontalFixed: false,
+				VerticalFixed:   false,
+				Layout:          VBox{MarginsZero: true},
+			},
 			PushButton{
-				AssignTo:  &mw.pb,
+				AssignTo:  &aw.pb,
 				Text:      "RUN",
 				OnClicked: automate.LaunchAutomate,
 			},
@@ -67,21 +77,35 @@ func CreateApp() {
 // AutomateWindow Setting the automate window structure
 type AutomateWindow struct {
 	*walk.MainWindow
-	model *AutomateModel
-	plb   *walk.ListBox
-	slb   *walk.ListBox
-	te    *walk.TextEdit
-	pb    *walk.PushButton
+	plb      *walk.ListBox
+	plbmodel *AutomateModel
+	slb      *walk.ListBox
+	slbmodel *AutomateModel
+	tw       *walk.TabWidget
+	te       *walk.TextEdit
+	pb       *walk.PushButton
+	sv       *walk.ScrollView
 }
 
-func (mw *AutomateWindow) plbItemActivated() {
-	i := mw.plb.CurrentIndex()
-	item := &mw.model.items[i]
+func (aw *AutomateWindow) plbItemActivated() {
+	i := aw.plb.CurrentIndex()
+	item := &aw.plbmodel.items[i]
 	value := item.name
-	mw.slb.SetModel(NewAutomateSubModel(value))
+	newModel := NewAutomateSubModel(value)
+	aw.slb.SetModel(newModel)
+	aw.slbmodel = newModel
 }
 
-func (mw *AutomateWindow) slbItemActivated() {
+func (aw *AutomateWindow) slbItemActivated() {
+	i := aw.slb.CurrentIndex()
+	item := &aw.slbmodel.items[i]
+	value := item.name
+	a, _ := walk.NewTextEdit(aw.sv)
+	// a.SetParent(aw.c)
+	// a.SetHeight(50)
+	a.SetCompactHeight(true)
+	a.SetTextAlignment(walk.AlignCenter)
+	a.SetText(value)
 	// value := mw.model.items[mw.slb.CurrentIndex()].value
 
 	// walk.MsgBox(mw, "Value", value, walk.MsgBoxIconInformation)
@@ -124,7 +148,7 @@ func NewAutomateModel() *AutomateModel {
 func NewAutomateSubModel(key string) *AutomateModel {
 	env := automate.SubPackages
 
-	m := &AutomateModel{items: make([]AutomateItem, len(env))}
+	m := &AutomateModel{items: make([]AutomateItem, len(env[key]))}
 
 	for i, e := range env[key] {
 		j := strings.Index(e, "=")

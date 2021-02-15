@@ -1,32 +1,49 @@
 package automate
 
+// Packages Export all the available automate's packages
 var Packages = []string{
-	"Log",
 	"Battery",
 	"Clipboard",
-	"Sleep",
+	"Keyboard",
+	"Log",
+	"Mouse",
 	"Notification",
+	"Sleep",
 }
 
+// SubPackages Export all the available functions
 var SubPackages = map[string][]string{
-	"Log": {
-		"log1",
-		"log2",
-	},
 	"Battery": {
-		"battery1",
-		"battery2",
+		"GetBatteries",
+		"GetBatteryState",
+		"GetBatteryPercentage",
+		"GetBatteryRemainingTime",
+		"GetBatteryChargeRate",
+		"GetBatteryCurrentCapacity",
+		"GetBatteryLastFullCapacity",
+		"GetBatteryDesignCapacity",
+		"GetBatteryVoltage",
+		"GetBatteryDesignVoltage",
 	},
 	"Clipboard": {
-		"clipboard1",
-		"clipboard2",
+		"ReadClipboard",
+		"WriteClipboard",
 	},
-	"Sleep": {
-		"sleep1",
-		"sleep2",
+	"Keyboard": {
+		"KeyTap",
+	},
+	"Log": {
+		"Print",
+	},
+	"Mouse": {
+		"MouseMove",
 	},
 	"Notification": {
-		"notification1",
-		"notification2",
+		"CreateNotification",
+		"PushNotification",
+	},
+	"Sleep": {
+		"MilliSleep",
+		"Sleep",
 	},
 }
