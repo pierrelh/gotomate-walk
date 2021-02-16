@@ -2,12 +2,12 @@ package lxn
 
 import (
 	"gotomate/automate"
-	"log"
 	"strconv"
 	"strings"
 
 	"github.com/lxn/walk"
 	. "github.com/lxn/walk/declarative"
+	"github.com/lxn/win"
 )
 
 /*
@@ -18,20 +18,21 @@ import (
    multipage
    notifyicon
 */
+var aw = &AutomateWindow{}
 
 // CreateApp Initiate the app
 func CreateApp() {
-	aw := &AutomateWindow{}
+
 	aw.plbmodel = NewAutomateModel()
 
-	if _, err := (MainWindow{
-		AssignTo: &aw.MainWindow,
-		Icon:     "img/icon.ico",
-		Title:    "Gotomate",
-		// Background: SolidColorBrush{Color: walk.RGB(0, 0, 0)},
-		MinSize: Size{Width: 320, Height: 240},
-		Size:    Size{Width: 800, Height: 600},
-		Layout:  VBox{MarginsZero: true},
+	window := MainWindow{
+		AssignTo:   &aw.mw,
+		Icon:       "img/icon.ico",
+		Title:      "Gotomate",
+		Background: SolidColorBrush{Color: walk.RGB(0, 0, 0)},
+		MinSize:    Size{Width: 320, Height: 240},
+		Size:       Size{Width: 800, Height: 600},
+		Layout:     VBox{MarginsZero: true},
 		Children: []Widget{
 			HSplitter{
 				MaxSize: Size{Width: 600, Height: 100},
@@ -69,22 +70,40 @@ func CreateApp() {
 				OnClicked: automate.LaunchAutomate,
 			},
 		},
-	}.Run()); err != nil {
-		log.Fatal(err)
 	}
+	window.Run()
 }
 
 // AutomateWindow Setting the automate window structure
 type AutomateWindow struct {
-	*walk.MainWindow
-	plb      *walk.ListBox
-	plbmodel *AutomateModel
-	slb      *walk.ListBox
-	slbmodel *AutomateModel
-	tw       *walk.TabWidget
-	te       *walk.TextEdit
-	pb       *walk.PushButton
-	sv       *walk.ScrollView
+	mw         *walk.MainWindow
+	plb        *walk.ListBox
+	plbmodel   *AutomateModel
+	slb        *walk.ListBox
+	slbmodel   *AutomateModel
+	tw         *walk.TabWidget
+	te         *walk.TextEdit
+	pb         *walk.PushButton
+	sv         *walk.ScrollView
+	pushButton *walk.PushButton
+	Dialog     *walk.Dialog
+}
+
+// FiberButton Setting fiber's buttons structure
+type FiberButton struct {
+	*walk.PushButton
+}
+
+// AutomateItem Setting automate packages items
+type AutomateItem struct {
+	name  string
+	value string
+}
+
+// AutomateModel Setting the model of automate ListBox
+type AutomateModel struct {
+	walk.ListModelBase
+	items []AutomateItem
 }
 
 func (aw *AutomateWindow) plbItemActivated() {
@@ -100,22 +119,36 @@ func (aw *AutomateWindow) slbItemActivated() {
 	i := aw.slb.CurrentIndex()
 	item := &aw.slbmodel.items[i]
 	value := item.name
-	a, _ := walk.NewTextEdit(aw.sv)
-	a.SetCompactHeight(true)
-	a.SetTextAlignment(walk.AlignCenter)
-	a.SetText(value)
+	mpb, _ := CreatePushButton(aw.sv)
+	mpb.SetText(value)
 }
 
-// AutomateItem Setting automate packages items
-type AutomateItem struct {
-	name  string
-	value string
+// CreatePushButton Create a new push button in the fiber
+func CreatePushButton(parent walk.Container) (*FiberButton, error) {
+	pb, err := walk.NewPushButton(parent)
+	if err != nil {
+		return nil, err
+	}
+
+	mpb := &FiberButton{pb}
+
+	if err := walk.InitWrapperWindow(mpb); err != nil {
+		return nil, err
+	}
+
+	return mpb, nil
 }
 
-// AutomateModel Setting the model of automate ListBox
-type AutomateModel struct {
-	walk.ListModelBase
-	items []AutomateItem
+// WndProc Trigger the button's events
+func (mpb *FiberButton) WndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) uintptr {
+	switch msg {
+	case win.WM_LBUTTONDOWN:
+		// aw := mpb.Parent()
+		automate.SleepDialog(aw.mw)
+		// log.Printf("%s: WM_LBUTTONDOWN", mpb.Text())
+	}
+
+	return mpb.PushButton.WndProc(hwnd, msg, wParam, lParam)
 }
 
 // NewAutomateModel Getting the automates packages
@@ -160,10 +193,12 @@ func NewAutomateSubModel(key string) *AutomateModel {
 	return m
 }
 
+// ItemCount return the length of an AutomateModel items
 func (m *AutomateModel) ItemCount() int {
 	return len(m.items)
 }
 
+// Value return the value of an AutomateModel item
 func (m *AutomateModel) Value(index int) interface{} {
 	return m.items[index].name
 }
