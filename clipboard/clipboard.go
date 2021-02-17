@@ -53,8 +53,8 @@ func waitOpenClipboard() error {
 	return err
 }
 
-// ReadClipboard read string from clipboard
-func ReadClipboard() (string, error) {
+// Read read string from clipboard
+func Read() (string, error) {
 	// r, _, err := openClipboard.Call(0)
 	err := waitOpenClipboard()
 	if err != nil {
@@ -82,8 +82,8 @@ func ReadClipboard() (string, error) {
 	return text, nil
 }
 
-// WriteClipboard write string to clipboard
-func WriteClipboard(text string) error {
+// Write write string to clipboard
+func Write(text string) error {
 	err := waitOpenClipboard()
 	if err != nil {
 		return err

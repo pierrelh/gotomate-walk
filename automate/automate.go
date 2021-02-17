@@ -4,11 +4,11 @@ import (
 	"gotomate/battery"
 	"gotomate/clipboard"
 	"gotomate/convert"
+	"gotomate/keyboard"
 	"gotomate/log"
+	"gotomate/mouse"
 	"gotomate/notification"
 	"gotomate/systime"
-
-	"github.com/go-vgo/robotgo"
 
 	toast "gopkg.in/toast.v1"
 )
@@ -26,9 +26,9 @@ func LaunchAutomate() {
 
 	notifActions := []toast.Action{}
 
-	newNotification := notification.CreateNotification("Test", "Test MSG", notifActions, false)
+	newNotification := notification.Create("Test", "Test MSG", notifActions, false)
 
-	err := notification.PushNotification(newNotification)
+	err := notification.Push(newNotification)
 	if err != nil {
 		log.Print("An error occur when pushing notification")
 	}
@@ -40,12 +40,12 @@ func LaunchAutomate() {
 		log.Print(battery.GetBatteryChargeRate(bat))
 	}
 
-	clipboard.WriteClipboard("TestClipboard")
+	clipboard.Write("TestClipboard")
 
-	clipboardValue, err := clipboard.ReadClipboard()
+	clipboardValue, err := clipboard.Read()
 	log.Print(clipboardValue)
 
-	robotgo.MoveMouse(250, 250)
-	robotgo.KeyTap("a")
+	mouse.Move(250, 250)
+	keyboard.Tap("a")
 
 }
