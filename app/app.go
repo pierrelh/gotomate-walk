@@ -1,4 +1,4 @@
-package lxn
+package app
 
 import (
 	"gotomate/automate"
@@ -7,7 +7,6 @@ import (
 
 	"github.com/lxn/walk"
 	. "github.com/lxn/walk/declarative"
-	"github.com/lxn/win"
 )
 
 /*
@@ -19,6 +18,7 @@ import (
    notifyicon
 */
 var aw = &AutomateWindow{}
+var fiber = &Fiber{}
 
 // CreateApp Initiate the app
 func CreateApp() {
@@ -81,17 +81,9 @@ type AutomateWindow struct {
 	plbmodel   *AutomateModel
 	slb        *walk.ListBox
 	slbmodel   *AutomateModel
-	tw         *walk.TabWidget
-	te         *walk.TextEdit
 	pb         *walk.PushButton
 	sv         *walk.ScrollView
 	pushButton *walk.PushButton
-	Dialog     *walk.Dialog
-}
-
-// FiberButton Setting fiber's buttons structure
-type FiberButton struct {
-	*walk.PushButton
 }
 
 // AutomateItem Setting automate packages items
@@ -116,44 +108,48 @@ func (aw *AutomateWindow) plbItemActivated() {
 }
 
 func (aw *AutomateWindow) slbItemActivated() {
+	plbIndex := aw.plb.CurrentIndex()
+	plbItem := &aw.plbmodel.items[plbIndex]
+	packageName := plbItem.name
+
 	i := aw.slb.CurrentIndex()
 	item := &aw.slbmodel.items[i]
-	value := item.name
-	mpb, _ := CreatePushButton(aw.sv)
-	mpb.SetText(value)
+	funcName := item.name
+
+	fiberButton, _ := CreatePushButton(aw.sv, funcName)
+
+	newInstruction := &FiberInstruction{
+		Package:  packageName,
+		FuncName: funcName,
+		Button:   fiberButton,
+	}
+	fiber.Instructions = append(fiber.Instructions, newInstruction)
 }
 
 // CreatePushButton Create a new push button in the fiber
-func CreatePushButton(parent walk.Container) (*FiberButton, error) {
+func CreatePushButton(parent walk.Container, funcName string) (*FiberButton, error) {
 	pb, err := walk.NewPushButton(parent)
 	if err != nil {
 		return nil, err
 	}
 
-	mpb := &FiberButton{pb}
+	pb.SetText(funcName)
 
-	if err := walk.InitWrapperWindow(mpb); err != nil {
+	fiberButton := &FiberButton{
+		pb,
+		CreateNewDialog(funcName),
+	}
+
+	if err := walk.InitWrapperWindow(fiberButton); err != nil {
 		return nil, err
 	}
 
-	return mpb, nil
-}
-
-// WndProc Trigger the button's events
-func (mpb *FiberButton) WndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) uintptr {
-	switch msg {
-	case win.WM_LBUTTONDOWN:
-		// aw := mpb.Parent()
-		automate.SleepDialog(aw.mw)
-		// log.Printf("%s: WM_LBUTTONDOWN", mpb.Text())
-	}
-
-	return mpb.PushButton.WndProc(hwnd, msg, wParam, lParam)
+	return fiberButton, nil
 }
 
 // NewAutomateModel Getting the automates packages
 func NewAutomateModel() *AutomateModel {
-	env := automate.Packages
+	env := Packages
 
 	m := &AutomateModel{items: make([]AutomateItem, len(env))}
 
@@ -174,7 +170,7 @@ func NewAutomateModel() *AutomateModel {
 
 // NewAutomateSubModel Gettings the automate's subpackages
 func NewAutomateSubModel(key string) *AutomateModel {
-	env := automate.SubPackages
+	env := SubPackages
 
 	m := &AutomateModel{items: make([]AutomateItem, len(env[key]))}
 
