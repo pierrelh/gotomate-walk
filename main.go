@@ -1,9 +1,9 @@
 package main
 
 import (
-	"gotomate/lxn"
+	"gotomate/app"
 )
 
 func main() {
-	lxn.CreateApp()
+	app.CreateApp()
 }
