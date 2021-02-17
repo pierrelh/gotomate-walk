@@ -8,6 +8,7 @@ import (
 	. "github.com/lxn/walk/declarative"
 )
 
+//Sleep Define the Sleep parameters
 type Sleep struct {
 	Duration time.Duration
 }
@@ -20,6 +21,7 @@ func (s *Sleep) SleepDurationField() *DurationField {
 	return &DurationField{&s.Duration}
 }
 
+// CreateNewDialog Create the dialog for the function & add the needed template
 func CreateNewDialog(funcName string) Dialog {
 	var dlg *walk.Dialog
 	var db *walk.DataBinder
@@ -71,80 +73,11 @@ func CreateNewDialog(funcName string) Dialog {
 }
 
 func fillDialog(funcName string) []Widget {
-	widget := []Widget{}
 	switch funcName {
 	case "Sleep":
-		widget = append(widget,
-			Label{
-				ColumnSpan: 2,
-				Text:       "Sleep For:",
-			},
-			LineEdit{
-				ColumnSpan: 2,
-				Text:       Bind("SleepDurationField"),
-			},
-		)
+		return SleepTemplate
 	default:
+		return nil
 
 	}
-	return widget
 }
-
-// func SleepDialog(aw walk.Form) (int, error) {
-// 	var dlg *walk.Dialog
-// 	var db *walk.DataBinder
-// 	var acceptPB, cancelPB *walk.PushButton
-
-// 	return Dialog{
-// 		Icon:          "img/icon.ico",
-// 		Title:         "Settings",
-// 		AssignTo:      &dlg,
-// 		DefaultButton: &acceptPB,
-// 		CancelButton:  &cancelPB,
-// 		DataBinder: DataBinder{
-// 			AssignTo:       &db,
-// 			Name:           "sleep",
-// 			ErrorPresenter: ToolTipErrorPresenter{},
-// 		},
-// 		MinSize: Size{300, 300},
-// 		Layout:  VBox{},
-// 		Children: []Widget{
-// 			Composite{
-// 				Layout: Grid{Columns: 2},
-// 				Children: []Widget{
-// 					Label{
-// 						ColumnSpan: 2,
-// 						Text:       "Sleep For:",
-// 					},
-// 					LineEdit{
-// 						ColumnSpan: 2,
-// 						Text:       Bind("SleepDurationField"),
-// 					},
-// 				},
-// 			},
-// 			Composite{
-// 				Layout: HBox{},
-// 				Children: []Widget{
-// 					HSpacer{},
-// 					PushButton{
-// 						AssignTo: &acceptPB,
-// 						Text:     "OK",
-// 						OnClicked: func() {
-// 							if err := db.Submit(); err != nil {
-// 								log.Print(err)
-// 								return
-// 							}
-
-// 							dlg.Accept()
-// 						},
-// 					},
-// 					PushButton{
-// 						AssignTo:  &cancelPB,
-// 						Text:      "Cancel",
-// 						OnClicked: func() { dlg.Cancel() },
-// 					},
-// 				},
-// 			},
-// 		},
-// 	}.Run(aw)
-// }

@@ -26,21 +26,23 @@ var SubPackages = map[string][]string{
 		"GetBatteryDesignVoltage",
 	},
 	"Clipboard": {
-		"ReadClipboard",
-		"WriteClipboard",
+		"Read",
+		"Write",
 	},
 	"Keyboard": {
-		"KeyTap",
+		"Tap",
 	},
 	"Log": {
 		"Print",
 	},
 	"Mouse": {
-		"MouseMove",
+		"Clic",
+		"Move",
+		"Scroll",
 	},
 	"Notification": {
-		"CreateNotification",
-		"PushNotification",
+		"Create",
+		"Push",
 	},
 	"Sleep": {
 		"MilliSleep",

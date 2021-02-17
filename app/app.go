@@ -154,11 +154,6 @@ func NewAutomateModel() *AutomateModel {
 	m := &AutomateModel{items: make([]AutomateItem, len(env))}
 
 	for i, e := range env {
-		j := strings.Index(e, "=")
-		if j == 0 {
-			continue
-		}
-
 		name := strconv.Itoa(i)
 		value := e
 
