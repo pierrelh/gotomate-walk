@@ -101,30 +101,34 @@ type AutomateModel struct {
 
 func (aw *AutomateWindow) plbItemActivated() {
 	i := aw.plb.CurrentIndex()
-	item := &aw.plbmodel.items[i]
-	value := item.name
-	newModel := NewAutomateSubModel(value)
-	aw.slb.SetModel(newModel)
-	aw.slbmodel = newModel
+	if i != -1 {
+		item := &aw.plbmodel.items[i]
+		value := item.name
+		newModel := NewAutomateSubModel(value)
+		aw.slb.SetModel(newModel)
+		aw.slbmodel = newModel
+	}
 }
 
 func (aw *AutomateWindow) slbItemActivated() {
-	plbIndex := aw.plb.CurrentIndex()
-	plbItem := &aw.plbmodel.items[plbIndex]
-	packageName := plbItem.name
-
 	i := aw.slb.CurrentIndex()
-	item := &aw.slbmodel.items[i]
-	funcName := item.name
+	if i != -1 {
+		plbIndex := aw.plb.CurrentIndex()
+		plbItem := &aw.plbmodel.items[plbIndex]
+		packageName := plbItem.name
 
-	fiberButton, _ := CreatePushButton(aw.sv, funcName)
+		item := &aw.slbmodel.items[i]
+		funcName := item.name
 
-	newInstruction := &FiberInstruction{
-		Package:  packageName,
-		FuncName: funcName,
-		Button:   fiberButton,
+		fiberButton, _ := CreatePushButton(aw.sv, funcName)
+
+		newInstruction := &FiberInstruction{
+			Package:  packageName,
+			FuncName: funcName,
+			Button:   fiberButton,
+		}
+		fiber.Instructions = append(fiber.Instructions, newInstruction)
 	}
-	fiber.Instructions = append(fiber.Instructions, newInstruction)
 }
 
 // CreatePushButton Create a new push button in the fiber
