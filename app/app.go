@@ -1,7 +1,6 @@
 package app
 
 import (
-	"gotomate/automate"
 	"strconv"
 	"strings"
 
@@ -65,9 +64,11 @@ func CreateApp() {
 				Layout:          VBox{MarginsZero: true},
 			},
 			PushButton{
-				AssignTo:  &aw.pb,
-				Text:      "RUN",
-				OnClicked: automate.LaunchAutomate,
+				AssignTo: &aw.pb,
+				Text:     "RUN",
+				OnClicked: func() {
+					go runFiber()
+				},
 			},
 		},
 	}

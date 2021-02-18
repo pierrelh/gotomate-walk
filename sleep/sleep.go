@@ -1,13 +1,19 @@
 package sleep
 
-import "time"
+import (
+	"fmt"
+	"time"
+)
 
 // MilliSleep sleep tm milli second
-func MilliSleep(tm int) {
-	time.Sleep(time.Duration(tm) * time.Millisecond)
+func MilliSleep(tm time.Duration) {
+	fmt.Println("Sleeping for: ", tm)
+	time.Sleep(tm * time.Millisecond)
 }
 
 // Sleep time.Sleep tm second
-func Sleep(tm int) {
-	time.Sleep(time.Duration(tm) * time.Second)
+func Sleep(tm time.Duration, finished chan bool) {
+	fmt.Println("Sleeping for: ", tm)
+	time.Sleep(tm)
+	finished <- true
 }

@@ -2,30 +2,17 @@ package app
 
 import (
 	"gotomate/log"
-	"time"
 
 	"github.com/lxn/walk"
 	. "github.com/lxn/walk/declarative"
 )
-
-//Sleep Define the Sleep parameters
-type Sleep struct {
-	Duration time.Duration
-}
-
-type DurationField struct {
-	p *time.Duration
-}
-
-func (s *Sleep) SleepDurationField() *DurationField {
-	return &DurationField{&s.Duration}
-}
 
 // CreateNewDialog Create the dialog for the function & add the needed template
 func CreateNewDialog(funcName string) Dialog {
 	var dlg *walk.Dialog
 	var db *walk.DataBinder
 	var acceptPB, cancelPB *walk.PushButton
+	source, children := fillDialog(funcName)
 
 	return Dialog{
 		Icon:          "img/icon.ico",
@@ -35,15 +22,19 @@ func CreateNewDialog(funcName string) Dialog {
 		CancelButton:  &cancelPB,
 		DataBinder: DataBinder{
 			AssignTo:       &db,
-			Name:           "sleep",
+			Name:           funcName,
+			DataSource:     source,
 			ErrorPresenter: ToolTipErrorPresenter{},
 		},
-		MinSize: Size{300, 300},
-		Layout:  VBox{},
+		MinSize: Size{
+			Width:  300,
+			Height: 300,
+		},
+		Layout: VBox{},
 		Children: []Widget{
 			Composite{
 				Layout:   Grid{Columns: 2},
-				Children: fillDialog(funcName),
+				Children: children,
 			},
 			Composite{
 				Layout: HBox{},
@@ -72,12 +63,11 @@ func CreateNewDialog(funcName string) Dialog {
 	}
 }
 
-func fillDialog(funcName string) []Widget {
+func fillDialog(funcName string) (interface{}, []Widget) {
 	switch funcName {
 	case "Sleep":
-		return SleepTemplate
+		return new(Sleep), SleepTemplate
 	default:
-		return nil
-
+		return nil, nil
 	}
 }
