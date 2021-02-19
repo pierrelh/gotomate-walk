@@ -19,6 +19,8 @@ func Move(x, y int) {
 }
 
 // Scroll scroll the mouse
-func Scroll(x, y int) {
+func Scroll(x, y int, finished chan bool) {
+	fmt.Println("Scroll initialization")
 	robotgo.Scroll(x, y)
+	finished <- true
 }

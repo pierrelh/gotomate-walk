@@ -109,6 +109,12 @@ func runFiber() {
 				button := val.FieldByName("MouseButtonName").Interface().(string)
 				go mouse.Click(button, finished)
 				<-finished
+			case "Scroll":
+				val := reflect.ValueOf(instruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+				x := val.FieldByName("X").Interface().(int)
+				y := val.FieldByName("Y").Interface().(int)
+				go mouse.Scroll(x, y, finished)
+				<-finished
 			}
 		default:
 			fmt.Println("This package is not integrated yet: " + instruction.Package)
