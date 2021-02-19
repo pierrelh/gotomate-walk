@@ -15,7 +15,7 @@ func CreateNewDialog(funcName string) Dialog {
 	source, children := fillDialog(funcName)
 
 	return Dialog{
-		Icon:          "img/icon.ico",
+		Icon:          "/icon.ico",
 		Title:         "Settings",
 		AssignTo:      &dlg,
 		DefaultButton: &acceptPB,
