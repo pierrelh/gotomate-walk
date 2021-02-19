@@ -38,7 +38,7 @@ func LaunchAutomate() {
 		log.Print(battery.GetBatteryChargeRate(bat))
 	}
 
-	clipboard.Write("TestClipboard")
+	// clipboard.Write("TestClipboard")
 
 	clipboardValue, err := clipboard.Read()
 	log.Print(clipboardValue)
