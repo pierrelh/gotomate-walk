@@ -2,6 +2,7 @@ package app
 
 import (
 	"fmt"
+	"gotomate/keyboard"
 	"gotomate/mouse"
 	"gotomate/sleep"
 	"reflect"
@@ -124,6 +125,25 @@ func runFiber() {
 			default:
 				fmt.Println("This function is not integrated yet: " + instruction.FuncName)
 				continue
+			}
+		case "Keyboard":
+			switch instruction.FuncName {
+			case "Tap":
+				val := reflect.ValueOf(instruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+				input := val.FieldByName("Input").Interface().(string)
+				special := []string{}
+				if err := val.FieldByName("Special1").Interface().(string); err != "" {
+					special = append(special, err)
+				}
+				if err := val.FieldByName("Special2").Interface().(string); err != "" {
+					special = append(special, err)
+				}
+				go keyboard.Tap(input, special, finished)
+				<-finished
+			default:
+				fmt.Println("This function is not integrated yet: " + instruction.FuncName)
+				continue
+
 			}
 		default:
 			fmt.Println("This package is not integrated yet: " + instruction.Package)
