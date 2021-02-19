@@ -40,3 +40,27 @@ type MouseMove struct {
 	X int
 	Y int
 }
+
+//KeyboardInput Define the KeyboardInput parameters
+type KeyboardInput struct {
+	Name string
+}
+
+//KeyboardInputs Define the possibles values of KeyboardInput
+func KeyboardInputs() []*KeyboardInput {
+	return []*KeyboardInput{
+		{""},
+		{"alt"},
+		{"cmd"},
+		{"shift"},
+		{"ctrl"},
+		{"enter"},
+	}
+}
+
+//KeyboardTap Define the KeyboardTap parameters
+type KeyboardTap struct {
+	Input    string
+	Special1 string
+	Special2 string
+}

@@ -4,7 +4,6 @@ import (
 	"gotomate/battery"
 	"gotomate/clipboard"
 	"gotomate/convert"
-	"gotomate/keyboard"
 	"gotomate/log"
 	"gotomate/notification"
 	"gotomate/systime"
@@ -45,6 +44,6 @@ func LaunchAutomate() {
 	log.Print(clipboardValue)
 
 	// mouse.Move(250, 250)
-	keyboard.Tap("a")
+	// keyboard.Tap("a")
 
 }
