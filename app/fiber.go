@@ -2,6 +2,7 @@ package app
 
 import (
 	"fmt"
+	"gotomate/mouse"
 	"gotomate/sleep"
 	"reflect"
 
@@ -100,6 +101,14 @@ func runFiber() {
 			default:
 				fmt.Println("This function is not integrated yet: " + instruction.FuncName)
 				continue
+			}
+		case "Mouse":
+			switch instruction.FuncName {
+			case "Click":
+				val := reflect.ValueOf(instruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+				button := val.FieldByName("MouseButtonName").Interface().(string)
+				go mouse.Click(button, finished)
+				<-finished
 			}
 		default:
 			fmt.Println("This package is not integrated yet: " + instruction.Package)

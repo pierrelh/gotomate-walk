@@ -1,10 +1,16 @@
 package mouse
 
-import "github.com/go-vgo/robotgo"
+import (
+	"fmt"
+
+	"github.com/go-vgo/robotgo"
+)
 
 // Click Simulate a user click
-func Click() {
-	robotgo.MouseClick()
+func Click(btn string, finished chan bool) {
+	fmt.Println("Click initialization: ", btn, " click")
+	robotgo.Click(btn)
+	finished <- true
 }
 
 // Move move the mouse
