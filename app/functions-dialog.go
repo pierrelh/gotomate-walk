@@ -67,6 +67,8 @@ func fillDialog(funcName string) (interface{}, []Widget) {
 	switch funcName {
 	case "Sleep":
 		return new(Sleep), SleepTemplate
+	case "MilliSleep":
+		return new(MilliSleep), MilliSleepTemplate
 	default:
 		return nil, nil
 	}

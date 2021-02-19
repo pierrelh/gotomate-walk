@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"gotomate/sleep"
 	"reflect"
-	"time"
 
 	"github.com/lxn/walk"
 	. "github.com/lxn/walk/declarative"
@@ -73,7 +72,6 @@ func (fb *FiberImageView) WndProc(hwnd win.HWND, msg uint32, wParam, lParam uint
 func (fb *FiberLinkLabel) WndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) uintptr {
 	switch msg {
 	case win.WM_LBUTTONDOWN:
-		fmt.Println("left down")
 		go fb.DialogWindow.Run(aw.mw)
 	}
 
@@ -91,10 +89,21 @@ func runFiber() {
 			switch instruction.FuncName {
 			case "Sleep":
 				val := reflect.ValueOf(instruction.Button.DialogWindow.DataBinder.DataSource).Elem()
-				duration := val.FieldByName("Duration").Interface().(time.Duration)
+				duration := val.FieldByName("Duration").Interface().(float64)
 				go sleep.Sleep(duration, finished)
 				<-finished
+			case "MilliSleep":
+				val := reflect.ValueOf(instruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+				duration := val.FieldByName("Duration").Interface().(float64)
+				go sleep.MilliSleep(duration, finished)
+				<-finished
+			default:
+				fmt.Println("This function is not integrated yet: " + instruction.FuncName)
+				continue
 			}
+		default:
+			fmt.Println("This package is not integrated yet: " + instruction.Package)
+			continue
 		}
 	}
 	fmt.Println("| Fiber Finished |")
