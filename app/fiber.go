@@ -25,22 +25,64 @@ type FiberInstruction struct {
 
 // FiberButton Setting fiber's buttons structure
 type FiberButton struct {
-	*walk.PushButton
+	*walk.Composite
+	*walk.ImageView
+	*walk.LinkLabel
 	DialogWindow Dialog
 }
 
-// WndProc Trigger the button's events
-func (fb *FiberButton) WndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) uintptr {
+// FiberComposite Setting FiberButton's composite & it's dialog
+type FiberComposite struct {
+	*walk.Composite
+	DialogWindow Dialog
+}
+
+// FiberImageView Setting FiberButton's imageview & it's dialog
+type FiberImageView struct {
+	*walk.ImageView
+	DialogWindow Dialog
+}
+
+// FiberLinkLabel Setting FiberButton's linklabel & it's dialog
+type FiberLinkLabel struct {
+	*walk.LinkLabel
+	DialogWindow Dialog
+}
+
+//WndProc setting the window event of the composite element
+func (fb *FiberComposite) WndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) uintptr {
 	switch msg {
 	case win.WM_LBUTTONDOWN:
 		go fb.DialogWindow.Run(aw.mw)
 	}
 
-	return fb.PushButton.WndProc(hwnd, msg, wParam, lParam)
+	return fb.Composite.WndProc(hwnd, msg, wParam, lParam)
+}
+
+//WndProc setting the window event of the imageview element
+func (fb *FiberImageView) WndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) uintptr {
+	switch msg {
+	case win.WM_LBUTTONDOWN:
+		go fb.DialogWindow.Run(aw.mw)
+	}
+
+	return fb.ImageView.WndProc(hwnd, msg, wParam, lParam)
+}
+
+//WndProc setting the window event of the linklabel element
+func (fb *FiberLinkLabel) WndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) uintptr {
+	switch msg {
+	case win.WM_LBUTTONDOWN:
+		fmt.Println("left down")
+		go fb.DialogWindow.Run(aw.mw)
+	}
+
+	return fb.LinkLabel.WndProc(hwnd, msg, wParam, lParam)
 }
 
 func runFiber() {
 	fmt.Println("| Fiber Start |")
+
 	for i := 0; i < len(fiber.Instructions); i++ {
 		finished := make(chan bool)
 		instruction := fiber.Instructions[i]
