@@ -6,7 +6,7 @@ import (
 	"reflect"
 
 	"github.com/lxn/walk"
-	. "github.com/lxn/walk/declarative"
+	declarative "github.com/lxn/walk/declarative"
 	"github.com/lxn/win"
 )
 
@@ -27,25 +27,25 @@ type FiberButton struct {
 	*walk.Composite
 	*walk.ImageView
 	*walk.LinkLabel
-	DialogWindow Dialog
+	DialogWindow declarative.Dialog
 }
 
 // FiberComposite Setting FiberButton's composite & it's dialog
 type FiberComposite struct {
 	*walk.Composite
-	DialogWindow Dialog
+	DialogWindow declarative.Dialog
 }
 
 // FiberImageView Setting FiberButton's imageview & it's dialog
 type FiberImageView struct {
 	*walk.ImageView
-	DialogWindow Dialog
+	DialogWindow declarative.Dialog
 }
 
 // FiberLinkLabel Setting FiberButton's linklabel & it's dialog
 type FiberLinkLabel struct {
 	*walk.LinkLabel
-	DialogWindow Dialog
+	DialogWindow declarative.Dialog
 }
 
 //WndProc setting the window event of the composite element

@@ -4,43 +4,43 @@ import (
 	"gotomate/log"
 
 	"github.com/lxn/walk"
-	. "github.com/lxn/walk/declarative"
+	declarative "github.com/lxn/walk/declarative"
 )
 
 // CreateNewDialog Create the dialog for the function & add the needed template
-func CreateNewDialog(funcName string) Dialog {
+func CreateNewDialog(funcName string) declarative.Dialog {
 	var dlg *walk.Dialog
 	var db *walk.DataBinder
 	var acceptPB, cancelPB *walk.PushButton
 	source, children := fillDialog(funcName)
 
-	return Dialog{
+	return declarative.Dialog{
 		Icon:          "/icon.ico",
 		Title:         "Settings",
 		AssignTo:      &dlg,
 		DefaultButton: &acceptPB,
 		CancelButton:  &cancelPB,
-		DataBinder: DataBinder{
+		DataBinder: declarative.DataBinder{
 			AssignTo:       &db,
 			Name:           funcName,
 			DataSource:     source,
-			ErrorPresenter: ToolTipErrorPresenter{},
+			ErrorPresenter: declarative.ToolTipErrorPresenter{},
 		},
-		MinSize: Size{
+		MinSize: declarative.Size{
 			Width:  300,
 			Height: 300,
 		},
-		Layout: VBox{},
-		Children: []Widget{
-			Composite{
-				Layout:   Grid{Columns: 2},
+		Layout: declarative.VBox{},
+		Children: []declarative.Widget{
+			declarative.Composite{
+				Layout:   declarative.Grid{Columns: 2},
 				Children: children,
 			},
-			Composite{
-				Layout: HBox{},
-				Children: []Widget{
-					HSpacer{},
-					PushButton{
+			declarative.Composite{
+				Layout: declarative.HBox{},
+				Children: []declarative.Widget{
+					declarative.HSpacer{},
+					declarative.PushButton{
 						AssignTo: &acceptPB,
 						Text:     "OK",
 						OnClicked: func() {
@@ -52,7 +52,7 @@ func CreateNewDialog(funcName string) Dialog {
 							dlg.Accept()
 						},
 					},
-					PushButton{
+					declarative.PushButton{
 						AssignTo:  &cancelPB,
 						Text:      "Cancel",
 						OnClicked: func() { dlg.Cancel() },
@@ -63,7 +63,7 @@ func CreateNewDialog(funcName string) Dialog {
 	}
 }
 
-func fillDialog(funcName string) (interface{}, []Widget) {
+func fillDialog(funcName string) (interface{}, []declarative.Widget) {
 	switch funcName {
 	case "Sleep":
 		return new(Sleep), SleepTemplate
