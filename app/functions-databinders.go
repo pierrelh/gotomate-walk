@@ -69,3 +69,9 @@ type KeyboardTap struct {
 type ClipboardWrite struct {
 	Content string
 }
+
+//ClipboardRead Define the ClipboardRead parameters
+type ClipboardRead struct {
+	Key     string
+	Content string
+}

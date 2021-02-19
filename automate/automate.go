@@ -2,7 +2,6 @@ package automate
 
 import (
 	"gotomate/battery"
-	"gotomate/clipboard"
 	"gotomate/convert"
 	"gotomate/log"
 	"gotomate/notification"
@@ -40,8 +39,8 @@ func LaunchAutomate() {
 
 	// clipboard.Write("TestClipboard")
 
-	clipboardValue, err := clipboard.Read()
-	log.Print(clipboardValue)
+	// clipboardValue, err := clipboard.Read()
+	// log.Print(clipboardValue)
 
 	// mouse.Move(250, 250)
 	// keyboard.Tap("a")
