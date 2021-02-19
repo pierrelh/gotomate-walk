@@ -5,7 +5,7 @@ import (
 	"strings"
 
 	"github.com/lxn/walk"
-	. "github.com/lxn/walk/declarative"
+	declarative "github.com/lxn/walk/declarative"
 )
 
 var aw = &AutomateWindow{}
@@ -16,37 +16,37 @@ func CreateApp() {
 
 	aw.plbmodel = NewAutomateModel()
 
-	window := MainWindow{
+	window := declarative.MainWindow{
 		AssignTo:   &aw.mw,
 		Icon:       "icon.ico",
 		Title:      "Gotomate",
-		Background: SolidColorBrush{Color: walk.RGB(11, 11, 11)},
-		MinSize:    Size{Width: 320, Height: 240},
-		Size:       Size{Width: 800, Height: 600},
-		Layout:     VBox{MarginsZero: true, SpacingZero: true},
-		Children: []Widget{
-			HSplitter{
-				MaxSize: Size{Height: 120},
-				Children: []Widget{
-					ListBox{
+		Background: declarative.SolidColorBrush{Color: walk.RGB(11, 11, 11)},
+		MinSize:    declarative.Size{Width: 320, Height: 240},
+		Size:       declarative.Size{Width: 800, Height: 600},
+		Layout:     declarative.VBox{MarginsZero: true, SpacingZero: true},
+		Children: []declarative.Widget{
+			declarative.HSplitter{
+				MaxSize: declarative.Size{Height: 120},
+				Children: []declarative.Widget{
+					declarative.ListBox{
 						Name:            "PrimaryList",
-						Font:            Font{Family: "Segoe UI", PointSize: 9},
+						Font:            declarative.Font{Family: "Segoe UI", PointSize: 9},
 						MultiSelection:  false,
 						AssignTo:        &aw.plb,
 						Model:           aw.plbmodel,
 						OnItemActivated: aw.plbItemActivated,
 					},
-					ListBox{
+					declarative.ListBox{
 						Name:            "SecondaryList",
-						Font:            Font{Family: "Segoe UI", PointSize: 9},
+						Font:            declarative.Font{Family: "Segoe UI", PointSize: 9},
 						MultiSelection:  false,
 						AssignTo:        &aw.slb,
 						OnItemActivated: aw.slbItemActivated,
 					},
-					PushButton{
+					declarative.PushButton{
 						AssignTo:   &aw.pb,
-						Font:       Font{Family: "Segoe UI", PointSize: 9, Bold: true},
-						Background: SolidColorBrush{Color: walk.RGB(106, 215, 229)},
+						Font:       declarative.Font{Family: "Segoe UI", PointSize: 9, Bold: true},
+						Background: declarative.SolidColorBrush{Color: walk.RGB(106, 215, 229)},
 						Text:       "RUN",
 						OnClicked: func() {
 							go runFiber()
@@ -54,10 +54,10 @@ func CreateApp() {
 					},
 				},
 			},
-			ScrollView{
+			declarative.ScrollView{
 				AssignTo:        &aw.sv,
-				Layout:          VBox{MarginsZero: true},
-				Background:      SolidColorBrush{Color: walk.RGB(11, 11, 11)},
+				Layout:          declarative.VBox{MarginsZero: true},
+				Background:      declarative.SolidColorBrush{Color: walk.RGB(11, 11, 11)},
 				HorizontalFixed: false,
 				VerticalFixed:   false,
 			},
