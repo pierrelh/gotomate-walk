@@ -9,3 +9,19 @@ type Sleep struct {
 type MilliSleep struct {
 	Duration float64
 }
+
+type MouseClick struct {
+	MouseButtonName string
+}
+
+type MouseButton struct {
+	ID   string
+	Name string
+}
+
+func MouseButtons() []*MouseButton {
+	return []*MouseButton{
+		{"left", "Left"},
+		{"right", "Right"},
+	}
+}

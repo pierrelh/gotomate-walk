@@ -69,6 +69,8 @@ func fillDialog(funcName string) (interface{}, []declarative.Widget) {
 		return new(Sleep), SleepTemplate
 	case "MilliSleep":
 		return new(MilliSleep), MilliSleepTemplate
+	case "Click":
+		return new(MouseClick), MouseClickTemplate
 	default:
 		return nil, nil
 	}

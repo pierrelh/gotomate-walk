@@ -27,3 +27,16 @@ var MilliSleepTemplate = []declarative.Widget{
 		Decimals: 0,
 	},
 }
+
+//MouseClickTemplate Dialog's MouseClicTemplate Template
+var MouseClickTemplate = []declarative.Widget{
+	declarative.Label{
+		Text: "Click:",
+	},
+	declarative.ComboBox{
+		Value:         declarative.Bind("MouseButtonName", declarative.SelRequired{}),
+		BindingMember: "ID",
+		DisplayMember: "Name",
+		Model:         MouseButtons(),
+	},
+}

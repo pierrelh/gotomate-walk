@@ -37,7 +37,7 @@ var SubPackages = map[string][]string{
 		"Print",
 	},
 	"Mouse": {
-		"Clic",
+		"Click",
 		"Move",
 		"Scroll",
 	},
