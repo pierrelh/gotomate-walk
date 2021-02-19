@@ -85,8 +85,9 @@ var KeyboardTapTemplate = []declarative.Widget{
 		Text: "Input: ",
 	},
 	declarative.TextEdit{
-		Text:      declarative.Bind("Input"),
-		MaxLength: 1,
+		Text:          declarative.Bind("Input"),
+		CompactHeight: true,
+		MaxLength:     1,
 	},
 	declarative.Label{
 		Text: "Special Input 1:",

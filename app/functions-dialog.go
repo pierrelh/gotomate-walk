@@ -33,16 +33,17 @@ func CreateNewDialog(funcName string) declarative.Dialog {
 		Layout: declarative.VBox{},
 		Children: []declarative.Widget{
 			declarative.Composite{
-				Layout:   declarative.Grid{Columns: 2},
+				Layout:   declarative.VBox{},
 				Children: children,
 			},
-			declarative.Composite{
-				Layout: declarative.HBox{},
+			declarative.HSplitter{
+				MaxSize: declarative.Size{Height: 30},
 				Children: []declarative.Widget{
 					declarative.HSpacer{},
 					declarative.PushButton{
 						AssignTo: &acceptPB,
 						Text:     "OK",
+						Font:     declarative.Font{Family: "Segoe UI", PointSize: 9},
 						OnClicked: func() {
 							if err := db.Submit(); err != nil {
 								log.Print(err)
@@ -55,6 +56,7 @@ func CreateNewDialog(funcName string) declarative.Dialog {
 					declarative.PushButton{
 						AssignTo:  &cancelPB,
 						Text:      "Cancel",
+						Font:      declarative.Font{Family: "Segoe UI", PointSize: 9},
 						OnClicked: func() { dlg.Cancel() },
 					},
 				},
