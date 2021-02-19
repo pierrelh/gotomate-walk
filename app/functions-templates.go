@@ -28,7 +28,7 @@ var MilliSleepTemplate = []declarative.Widget{
 	},
 }
 
-//MouseClickTemplate Dialog's MouseClicTemplate Template
+//MouseClickTemplate Dialog's MouseClic Template
 var MouseClickTemplate = []declarative.Widget{
 	declarative.Label{
 		Text: "Click:",
@@ -41,7 +41,7 @@ var MouseClickTemplate = []declarative.Widget{
 	},
 }
 
-//MouseScrollTemplate Dialog's MouseScrollTemplate Template
+//MouseScrollTemplate Dialog's MouseScroll Template
 var MouseScrollTemplate = []declarative.Widget{
 	declarative.Label{
 		Text: "Horizontal: ",
@@ -56,5 +56,25 @@ var MouseScrollTemplate = []declarative.Widget{
 	declarative.NumberEdit{
 		Value:    declarative.Bind("Y"),
 		Decimals: 2,
+	},
+}
+
+//MouseMoveTemplate Dialog's MouseMove Template
+var MouseMoveTemplate = []declarative.Widget{
+	declarative.Label{
+		Text: "Horizontal: ",
+	},
+	declarative.NumberEdit{
+		Value:    declarative.Bind("X"),
+		Suffix:   "px",
+		Decimals: 0,
+	},
+	declarative.Label{
+		Text: "Vertical: ",
+	},
+	declarative.NumberEdit{
+		Value:    declarative.Bind("Y"),
+		Suffix:   "px",
+		Decimals: 0,
 	},
 }

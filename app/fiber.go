@@ -115,6 +115,15 @@ func runFiber() {
 				y := val.FieldByName("Y").Interface().(int)
 				go mouse.Scroll(x, y, finished)
 				<-finished
+			case "Move":
+				val := reflect.ValueOf(instruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+				x := val.FieldByName("X").Interface().(int)
+				y := val.FieldByName("Y").Interface().(int)
+				go mouse.Move(x, y, finished)
+				<-finished
+			default:
+				fmt.Println("This function is not integrated yet: " + instruction.FuncName)
+				continue
 			}
 		default:
 			fmt.Println("This package is not integrated yet: " + instruction.Package)
