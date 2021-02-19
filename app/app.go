@@ -26,7 +26,7 @@ func CreateApp() {
 		Layout:     VBox{MarginsZero: true, SpacingZero: true},
 		Children: []Widget{
 			HSplitter{
-				MaxSize: Size{Height: 150},
+				MaxSize: Size{Height: 120},
 				Children: []Widget{
 					ListBox{
 						Name:            "PrimaryList",
@@ -42,8 +42,15 @@ func CreateApp() {
 						MultiSelection:  false,
 						AssignTo:        &aw.slb,
 						OnItemActivated: aw.slbItemActivated,
-						BindingMember:   "test",
-						DisplayMember:   "test",
+					},
+					PushButton{
+						AssignTo:   &aw.pb,
+						Font:       Font{Family: "Segoe UI", PointSize: 9, Bold: true},
+						Background: SolidColorBrush{Color: walk.RGB(106, 215, 229)},
+						Text:       "RUN",
+						OnClicked: func() {
+							go runFiber()
+						},
 					},
 				},
 			},
@@ -53,15 +60,6 @@ func CreateApp() {
 				Background:      SolidColorBrush{Color: walk.RGB(11, 11, 11)},
 				HorizontalFixed: false,
 				VerticalFixed:   false,
-			},
-			PushButton{
-				AssignTo:   &aw.pb,
-				Font:       Font{Family: "Segoe UI", PointSize: 9},
-				Background: SolidColorBrush{Color: walk.RGB(106, 215, 229)},
-				Text:       "RUN",
-				OnClicked: func() {
-					go runFiber()
-				},
 			},
 		},
 	}

@@ -4,13 +4,26 @@ import (
 	. "github.com/lxn/walk/declarative"
 )
 
+//SleepTemplate Dialog's Sleep Template
 var SleepTemplate = []Widget{
 	Label{
-		ColumnSpan: 2,
-		Text:       "Sleep For:",
+		Text: "Sleep For:",
 	},
-	LineEdit{
-		ColumnSpan: 2,
-		Text:       Bind("SleepDurationField"),
+	NumberEdit{
+		Value:    Bind("Duration", Range{Min: 1, Max: 1000}),
+		Suffix:   " s",
+		Decimals: 0,
+	},
+}
+
+//MilliSleepTemplate Dialog's MilliSleep Template
+var MilliSleepTemplate = []Widget{
+	Label{
+		Text: "Sleep For:",
+	},
+	NumberEdit{
+		Value:    Bind("Duration", Range{Min: 1, Max: 1000}),
+		Suffix:   " ms",
+		Decimals: 0,
 	},
 }

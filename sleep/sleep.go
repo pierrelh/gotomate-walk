@@ -6,14 +6,15 @@ import (
 )
 
 // MilliSleep sleep tm milli second
-func MilliSleep(tm time.Duration) {
-	fmt.Println("Sleeping for: ", tm)
-	time.Sleep(tm * time.Millisecond)
+func MilliSleep(tm float64, finished chan bool) {
+	fmt.Println("Sleeping for: ", tm, "ms")
+	time.Sleep(time.Duration(tm) * time.Millisecond)
+	finished <- true
 }
 
 // Sleep time.Sleep tm second
-func Sleep(tm time.Duration, finished chan bool) {
-	fmt.Println("Sleeping for: ", tm)
-	time.Sleep(tm)
+func Sleep(tm float64, finished chan bool) {
+	fmt.Println("Sleeping for: ", tm, "s")
+	time.Sleep(time.Duration(tm) * time.Second)
 	finished <- true
 }
