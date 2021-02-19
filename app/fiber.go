@@ -152,6 +152,14 @@ func runFiber() {
 				content := val.FieldByName("Content").Interface().(string)
 				go clipboard.Write(content, finished)
 				<-finished
+			case "Read":
+				go func() {
+					content, _ := clipboard.Read(finished)
+					val := reflect.ValueOf(instruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+					val.FieldByName("Content").SetString(content)
+					fmt.Println(val.FieldByName("Content"))
+				}()
+				<-finished
 			default:
 				fmt.Println("This function is not integrated yet: " + instruction.FuncName)
 				continue

@@ -118,3 +118,14 @@ var ClipboardWriteTemplate = []declarative.Widget{
 		Text: declarative.Bind("Content"),
 	},
 }
+
+//ClipboardReadTemplate Dialog's ClipboardRead Template
+var ClipboardReadTemplate = []declarative.Widget{
+	declarative.Label{
+		Text: "Output var: ",
+	},
+	declarative.TextEdit{
+		Text:          declarative.Bind("Key"),
+		CompactHeight: true,
+	},
+}

@@ -81,6 +81,8 @@ func fillDialog(funcName string) (interface{}, []declarative.Widget) {
 		return new(KeyboardTap), KeyboardTapTemplate
 	case "Write":
 		return new(ClipboardWrite), ClipboardWriteTemplate
+	case "Read":
+		return new(ClipboardRead), ClipboardReadTemplate
 	default:
 		return nil, nil
 	}

@@ -10,7 +10,8 @@ import (
 	"fmt"
 	"syscall"
 	"time"
-	"unsafe"
+
+	"github.com/go-vgo/robotgo"
 )
 
 const (
@@ -55,94 +56,17 @@ func waitOpenClipboard() error {
 }
 
 // Read read string from clipboard
-func Read() (string, error) {
-	// r, _, err := openClipboard.Call(0)
-	err := waitOpenClipboard()
-	if err != nil {
-		return "", err
-	}
-	defer closeClipboard.Call()
-
-	h, _, err := getClipboardData.Call(cfUnicodetext)
-	if h == 0 {
-		return "", err
-	}
-
-	l, _, err := globalLock.Call(h)
-	if l == 0 {
-		return "", err
-	}
-
-	text := syscall.UTF16ToString((*[1 << 20]uint16)(unsafe.Pointer(l))[:])
-
-	r, _, err := globalUnlock.Call(h)
-	if r == 0 {
-		return "", err
-	}
-
-	return text, nil
+func Read(finished chan bool) (string, error) {
+	fmt.Println("Clipboard Reading initialization ...")
+	content, err := robotgo.ReadAll()
+	finished <- true
+	return content, err
 }
 
 // Write write string to clipboard
 func Write(text string, finished chan bool) error {
 	fmt.Println("Clipboard Writing initialization ...")
-	err := waitOpenClipboard()
-	if err != nil {
-		finished <- true
-		return err
-	}
-	defer closeClipboard.Call()
-
-	r, _, err := emptyClipboard.Call(0)
-	if r == 0 {
-		finished <- true
-		return err
-	}
-
-	data := syscall.StringToUTF16(text)
-
-	// "If the hMem parameter identifies a memory object, the object must have
-	// been allocated using the function with the GMEM_MOVEABLE flag."
-	h, _, err := globalAlloc.Call(gmemMoveable,
-		uintptr(len(data)*int(unsafe.Sizeof(data[0]))))
-	if h == 0 {
-		finished <- true
-		return err
-	}
-
-	defer func() {
-		if h != 0 {
-			globalFree.Call(h)
-		}
-	}()
-
-	l, _, err := globalLock.Call(h)
-	if l == 0 {
-		finished <- true
-		return err
-	}
-
-	r, _, err = lstrcpy.Call(l, uintptr(unsafe.Pointer(&data[0])))
-	if r == 0 {
-		finished <- true
-		return err
-	}
-
-	r, _, err = globalUnlock.Call(h)
-	if r == 0 {
-		if err.(syscall.Errno) != 0 {
-			finished <- true
-			return err
-		}
-	}
-
-	r, _, err = setClipboardData.Call(cfUnicodetext, h)
-	if r == 0 {
-		finished <- true
-		return err
-	}
-
-	h = 0 // suppress deferred cleanup
+	err := robotgo.WriteAll(text)
 	finished <- true
-	return nil
+	return err
 }
