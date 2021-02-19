@@ -73,6 +73,8 @@ func fillDialog(funcName string) (interface{}, []declarative.Widget) {
 		return new(MouseClick), MouseClickTemplate
 	case "Scroll":
 		return new(MouseScroll), MouseScrollTemplate
+	case "Move":
+		return new(MouseMove), MouseMoveTemplate
 	default:
 		return nil, nil
 	}

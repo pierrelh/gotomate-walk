@@ -34,3 +34,9 @@ type MouseScroll struct {
 	X int
 	Y int
 }
+
+//MouseMove Define the MouseMove parameters
+type MouseMove struct {
+	X int
+	Y int
+}
