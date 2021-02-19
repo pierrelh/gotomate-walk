@@ -10,8 +10,8 @@ var SleepTemplate = []declarative.Widget{
 		Text: "Sleep For:",
 	},
 	declarative.NumberEdit{
-		Value:    declarative.Bind("Duration", declarative.Range{Min: 1, Max: 1000}),
-		Suffix:   " s",
+		Value:    declarative.Bind("Duration"),
+		Suffix:   "s",
 		Decimals: 0,
 	},
 }
@@ -22,8 +22,8 @@ var MilliSleepTemplate = []declarative.Widget{
 		Text: "Sleep For:",
 	},
 	declarative.NumberEdit{
-		Value:    declarative.Bind("Duration", declarative.Range{Min: 1, Max: 1000}),
-		Suffix:   " ms",
+		Value:    declarative.Bind("Duration"),
+		Suffix:   "ms",
 		Decimals: 0,
 	},
 }
@@ -38,5 +38,23 @@ var MouseClickTemplate = []declarative.Widget{
 		BindingMember: "ID",
 		DisplayMember: "Name",
 		Model:         MouseButtons(),
+	},
+}
+
+//MouseScrollTemplate Dialog's MouseScrollTemplate Template
+var MouseScrollTemplate = []declarative.Widget{
+	declarative.Label{
+		Text: "Horizontal: ",
+	},
+	declarative.NumberEdit{
+		Value:    declarative.Bind("X"),
+		Decimals: 2,
+	},
+	declarative.Label{
+		Text: "Vertical: ",
+	},
+	declarative.NumberEdit{
+		Value:    declarative.Bind("Y"),
+		Decimals: 2,
 	},
 }
