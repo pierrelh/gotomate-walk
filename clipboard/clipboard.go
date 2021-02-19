@@ -7,6 +7,7 @@
 package clipboard
 
 import (
+	"fmt"
 	"syscall"
 	"time"
 	"unsafe"
@@ -83,15 +84,18 @@ func Read() (string, error) {
 }
 
 // Write write string to clipboard
-func Write(text string) error {
+func Write(text string, finished chan bool) error {
+	fmt.Println("Clipboard Writing initialization ...")
 	err := waitOpenClipboard()
 	if err != nil {
+		finished <- true
 		return err
 	}
 	defer closeClipboard.Call()
 
 	r, _, err := emptyClipboard.Call(0)
 	if r == 0 {
+		finished <- true
 		return err
 	}
 
@@ -102,6 +106,7 @@ func Write(text string) error {
 	h, _, err := globalAlloc.Call(gmemMoveable,
 		uintptr(len(data)*int(unsafe.Sizeof(data[0]))))
 	if h == 0 {
+		finished <- true
 		return err
 	}
 
@@ -113,26 +118,31 @@ func Write(text string) error {
 
 	l, _, err := globalLock.Call(h)
 	if l == 0 {
+		finished <- true
 		return err
 	}
 
 	r, _, err = lstrcpy.Call(l, uintptr(unsafe.Pointer(&data[0])))
 	if r == 0 {
+		finished <- true
 		return err
 	}
 
 	r, _, err = globalUnlock.Call(h)
 	if r == 0 {
 		if err.(syscall.Errno) != 0 {
+			finished <- true
 			return err
 		}
 	}
 
 	r, _, err = setClipboardData.Call(cfUnicodetext, h)
 	if r == 0 {
+		finished <- true
 		return err
 	}
 
 	h = 0 // suppress deferred cleanup
+	finished <- true
 	return nil
 }

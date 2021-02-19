@@ -2,6 +2,7 @@ package app
 
 import (
 	"fmt"
+	"gotomate/clipboard"
 	"gotomate/keyboard"
 	"gotomate/mouse"
 	"gotomate/sleep"
@@ -143,7 +144,17 @@ func runFiber() {
 			default:
 				fmt.Println("This function is not integrated yet: " + instruction.FuncName)
 				continue
-
+			}
+		case "Clipboard":
+			switch instruction.FuncName {
+			case "Write":
+				val := reflect.ValueOf(instruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+				content := val.FieldByName("Content").Interface().(string)
+				go clipboard.Write(content, finished)
+				<-finished
+			default:
+				fmt.Println("This function is not integrated yet: " + instruction.FuncName)
+				continue
 			}
 		default:
 			fmt.Println("This package is not integrated yet: " + instruction.Package)

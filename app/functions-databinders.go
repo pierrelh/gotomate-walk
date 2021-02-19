@@ -64,3 +64,8 @@ type KeyboardTap struct {
 	Special1 string
 	Special2 string
 }
+
+//ClipboardWrite Define the ClipboardWrite parameters
+type ClipboardWrite struct {
+	Content string
+}

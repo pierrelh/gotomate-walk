@@ -108,3 +108,13 @@ var KeyboardTapTemplate = []declarative.Widget{
 		Model:         KeyboardInputs(),
 	},
 }
+
+//ClipboardWriteTemplate Dialog's ClipboardWrite Template
+var ClipboardWriteTemplate = []declarative.Widget{
+	declarative.Label{
+		Text: "Clipboard: ",
+	},
+	declarative.TextEdit{
+		Text: declarative.Bind("Content"),
+	},
+}
