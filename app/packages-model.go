@@ -9,6 +9,7 @@ var Packages = []string{
 	"Mouse",
 	"Notification",
 	"Sleep",
+	"Systime",
 }
 
 // SubPackages Export all the available functions
@@ -47,5 +48,9 @@ var SubPackages = map[string][]string{
 	"Sleep": {
 		"MilliSleep",
 		"Sleep",
+	},
+	"Systime": {
+		"GetCurrentSysTime",
+		"GetCurrentSysClock",
 	},
 }
