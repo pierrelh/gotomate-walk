@@ -200,6 +200,19 @@ func runFiber() {
 					val.FieldByName("Battery").Set(reflect.ValueOf(bat))
 				}()
 				<-finished
+			case "GetBatteryState":
+				go func() {
+					stateInstruction := reflect.ValueOf(instruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+					batName := stateInstruction.FieldByName("BatteryName").Interface().(string)
+					batInstruction := varSearch(batName)
+					if batInstruction != nil {
+						val := reflect.ValueOf(batInstruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+						bat := val.FieldByName("Battery").Interface().(*battery.Battery)
+						state := battery.GetBatteryState(bat, finished)
+						stateInstruction.FieldByName("State").Set(reflect.ValueOf(state))
+					}
+				}()
+				<-finished
 			default:
 				fmt.Println("This function is not integrated yet: " + instruction.FuncName)
 				continue

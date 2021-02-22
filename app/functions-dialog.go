@@ -89,6 +89,8 @@ func fillDialog(funcName string) (interface{}, []declarative.Widget) {
 		return new(NotificationCreate), NotificationCreateTemplate
 	case "GetBattery":
 		return new(UserBattery), UserBatteryTemplate
+	case "GetBatteryState":
+		return new(BatteryState), BatteryStateTemplate
 	default:
 		return nil, nil
 	}

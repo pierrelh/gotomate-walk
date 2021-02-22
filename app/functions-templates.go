@@ -125,7 +125,7 @@ var ClipboardReadTemplate = []declarative.Widget{
 		Text: "Output var: ",
 	},
 	declarative.TextEdit{
-		Text:          declarative.Bind("Key"),
+		Text:          declarative.Bind("Var"),
 		CompactHeight: true,
 	},
 }
@@ -161,6 +161,24 @@ var NotificationCreateTemplate = []declarative.Widget{
 
 //UserBatteryTemplate Dialog's UserBattery Template
 var UserBatteryTemplate = []declarative.Widget{
+	declarative.Label{
+		Text: "Output var: ",
+	},
+	declarative.TextEdit{
+		Text:          declarative.Bind("Var"),
+		CompactHeight: true,
+	},
+}
+
+//BatteryStateTemplate Dialog's BatteryState Template
+var BatteryStateTemplate = []declarative.Widget{
+	declarative.Label{
+		Text: "Battery Name: ",
+	},
+	declarative.TextEdit{
+		Text:          declarative.Bind("BatteryName"),
+		CompactHeight: true,
+	},
 	declarative.Label{
 		Text: "Output var: ",
 	},
