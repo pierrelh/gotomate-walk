@@ -107,6 +107,10 @@ func fillDialog(funcName string) (interface{}, []declarative.Widget) {
 		return new(BatteryVoltage), BatteryParametersTemplate
 	case "GetBatteryDesignVoltage":
 		return new(BatteryDesignVoltage), BatteryParametersTemplate
+	case "GetCurrentSysClock":
+		return new(SysClock), SysClockTemplate
+	case "GetCurrentSysTime":
+		return new(SysTime), SysClockTemplate
 	default:
 		return nil, nil
 	}

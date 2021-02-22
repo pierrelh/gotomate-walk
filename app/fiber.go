@@ -9,6 +9,7 @@ import (
 	"gotomate/mouse"
 	"gotomate/notification"
 	"gotomate/sleep"
+	"gotomate/systime"
 	"reflect"
 
 	"github.com/lxn/walk"
@@ -342,6 +343,27 @@ func runFiber() {
 						fmt.Println("Unable to find the battery named: ", batName)
 						finished <- true
 					}
+				}()
+				<-finished
+			default:
+				fmt.Println("This function is not integrated yet: " + instruction.FuncName)
+				continue
+			}
+		case "Systime":
+			switch instruction.FuncName {
+			case "GetCurrentSysClock":
+				go func() {
+					h, m, s := systime.GetCurrentSysClock(finished)
+					clock := [3]int{h, m, s}
+					val := reflect.ValueOf(instruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+					val.FieldByName("Time").Set(reflect.ValueOf(clock))
+				}()
+				<-finished
+			case "GetCurrentSysTime":
+				go func() {
+					time := systime.GetCurrentSysTime(finished)
+					val := reflect.ValueOf(instruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+					val.FieldByName("Time").Set(reflect.ValueOf(time))
 				}()
 				<-finished
 			default:
