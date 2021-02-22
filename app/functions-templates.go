@@ -170,8 +170,8 @@ var UserBatteryTemplate = []declarative.Widget{
 	},
 }
 
-//BatteryStateTemplate Dialog's BatteryState Template
-var BatteryStateTemplate = []declarative.Widget{
+//BatteryParametersTemplate Dialog's BatteryParameters Template
+var BatteryParametersTemplate = []declarative.Widget{
 	declarative.Label{
 		Text: "Battery Name: ",
 	},

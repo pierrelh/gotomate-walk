@@ -90,7 +90,23 @@ func fillDialog(funcName string) (interface{}, []declarative.Widget) {
 	case "GetBattery":
 		return new(UserBattery), UserBatteryTemplate
 	case "GetBatteryState":
-		return new(BatteryState), BatteryStateTemplate
+		return new(BatteryState), BatteryParametersTemplate
+	case "GetBatteryPercentage":
+		return new(BatteryPercentage), BatteryParametersTemplate
+	case "GetBatteryRemainingTime":
+		return new(BatteryRemainingTime), BatteryParametersTemplate
+	case "GetBatteryChargeRate":
+		return new(BatteryChargeRate), BatteryParametersTemplate
+	case "GetBatteryCurrentCapacity":
+		return new(BatteryCurrentCapacity), BatteryParametersTemplate
+	case "GetBatteryLastFullCapacity":
+		return new(BatteryLastFullCapacity), BatteryParametersTemplate
+	case "GetBatteryDesignCapacity":
+		return new(BatteryDesignCapacity), BatteryParametersTemplate
+	case "GetBatteryVoltage":
+		return new(BatteryVoltage), BatteryParametersTemplate
+	case "GetBatteryDesignVoltage":
+		return new(BatteryDesignVoltage), BatteryParametersTemplate
 	default:
 		return nil, nil
 	}

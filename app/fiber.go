@@ -216,6 +216,134 @@ func runFiber() {
 					}
 				}()
 				<-finished
+			case "GetBatteryPercentage":
+				go func() {
+					percentageInstruction := reflect.ValueOf(instruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+					batName := percentageInstruction.FieldByName("BatteryName").Interface().(string)
+					batInstruction := varSearch(batName)
+					if batInstruction != nil {
+						val := reflect.ValueOf(batInstruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+						bat := val.FieldByName("Battery").Interface().(*battery.Battery)
+						percentage := battery.GetBatteryPercentage(bat, finished)
+						percentageInstruction.FieldByName("Percentage").Set(reflect.ValueOf(percentage))
+					} else {
+						fmt.Println("Unable to find the battery named: ", batName)
+						finished <- true
+					}
+				}()
+				<-finished
+			case "GetBatteryRemainingTime":
+				go func() {
+					remainingTimeInstruction := reflect.ValueOf(instruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+					batName := remainingTimeInstruction.FieldByName("BatteryName").Interface().(string)
+					batInstruction := varSearch(batName)
+					if batInstruction != nil {
+						val := reflect.ValueOf(batInstruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+						bat := val.FieldByName("Battery").Interface().(*battery.Battery)
+						time := battery.GetBatteryRemainingTime(bat, finished)
+						remainingTimeInstruction.FieldByName("RemainingTime").Set(reflect.ValueOf(time))
+					} else {
+						fmt.Println("Unable to find the battery named: ", batName)
+						finished <- true
+					}
+				}()
+				<-finished
+			case "GetBatteryChargeRate":
+				go func() {
+					chargeRateInstruction := reflect.ValueOf(instruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+					batName := chargeRateInstruction.FieldByName("BatteryName").Interface().(string)
+					batInstruction := varSearch(batName)
+					if batInstruction != nil {
+						val := reflect.ValueOf(batInstruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+						bat := val.FieldByName("Battery").Interface().(*battery.Battery)
+						rate := battery.GetBatteryChargeRate(bat, finished)
+						chargeRateInstruction.FieldByName("ChargeRate").Set(reflect.ValueOf(rate))
+					} else {
+						fmt.Println("Unable to find the battery named: ", batName)
+						finished <- true
+					}
+				}()
+				<-finished
+			case "GetBatteryCurrentCapacity":
+				go func() {
+					currentCapacityInstruction := reflect.ValueOf(instruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+					batName := currentCapacityInstruction.FieldByName("BatteryName").Interface().(string)
+					batInstruction := varSearch(batName)
+					if batInstruction != nil {
+						val := reflect.ValueOf(batInstruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+						bat := val.FieldByName("Battery").Interface().(*battery.Battery)
+						capacity := battery.GetBatteryCurrentCapacity(bat, finished)
+						currentCapacityInstruction.FieldByName("CurrentCapacity").Set(reflect.ValueOf(capacity))
+					} else {
+						fmt.Println("Unable to find the battery named: ", batName)
+						finished <- true
+					}
+				}()
+				<-finished
+			case "GetBatteryLastFullCapacity":
+				go func() {
+					lastCapacityInstruction := reflect.ValueOf(instruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+					batName := lastCapacityInstruction.FieldByName("BatteryName").Interface().(string)
+					batInstruction := varSearch(batName)
+					if batInstruction != nil {
+						val := reflect.ValueOf(batInstruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+						bat := val.FieldByName("Battery").Interface().(*battery.Battery)
+						capacity := battery.GetBatteryLastFullCapacity(bat, finished)
+						lastCapacityInstruction.FieldByName("LastFullCapacity").Set(reflect.ValueOf(capacity))
+					} else {
+						fmt.Println("Unable to find the battery named: ", batName)
+						finished <- true
+					}
+				}()
+				<-finished
+			case "GetBatteryDesignCapacity":
+				go func() {
+					designCapacityInstruction := reflect.ValueOf(instruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+					batName := designCapacityInstruction.FieldByName("BatteryName").Interface().(string)
+					batInstruction := varSearch(batName)
+					if batInstruction != nil {
+						val := reflect.ValueOf(batInstruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+						bat := val.FieldByName("Battery").Interface().(*battery.Battery)
+						capacity := battery.GetBatteryDesignCapacity(bat, finished)
+						designCapacityInstruction.FieldByName("DesignCapacity").Set(reflect.ValueOf(capacity))
+					} else {
+						fmt.Println("Unable to find the battery named: ", batName)
+						finished <- true
+					}
+				}()
+				<-finished
+			case "GetBatteryVoltage":
+				go func() {
+					voltageInstruction := reflect.ValueOf(instruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+					batName := voltageInstruction.FieldByName("BatteryName").Interface().(string)
+					batInstruction := varSearch(batName)
+					if batInstruction != nil {
+						val := reflect.ValueOf(batInstruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+						bat := val.FieldByName("Battery").Interface().(*battery.Battery)
+						voltage := battery.GetBatteryVoltage(bat, finished)
+						voltageInstruction.FieldByName("Voltage").Set(reflect.ValueOf(voltage))
+					} else {
+						fmt.Println("Unable to find the battery named: ", batName)
+						finished <- true
+					}
+				}()
+				<-finished
+			case "GetBatteryDesignVoltage":
+				go func() {
+					designVoltageInstruction := reflect.ValueOf(instruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+					batName := designVoltageInstruction.FieldByName("BatteryName").Interface().(string)
+					batInstruction := varSearch(batName)
+					if batInstruction != nil {
+						val := reflect.ValueOf(batInstruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+						bat := val.FieldByName("Battery").Interface().(*battery.Battery)
+						voltage := battery.GetBatteryDesignVoltage(bat, finished)
+						designVoltageInstruction.FieldByName("DesignVoltage").Set(reflect.ValueOf(voltage))
+					} else {
+						fmt.Println("Unable to find the battery named: ", batName)
+						finished <- true
+					}
+				}()
+				<-finished
 			default:
 				fmt.Println("This function is not integrated yet: " + instruction.FuncName)
 				continue

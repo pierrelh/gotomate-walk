@@ -2,6 +2,7 @@ package app
 
 import (
 	"gotomate/battery"
+	"time"
 
 	"gopkg.in/toast.v1"
 )
@@ -105,4 +106,60 @@ type BatteryState struct {
 	BatteryName string
 	Var         string
 	State       battery.State
+}
+
+//BatteryPercentage Define the BatteryPercentage parameters
+type BatteryPercentage struct {
+	BatteryName string
+	Var         string
+	Percentage  float64
+}
+
+//BatteryRemainingTime Define the BatteryRemainingTime parameters
+type BatteryRemainingTime struct {
+	BatteryName   string
+	Var           string
+	RemainingTime time.Duration
+}
+
+//BatteryChargeRate Define the BatteryChargeRate parameters
+type BatteryChargeRate struct {
+	BatteryName string
+	Var         string
+	ChargeRate  time.Duration
+}
+
+//BatteryCurrentCapacity Define the BatteryCurrentCapacity parameters
+type BatteryCurrentCapacity struct {
+	BatteryName     string
+	Var             string
+	CurrentCapacity float64
+}
+
+//BatteryLastFullCapacity Define the BatteryLastFullCapacity parameters
+type BatteryLastFullCapacity struct {
+	BatteryName      string
+	Var              string
+	LastFullCapacity float64
+}
+
+//BatteryDesignCapacity Define the BatteryDesignCapacity parameters
+type BatteryDesignCapacity struct {
+	BatteryName    string
+	Var            string
+	DesignCapacity float64
+}
+
+//BatteryVoltage Define the BatteryVoltage parameters
+type BatteryVoltage struct {
+	BatteryName string
+	Var         string
+	Voltage     float64
+}
+
+//BatteryDesignVoltage Define the BatteryDesignVoltage parameters
+type BatteryDesignVoltage struct {
+	BatteryName   string
+	Var           string
+	DesignVoltage float64
 }
