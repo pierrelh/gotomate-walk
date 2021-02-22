@@ -39,7 +39,9 @@ func GetBattery(finished chan bool) *Battery {
 }
 
 // GetBatteryState : Return the battery state of a battery
-func GetBatteryState(bat *Battery) State {
+func GetBatteryState(bat *Battery, finished chan bool) State {
+	fmt.Println("Battery getting state ...")
+	finished <- true
 	return bat.State
 }
 

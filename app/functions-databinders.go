@@ -78,7 +78,7 @@ type ClipboardWrite struct {
 
 //ClipboardRead Define the ClipboardRead parameters
 type ClipboardRead struct {
-	Key     string
+	Var     string
 	Content string
 }
 
@@ -98,4 +98,11 @@ type NotificationCreate struct {
 type UserBattery struct {
 	Var     string
 	Battery *battery.Battery
+}
+
+//BatteryState Define the BatteryState parameters
+type BatteryState struct {
+	BatteryName string
+	Var         string
+	State       battery.State
 }
