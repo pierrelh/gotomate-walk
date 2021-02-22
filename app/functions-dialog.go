@@ -16,7 +16,7 @@ func CreateNewDialog(funcName string) declarative.Dialog {
 
 	return declarative.Dialog{
 		Icon:          "/icon.ico",
-		Title:         "Settings",
+		Title:         funcName + " Settings",
 		AssignTo:      &dlg,
 		DefaultButton: &acceptPB,
 		CancelButton:  &cancelPB,

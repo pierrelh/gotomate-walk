@@ -1,6 +1,8 @@
 package app
 
 import (
+	"encoding/json"
+	"fmt"
 	"strconv"
 	"strings"
 
@@ -15,6 +17,7 @@ var fiber = &Fiber{}
 func CreateApp() {
 
 	aw.plbmodel = NewAutomateModel()
+	var openAction *walk.Action
 
 	window := declarative.MainWindow{
 		AssignTo:   &aw.mw,
@@ -24,6 +27,31 @@ func CreateApp() {
 		MinSize:    declarative.Size{Width: 320, Height: 240},
 		Size:       declarative.Size{Width: 800, Height: 600},
 		Layout:     declarative.VBox{MarginsZero: true, SpacingZero: true},
+		MenuItems: []declarative.MenuItem{
+			declarative.Menu{
+				Text: "&File",
+				Items: []declarative.MenuItem{
+					declarative.Action{
+						AssignTo: &openAction,
+						Text:     "&Open",
+						Image:    "/open.png",
+						Enabled:  declarative.Bind("enabledCB.Checked"),
+						Visible:  declarative.Bind("!openHiddenCB.Checked"),
+						Shortcut: declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyO},
+						// OnTriggered: aw.openActionTriggered,
+					},
+					declarative.Action{
+						Text:        "Save",
+						Shortcut:    declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyS},
+						OnTriggered: aw.saveFiber,
+					},
+					declarative.Action{
+						Text:        "Exit",
+						OnTriggered: func() { aw.mw.Close() },
+					},
+				},
+			},
+		},
 		Children: []declarative.Widget{
 			declarative.HSplitter{
 				MaxSize: declarative.Size{Height: 120},
@@ -44,6 +72,7 @@ func CreateApp() {
 						OnItemActivated: aw.slbItemActivated,
 					},
 					declarative.PushButton{
+						MaxSize:    declarative.Size{Width: 100},
 						AssignTo:   &aw.pb,
 						Font:       declarative.Font{Family: "Segoe UI", PointSize: 9, Bold: true},
 						Background: declarative.SolidColorBrush{Color: walk.RGB(106, 215, 229)},
@@ -89,6 +118,13 @@ type AutomateItem struct {
 type AutomateModel struct {
 	walk.ListModelBase
 	items []AutomateItem
+}
+
+func (aw *AutomateWindow) saveFiber() {
+	file, _ := json.Marshal(fiber)
+	fmt.Println(file)
+	fmt.Println(*fiber)
+	// _ = ioutil.WriteFile("test.json", file, 0644)
 }
 
 func (aw *AutomateWindow) plbItemActivated() {
