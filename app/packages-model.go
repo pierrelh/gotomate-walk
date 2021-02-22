@@ -43,7 +43,6 @@ var SubPackages = map[string][]string{
 	},
 	"Notification": {
 		"Create",
-		"Push",
 	},
 	"Sleep": {
 		"MilliSleep",

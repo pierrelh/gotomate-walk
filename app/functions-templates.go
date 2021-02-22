@@ -140,3 +140,21 @@ var LogPrintTemplate = []declarative.Widget{
 		CompactHeight: true,
 	},
 }
+
+//NotificationCreateTemplate Dialog's NotificationCreate Template
+var NotificationCreateTemplate = []declarative.Widget{
+	declarative.Label{
+		Text: "Title: ",
+	},
+	declarative.TextEdit{
+		Text:          declarative.Bind("Title"),
+		CompactHeight: true,
+	},
+	declarative.Label{
+		Text: "Message: ",
+	},
+	declarative.TextEdit{
+		Text:          declarative.Bind("Message"),
+		CompactHeight: true,
+	},
+}

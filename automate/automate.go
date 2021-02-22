@@ -4,10 +4,7 @@ import (
 	"fmt"
 	"gotomate/battery"
 	"gotomate/convert"
-	"gotomate/notification"
 	"gotomate/systime"
-
-	toast "gopkg.in/toast.v1"
 )
 
 // LaunchAutomate Start the fiber
@@ -21,14 +18,14 @@ func LaunchAutomate() {
 	stringSysClock := convert.IntArrayToString(a, " ")
 	fmt.Println(stringSysClock)
 
-	notifActions := []toast.Action{}
+	// notifActions := []toast.Action{}
 
-	newNotification := notification.Create("Test", "Test MSG", notifActions, false)
+	// newNotification := notification.Create("Test", "Test MSG", notifActions)
 
-	err := notification.Push(newNotification)
-	if err != nil {
-		fmt.Println("An error occur when pushing notification")
-	}
+	// err := notification.Push(newNotification)
+	// if err != nil {
+	// 	fmt.Println("An error occur when pushing notification")
+	// }
 
 	bat := battery.GetBatteries()
 	if bat != nil {

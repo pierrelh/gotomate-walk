@@ -1,5 +1,7 @@
 package app
 
+import "gopkg.in/toast.v1"
+
 //Sleep Define the Sleep parameters
 type Sleep struct {
 	Duration float64
@@ -79,4 +81,11 @@ type ClipboardRead struct {
 //LogPrint Define the LogPrint parameters
 type LogPrint struct {
 	Log string
+}
+
+//NotificationCreate Define the NotificationCreate parameters
+type NotificationCreate struct {
+	Title   string
+	Message string
+	Actions []toast.Action
 }

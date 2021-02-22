@@ -6,12 +6,14 @@ import (
 	"gotomate/keyboard"
 	"gotomate/log"
 	"gotomate/mouse"
+	"gotomate/notification"
 	"gotomate/sleep"
 	"reflect"
 
 	"github.com/lxn/walk"
 	declarative "github.com/lxn/walk/declarative"
 	"github.com/lxn/win"
+	"gopkg.in/toast.v1"
 )
 
 // Fiber Initialize the fiber structure
@@ -171,6 +173,19 @@ func runFiber() {
 				val := reflect.ValueOf(instruction.Button.DialogWindow.DataBinder.DataSource).Elem()
 				msg := val.FieldByName("Log").Interface().(string)
 				go log.Print(msg, finished)
+				<-finished
+			default:
+				fmt.Println("This function is not integrated yet: " + instruction.FuncName)
+				continue
+			}
+		case "Notification":
+			switch instruction.FuncName {
+			case "Create":
+				val := reflect.ValueOf(instruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+				title := val.FieldByName("Title").Interface().(string)
+				msg := val.FieldByName("Message").Interface().(string)
+				actions := val.FieldByName("Actions").Interface().([]toast.Action)
+				go notification.Create(title, msg, actions, finished)
 				<-finished
 			default:
 				fmt.Println("This function is not integrated yet: " + instruction.FuncName)
