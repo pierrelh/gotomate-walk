@@ -1,8 +1,6 @@
 package app
 
 import (
-	"encoding/json"
-	"fmt"
 	"strconv"
 	"strings"
 
@@ -121,9 +119,7 @@ type AutomateModel struct {
 }
 
 func (aw *AutomateWindow) saveFiber() {
-	file, _ := json.Marshal(fiber)
-	fmt.Println(file)
-	fmt.Println(*fiber)
+	// file, _ := json.Marshal(fiber)
 	// _ = ioutil.WriteFile("test.json", file, 0644)
 }
 
