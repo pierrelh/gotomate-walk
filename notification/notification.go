@@ -3,27 +3,21 @@
 package notification
 
 import (
+	"fmt"
+
 	"gopkg.in/toast.v1"
 )
 
-// Create create a new notification with presets
-func Create(title, message string, actions []toast.Action, loop bool) toast.Notification {
+// Create create a new notification with presets & push it
+func Create(title, message string, actions []toast.Action, finished chan bool) {
+	fmt.Println("Notification initialization")
 	createdNotif := toast.Notification{
 		AppID:   "Gotomate",
 		Title:   title,
 		Message: message,
 		Icon:    "C:/Users/lhopi/go/src/gotomate/img/gotomate.png",
 		Actions: actions,
-		Loop:    loop,
 	}
-	return createdNotif
-}
-
-// Push push a notification in user's system return nil if pushed else nil
-func Push(notification toast.Notification) error {
-	err := notification.Push()
-	if err != nil {
-		return nil
-	}
-	return err
+	createdNotif.Push()
+	finished <- true
 }
