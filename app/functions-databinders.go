@@ -1,6 +1,10 @@
 package app
 
-import "gopkg.in/toast.v1"
+import (
+	"gotomate/battery"
+
+	"gopkg.in/toast.v1"
+)
 
 //Sleep Define the Sleep parameters
 type Sleep struct {
@@ -88,4 +92,10 @@ type NotificationCreate struct {
 	Title   string
 	Message string
 	Actions []toast.Action
+}
+
+//UserBattery Define the UserBattery parameters
+type UserBattery struct {
+	Var     string
+	Battery *battery.Battery
 }

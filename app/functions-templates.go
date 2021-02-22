@@ -158,3 +158,14 @@ var NotificationCreateTemplate = []declarative.Widget{
 		CompactHeight: true,
 	},
 }
+
+//UserBatteryTemplate Dialog's UserBattery Template
+var UserBatteryTemplate = []declarative.Widget{
+	declarative.Label{
+		Text: "Output var: ",
+	},
+	declarative.TextEdit{
+		Text:          declarative.Bind("Var"),
+		CompactHeight: true,
+	},
+}
