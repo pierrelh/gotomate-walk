@@ -163,3 +163,15 @@ type BatteryDesignVoltage struct {
 	Var           string
 	DesignVoltage float64
 }
+
+//SysClock Define the SysClock parameters
+type SysClock struct {
+	Var  string
+	Time [3]int
+}
+
+//SysTime Define the SysTime parameters
+type SysTime struct {
+	Var  string
+	Time time.Time
+}

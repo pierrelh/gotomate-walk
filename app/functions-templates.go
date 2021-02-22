@@ -187,3 +187,14 @@ var BatteryParametersTemplate = []declarative.Widget{
 		CompactHeight: true,
 	},
 }
+
+//SysClockTemplate Dialog's SysClock Template
+var SysClockTemplate = []declarative.Widget{
+	declarative.Label{
+		Text: "Output var: ",
+	},
+	declarative.TextEdit{
+		Text:          declarative.Bind("Var"),
+		CompactHeight: true,
+	},
+}
