@@ -46,12 +46,15 @@ func GetBatteryState(bat *Battery, finished chan bool) State {
 }
 
 // GetBatteryPercentage : Return the left percentage of a battery
-func GetBatteryPercentage(bat *Battery) float64 {
+func GetBatteryPercentage(bat *Battery, finished chan bool) float64 {
+	fmt.Println("Battery getting percentage ...")
+	finished <- true
 	return bat.Current / bat.Full * 100
 }
 
 // GetBatteryRemainingTime : Return the remaining time of battery or for battery charging
-func GetBatteryRemainingTime(bat *Battery) time.Duration {
+func GetBatteryRemainingTime(bat *Battery, finished chan bool) time.Duration {
+	fmt.Println("Battery getting remaining time ...")
 	var timeNum float64
 	switch bat.State {
 	case Discharging:
@@ -62,35 +65,48 @@ func GetBatteryRemainingTime(bat *Battery) time.Duration {
 		timeNum = 0
 	}
 	duration, _ := time.ParseDuration(fmt.Sprintf("%fh", timeNum))
+	finished <- true
 	return duration
 }
 
 // GetBatteryChargeRate : Return a battery charge rate mW
-func GetBatteryChargeRate(bat *Battery) time.Duration {
+func GetBatteryChargeRate(bat *Battery, finished chan bool) time.Duration {
+	fmt.Println("Battery getting charge rate ...")
+	finished <- true
 	return time.Duration(bat.ChargeRate)
 }
 
 // GetBatteryCurrentCapacity : Return a battery current capacity
-func GetBatteryCurrentCapacity(bat *Battery) float64 {
+func GetBatteryCurrentCapacity(bat *Battery, finished chan bool) float64 {
+	fmt.Println("Battery getting current capacity ...")
+	finished <- true
 	return bat.Current
 }
 
 // GetBatteryLastFullCapacity : Return a battery last full capacity
-func GetBatteryLastFullCapacity(bat *Battery) float64 {
+func GetBatteryLastFullCapacity(bat *Battery, finished chan bool) float64 {
+	fmt.Println("Battery getting last full capacity ...")
+	finished <- true
 	return bat.Full
 }
 
 // GetBatteryDesignCapacity : Return a battery design capacity
-func GetBatteryDesignCapacity(bat *Battery) float64 {
+func GetBatteryDesignCapacity(bat *Battery, finished chan bool) float64 {
+	fmt.Println("Battery getting design capacity ...")
+	finished <- true
 	return bat.Design
 }
 
 // GetBatteryVoltage : Return a battery voltage
-func GetBatteryVoltage(bat *Battery) float64 {
+func GetBatteryVoltage(bat *Battery, finished chan bool) float64 {
+	fmt.Println("Battery getting voltage ...")
+	finished <- true
 	return bat.Voltage
 }
 
 // GetBatteryDesignVoltage : Return a battery design voltage
-func GetBatteryDesignVoltage(bat *Battery) float64 {
+func GetBatteryDesignVoltage(bat *Battery, finished chan bool) float64 {
+	fmt.Println("Battery getting design voltage ...")
+	finished <- true
 	return bat.DesignVoltage
 }
