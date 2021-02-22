@@ -210,6 +210,9 @@ func runFiber() {
 						bat := val.FieldByName("Battery").Interface().(*battery.Battery)
 						state := battery.GetBatteryState(bat, finished)
 						stateInstruction.FieldByName("State").Set(reflect.ValueOf(state))
+					} else {
+						fmt.Println("Unable to find the battery named: ", batName)
+						finished <- true
 					}
 				}()
 				<-finished
