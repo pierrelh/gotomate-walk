@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gotomate/clipboard"
 	"gotomate/keyboard"
+	"gotomate/log"
 	"gotomate/mouse"
 	"gotomate/sleep"
 	"reflect"
@@ -159,6 +160,17 @@ func runFiber() {
 					val.FieldByName("Content").SetString(content)
 					fmt.Println(val.FieldByName("Content"))
 				}()
+				<-finished
+			default:
+				fmt.Println("This function is not integrated yet: " + instruction.FuncName)
+				continue
+			}
+		case "Log":
+			switch instruction.FuncName {
+			case "Print":
+				val := reflect.ValueOf(instruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+				msg := val.FieldByName("Log").Interface().(string)
+				go log.Print(msg, finished)
 				<-finished
 			default:
 				fmt.Println("This function is not integrated yet: " + instruction.FuncName)

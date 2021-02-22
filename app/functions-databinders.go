@@ -75,3 +75,8 @@ type ClipboardRead struct {
 	Key     string
 	Content string
 }
+
+//LogPrint Define the LogPrint parameters
+type LogPrint struct {
+	Log string
+}
