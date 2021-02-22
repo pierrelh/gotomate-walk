@@ -13,13 +13,16 @@ func GetAll() ([]*Battery, error) {
 	return getAll(systemGetAll)
 }
 
-// GetBatteries get the first system battery if exist
-func GetBatteries() *Battery {
+// GetBattery get the first system battery if exist
+func GetBattery(finished chan bool) *Battery {
+	fmt.Println("Battery getting initialization ...")
 	batteries, err := GetAll()
 	if _, isFatal := err.(ErrFatal); isFatal {
+		finished <- true
 		return nil
 	}
 	if len(batteries) == 0 {
+		finished <- true
 		return nil
 	}
 	errs, partialErrs := err.(Errors)
@@ -28,8 +31,10 @@ func GetBatteries() *Battery {
 			fmt.Fprintf(os.Stderr, "Error getting info for BAT%d: %s\n", i, errs[i])
 			continue
 		}
+		finished <- true
 		return bat
 	}
+	finished <- true
 	return nil
 }
 

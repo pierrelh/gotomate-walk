@@ -2,6 +2,7 @@ package app
 
 import (
 	"fmt"
+	"gotomate/battery"
 	"gotomate/clipboard"
 	"gotomate/keyboard"
 	"gotomate/log"
@@ -160,7 +161,6 @@ func runFiber() {
 					content, _ := clipboard.Read(finished)
 					val := reflect.ValueOf(instruction.Button.DialogWindow.DataBinder.DataSource).Elem()
 					val.FieldByName("Content").SetString(content)
-					fmt.Println(val.FieldByName("Content"))
 				}()
 				<-finished
 			default:
@@ -186,6 +186,19 @@ func runFiber() {
 				msg := val.FieldByName("Message").Interface().(string)
 				actions := val.FieldByName("Actions").Interface().([]toast.Action)
 				go notification.Create(title, msg, actions, finished)
+				<-finished
+			default:
+				fmt.Println("This function is not integrated yet: " + instruction.FuncName)
+				continue
+			}
+		case "Battery":
+			switch instruction.FuncName {
+			case "GetBattery":
+				go func() {
+					bat := battery.GetBattery(finished)
+					val := reflect.ValueOf(instruction.Button.DialogWindow.DataBinder.DataSource).Elem()
+					val.FieldByName("Battery").Set(reflect.ValueOf(bat))
+				}()
 				<-finished
 			default:
 				fmt.Println("This function is not integrated yet: " + instruction.FuncName)

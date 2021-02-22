@@ -15,7 +15,7 @@ var Packages = []string{
 // SubPackages Export all the available functions
 var SubPackages = map[string][]string{
 	"Battery": {
-		"GetBatteries",
+		"GetBattery",
 		"GetBatteryState",
 		"GetBatteryPercentage",
 		"GetBatteryRemainingTime",

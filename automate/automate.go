@@ -2,7 +2,6 @@ package automate
 
 import (
 	"fmt"
-	"gotomate/battery"
 	"gotomate/convert"
 	"gotomate/systime"
 )
@@ -27,12 +26,12 @@ func LaunchAutomate() {
 	// 	fmt.Println("An error occur when pushing notification")
 	// }
 
-	bat := battery.GetBatteries()
-	if bat != nil {
-		fmt.Println(battery.GetBatteryPercentage(bat))
-		fmt.Println(battery.GetBatteryRemainingTime(bat))
-		fmt.Println(battery.GetBatteryChargeRate(bat))
-	}
+	// bat := battery.GetBattery()
+	// if bat != nil {
+	// 	fmt.Println(battery.GetBatteryPercentage(bat))
+	// 	fmt.Println(battery.GetBatteryRemainingTime(bat))
+	// 	fmt.Println(battery.GetBatteryChargeRate(bat))
+	// }
 
 	// clipboard.Write("TestClipboard")
 
