@@ -1,9 +1,9 @@
 package automate
 
 import (
+	"fmt"
 	"gotomate/battery"
 	"gotomate/convert"
-	"gotomate/log"
 	"gotomate/notification"
 	"gotomate/systime"
 
@@ -13,13 +13,13 @@ import (
 // LaunchAutomate Start the fiber
 func LaunchAutomate() {
 	sysTime := systime.GetCurrentSysTime()
-	log.Print(sysTime)
+	fmt.Println(sysTime)
 
 	h, m, s := systime.GetCurrentSysClock()
 	var a []int
 	a = append(a, h, m, s)
 	stringSysClock := convert.IntArrayToString(a, " ")
-	log.Print(stringSysClock)
+	fmt.Println(stringSysClock)
 
 	notifActions := []toast.Action{}
 
@@ -27,14 +27,14 @@ func LaunchAutomate() {
 
 	err := notification.Push(newNotification)
 	if err != nil {
-		log.Print("An error occur when pushing notification")
+		fmt.Println("An error occur when pushing notification")
 	}
 
 	bat := battery.GetBatteries()
 	if bat != nil {
-		log.Print(battery.GetBatteryPercentage(bat))
-		log.Print(battery.GetBatteryRemainingTime(bat))
-		log.Print(battery.GetBatteryChargeRate(bat))
+		fmt.Println(battery.GetBatteryPercentage(bat))
+		fmt.Println(battery.GetBatteryRemainingTime(bat))
+		fmt.Println(battery.GetBatteryChargeRate(bat))
 	}
 
 	// clipboard.Write("TestClipboard")

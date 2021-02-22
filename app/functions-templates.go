@@ -129,3 +129,14 @@ var ClipboardReadTemplate = []declarative.Widget{
 		CompactHeight: true,
 	},
 }
+
+//LogPrintTemplate Dialog's LogPrint Template
+var LogPrintTemplate = []declarative.Widget{
+	declarative.Label{
+		Text: "Log: ",
+	},
+	declarative.TextEdit{
+		Text:          declarative.Bind("Log"),
+		CompactHeight: true,
+	},
+}

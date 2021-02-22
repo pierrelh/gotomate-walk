@@ -1,7 +1,7 @@
 package app
 
 import (
-	"gotomate/log"
+	"fmt"
 
 	"github.com/lxn/walk"
 	declarative "github.com/lxn/walk/declarative"
@@ -46,7 +46,7 @@ func CreateNewDialog(funcName string) declarative.Dialog {
 						Font:     declarative.Font{Family: "Segoe UI", PointSize: 9},
 						OnClicked: func() {
 							if err := db.Submit(); err != nil {
-								log.Print(err)
+								fmt.Println(err)
 								return
 							}
 
@@ -83,6 +83,8 @@ func fillDialog(funcName string) (interface{}, []declarative.Widget) {
 		return new(ClipboardWrite), ClipboardWriteTemplate
 	case "Read":
 		return new(ClipboardRead), ClipboardReadTemplate
+	case "Print":
+		return new(LogPrint), LogPrintTemplate
 	default:
 		return nil, nil
 	}
