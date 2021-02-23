@@ -7,9 +7,11 @@ import (
 //SleepTemplate Dialog's Sleep Template
 var SleepTemplate = []declarative.Widget{
 	declarative.Label{
+		Font: declarative.Font{Family: "Roboto", PointSize: 9},
 		Text: "Sleep For:",
 	},
 	declarative.NumberEdit{
+		Font:     declarative.Font{Family: "Roboto", PointSize: 9},
 		Value:    declarative.Bind("Duration"),
 		Suffix:   "s",
 		Decimals: 0,
@@ -19,9 +21,11 @@ var SleepTemplate = []declarative.Widget{
 //MilliSleepTemplate Dialog's MilliSleep Template
 var MilliSleepTemplate = []declarative.Widget{
 	declarative.Label{
+		Font: declarative.Font{Family: "Roboto", PointSize: 9},
 		Text: "Sleep For:",
 	},
 	declarative.NumberEdit{
+		Font:     declarative.Font{Family: "Roboto", PointSize: 9},
 		Value:    declarative.Bind("Duration"),
 		Suffix:   "ms",
 		Decimals: 0,
@@ -31,9 +35,11 @@ var MilliSleepTemplate = []declarative.Widget{
 //MouseClickTemplate Dialog's MouseClic Template
 var MouseClickTemplate = []declarative.Widget{
 	declarative.Label{
+		Font: declarative.Font{Family: "Roboto", PointSize: 9},
 		Text: "Click:",
 	},
 	declarative.ComboBox{
+		Font:          declarative.Font{Family: "Roboto", PointSize: 9},
 		Value:         declarative.Bind("MouseButtonName", declarative.SelRequired{}),
 		BindingMember: "ID",
 		DisplayMember: "Name",
@@ -44,16 +50,20 @@ var MouseClickTemplate = []declarative.Widget{
 //MouseScrollTemplate Dialog's MouseScroll Template
 var MouseScrollTemplate = []declarative.Widget{
 	declarative.Label{
+		Font: declarative.Font{Family: "Roboto", PointSize: 9},
 		Text: "Horizontal: ",
 	},
 	declarative.NumberEdit{
+		Font:     declarative.Font{Family: "Roboto", PointSize: 9},
 		Value:    declarative.Bind("X"),
 		Decimals: 2,
 	},
 	declarative.Label{
+		Font: declarative.Font{Family: "Roboto", PointSize: 9},
 		Text: "Vertical: ",
 	},
 	declarative.NumberEdit{
+		Font:     declarative.Font{Family: "Roboto", PointSize: 9},
 		Value:    declarative.Bind("Y"),
 		Decimals: 2,
 	},
@@ -62,17 +72,21 @@ var MouseScrollTemplate = []declarative.Widget{
 //MouseMoveTemplate Dialog's MouseMove Template
 var MouseMoveTemplate = []declarative.Widget{
 	declarative.Label{
+		Font: declarative.Font{Family: "Roboto", PointSize: 9},
 		Text: "Horizontal: ",
 	},
 	declarative.NumberEdit{
+		Font:     declarative.Font{Family: "Roboto", PointSize: 9},
 		Value:    declarative.Bind("X"),
 		Suffix:   "px",
 		Decimals: 0,
 	},
 	declarative.Label{
+		Font: declarative.Font{Family: "Roboto", PointSize: 9},
 		Text: "Vertical: ",
 	},
 	declarative.NumberEdit{
+		Font:     declarative.Font{Family: "Roboto", PointSize: 9},
 		Value:    declarative.Bind("Y"),
 		Suffix:   "px",
 		Decimals: 0,
@@ -82,26 +96,32 @@ var MouseMoveTemplate = []declarative.Widget{
 //KeyboardTapTemplate Dialog's KeyboardTap Template
 var KeyboardTapTemplate = []declarative.Widget{
 	declarative.Label{
+		Font: declarative.Font{Family: "Roboto", PointSize: 9},
 		Text: "Input: ",
 	},
 	declarative.TextEdit{
+		Font:          declarative.Font{Family: "Roboto", PointSize: 9},
 		Text:          declarative.Bind("Input"),
 		CompactHeight: true,
 		MaxLength:     1,
 	},
 	declarative.Label{
+		Font: declarative.Font{Family: "Roboto", PointSize: 9},
 		Text: "Special Input 1:",
 	},
 	declarative.ComboBox{
+		Font:          declarative.Font{Family: "Roboto", PointSize: 9},
 		Value:         declarative.Bind("Special1", declarative.SelRequired{}),
 		BindingMember: "Name",
 		DisplayMember: "Name",
 		Model:         KeyboardInputs(),
 	},
 	declarative.Label{
+		Font: declarative.Font{Family: "Roboto", PointSize: 9},
 		Text: "Special Input 2:",
 	},
 	declarative.ComboBox{
+		Font:          declarative.Font{Family: "Roboto", PointSize: 9},
 		Value:         declarative.Bind("Special2", declarative.SelRequired{}),
 		BindingMember: "Name",
 		DisplayMember: "Name",
@@ -112,9 +132,11 @@ var KeyboardTapTemplate = []declarative.Widget{
 //ClipboardWriteTemplate Dialog's ClipboardWrite Template
 var ClipboardWriteTemplate = []declarative.Widget{
 	declarative.Label{
+		Font: declarative.Font{Family: "Roboto", PointSize: 9},
 		Text: "Clipboard: ",
 	},
 	declarative.TextEdit{
+		Font: declarative.Font{Family: "Roboto", PointSize: 9},
 		Text: declarative.Bind("Content"),
 	},
 }
@@ -122,9 +144,11 @@ var ClipboardWriteTemplate = []declarative.Widget{
 //ClipboardReadTemplate Dialog's ClipboardRead Template
 var ClipboardReadTemplate = []declarative.Widget{
 	declarative.Label{
+		Font: declarative.Font{Family: "Roboto", PointSize: 9},
 		Text: "Output var: ",
 	},
 	declarative.TextEdit{
+		Font:          declarative.Font{Family: "Roboto", PointSize: 9},
 		Text:          declarative.Bind("Var"),
 		CompactHeight: true,
 	},
@@ -133,9 +157,11 @@ var ClipboardReadTemplate = []declarative.Widget{
 //LogPrintTemplate Dialog's LogPrint Template
 var LogPrintTemplate = []declarative.Widget{
 	declarative.Label{
+		Font: declarative.Font{Family: "Roboto", PointSize: 9},
 		Text: "Log: ",
 	},
 	declarative.TextEdit{
+		Font:          declarative.Font{Family: "Roboto", PointSize: 9},
 		Text:          declarative.Bind("Log"),
 		CompactHeight: true,
 	},
@@ -144,16 +170,20 @@ var LogPrintTemplate = []declarative.Widget{
 //NotificationCreateTemplate Dialog's NotificationCreate Template
 var NotificationCreateTemplate = []declarative.Widget{
 	declarative.Label{
+		Font: declarative.Font{Family: "Roboto", PointSize: 9},
 		Text: "Title: ",
 	},
 	declarative.TextEdit{
+		Font:          declarative.Font{Family: "Roboto", PointSize: 9},
 		Text:          declarative.Bind("Title"),
 		CompactHeight: true,
 	},
 	declarative.Label{
+		Font: declarative.Font{Family: "Roboto", PointSize: 9},
 		Text: "Message: ",
 	},
 	declarative.TextEdit{
+		Font:          declarative.Font{Family: "Roboto", PointSize: 9},
 		Text:          declarative.Bind("Message"),
 		CompactHeight: true,
 	},
@@ -162,9 +192,11 @@ var NotificationCreateTemplate = []declarative.Widget{
 //UserBatteryTemplate Dialog's UserBattery Template
 var UserBatteryTemplate = []declarative.Widget{
 	declarative.Label{
+		Font: declarative.Font{Family: "Roboto", PointSize: 9},
 		Text: "Output var: ",
 	},
 	declarative.TextEdit{
+		Font:          declarative.Font{Family: "Roboto", PointSize: 9},
 		Text:          declarative.Bind("Var"),
 		CompactHeight: true,
 	},
@@ -173,16 +205,20 @@ var UserBatteryTemplate = []declarative.Widget{
 //BatteryParametersTemplate Dialog's BatteryParameters Template
 var BatteryParametersTemplate = []declarative.Widget{
 	declarative.Label{
+		Font: declarative.Font{Family: "Roboto", PointSize: 9},
 		Text: "Battery Name: ",
 	},
 	declarative.TextEdit{
+		Font:          declarative.Font{Family: "Roboto", PointSize: 9},
 		Text:          declarative.Bind("BatteryName"),
 		CompactHeight: true,
 	},
 	declarative.Label{
+		Font: declarative.Font{Family: "Roboto", PointSize: 9},
 		Text: "Output var: ",
 	},
 	declarative.TextEdit{
+		Font:          declarative.Font{Family: "Roboto", PointSize: 9},
 		Text:          declarative.Bind("Var"),
 		CompactHeight: true,
 	},
@@ -191,9 +227,11 @@ var BatteryParametersTemplate = []declarative.Widget{
 //SysClockTemplate Dialog's SysClock Template
 var SysClockTemplate = []declarative.Widget{
 	declarative.Label{
+		Font: declarative.Font{Family: "Roboto", PointSize: 9},
 		Text: "Output var: ",
 	},
 	declarative.TextEdit{
+		Font:          declarative.Font{Family: "Roboto", PointSize: 9},
 		Text:          declarative.Bind("Var"),
 		CompactHeight: true,
 	},
