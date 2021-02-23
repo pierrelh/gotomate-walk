@@ -2,7 +2,11 @@ package app
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
+	"log"
+	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 
@@ -18,8 +22,9 @@ func CreateApp() {
 
 	aw.plbmodel = NewAutomateModel()
 	var openAction *walk.Action
+	var fibers *walk.Menu
 
-	window := declarative.MainWindow{
+	if err := (declarative.MainWindow{
 		AssignTo:   &aw.mw,
 		Icon:       "icon.ico",
 		Title:      "Gotomate",
@@ -33,15 +38,29 @@ func CreateApp() {
 				Items: []declarative.MenuItem{
 					declarative.Action{
 						AssignTo: &openAction,
-						Text:     "&Open",
+						Text:     "Open",
 						Image:    "/open.png",
 						Enabled:  declarative.Bind("enabledCB.Checked"),
 						Visible:  declarative.Bind("!openHiddenCB.Checked"),
 						Shortcut: declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyO},
 						// OnTriggered: aw.openActionTriggered,
 					},
+					declarative.Menu{
+						AssignTo: &fibers,
+						Image:    "/folder.png",
+						Text:     "My Fibers",
+					},
+					declarative.Action{
+						Text:     "Run",
+						Image:    "/run.png",
+						Shortcut: declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyR},
+						OnTriggered: func() {
+							go runFiber()
+						},
+					},
 					declarative.Action{
 						Text:        "Save",
+						Image:       "/save.png",
 						Shortcut:    declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyS},
 						OnTriggered: aw.saveFiber,
 					},
@@ -53,7 +72,8 @@ func CreateApp() {
 			},
 		},
 		Children: []declarative.Widget{
-			declarative.HSplitter{
+			declarative.Composite{
+				Layout:  declarative.HBox{MarginsZero: true, SpacingZero: true},
 				MaxSize: declarative.Size{Height: 120},
 				Children: []declarative.Widget{
 					declarative.ListBox{
@@ -71,14 +91,49 @@ func CreateApp() {
 						AssignTo:        &aw.slb,
 						OnItemActivated: aw.slbItemActivated,
 					},
-					declarative.PushButton{
-						MaxSize:    declarative.Size{Width: 100},
-						AssignTo:   &aw.pb,
-						Font:       declarative.Font{Family: "Roboto", PointSize: 9, Bold: true},
-						Background: declarative.SolidColorBrush{Color: walk.RGB(106, 215, 229)},
-						Text:       "RUN",
-						OnClicked: func() {
-							go runFiber()
+					declarative.Composite{
+						Layout: declarative.VBox{},
+						Children: []declarative.Widget{
+							declarative.Composite{
+								Layout: declarative.HBox{},
+								Children: []declarative.Widget{
+									declarative.Label{
+										Alignment: declarative.Alignment2D(walk.AlignHFarVCenter),
+										Font:      declarative.Font{Family: "Roboto", PointSize: 12, Underline: true, Bold: true},
+										Text:      "Fiber Name :",
+										TextColor: walk.Color(0xffffff),
+									},
+									declarative.TextEdit{
+										Alignment:     declarative.Alignment2D(walk.AlignHNearVCenter),
+										Font:          declarative.Font{Family: "Roboto", PointSize: 9},
+										CompactHeight: true,
+										MaxSize:       declarative.Size{Width: 150},
+									},
+								},
+							},
+							declarative.Composite{
+								Layout: declarative.HBox{},
+								Children: []declarative.Widget{
+									declarative.PushButton{
+										MaxSize:    declarative.Size{Width: 100},
+										AssignTo:   &aw.run,
+										Font:       declarative.Font{Family: "Roboto", PointSize: 9, Bold: true},
+										Background: declarative.SolidColorBrush{Color: walk.RGB(106, 215, 229)},
+										Text:       "RUN",
+										OnClicked: func() {
+											go runFiber()
+										},
+									},
+									declarative.PushButton{
+										MaxSize:    declarative.Size{Width: 100},
+										AssignTo:   &aw.save,
+										Font:       declarative.Font{Family: "Roboto", PointSize: 9, Bold: true},
+										Background: declarative.SolidColorBrush{Color: walk.RGB(106, 215, 229)},
+										Text:       "Save",
+										OnClicked:  aw.saveFiber,
+									},
+								},
+							},
 						},
 					},
 				},
@@ -92,8 +147,29 @@ func CreateApp() {
 				VerticalFixed:   false,
 			},
 		},
+	}.Create()); err != nil {
+		log.Fatal(err)
 	}
-	window.Run()
+
+	addRecentFileActions := func() {
+		root := "./saves"
+
+		_ = filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+			if filepath.Ext(path) == ".json" {
+				var file = filepath.Base(path)
+				var extension = filepath.Ext(file)
+				var name = file[0 : len(file)-len(extension)]
+				a := walk.NewAction()
+				a.SetText(name)
+				a.Triggered().Attach(func() { fmt.Println("Do something") })
+				fibers.Actions().Add(a)
+			}
+			return nil
+		})
+	}
+
+	addRecentFileActions()
+	aw.mw.Run()
 }
 
 // AutomateWindow Setting the automate window structure
@@ -103,7 +179,8 @@ type AutomateWindow struct {
 	plbmodel   *AutomateModel
 	slb        *walk.ListBox
 	slbmodel   *AutomateModel
-	pb         *walk.PushButton
+	run        *walk.PushButton
+	save       *walk.PushButton
 	sv         *walk.ScrollView
 	pushButton *walk.PushButton
 	compose    *walk.Composite
