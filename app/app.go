@@ -84,11 +84,13 @@ func CreateApp() {
 				},
 			},
 			declarative.ScrollView{
-				AssignTo:        &aw.sv,
-				Layout:          declarative.VBox{MarginsZero: true},
-				Background:      declarative.SolidColorBrush{Color: walk.RGB(11, 11, 11)},
-				HorizontalFixed: false,
-				VerticalFixed:   false,
+				AssignTo:           &aw.sv,
+				Column:             5,
+				Layout:             declarative.Flow{MarginsZero: true},
+				AlwaysConsumeSpace: true,
+				Background:         declarative.SolidColorBrush{Color: walk.RGB(11, 11, 11)},
+				HorizontalFixed:    false,
+				VerticalFixed:      false,
 			},
 		},
 	}
@@ -122,7 +124,7 @@ type AutomateModel struct {
 
 func (aw *AutomateWindow) saveFiber() {
 	file, _ := json.Marshal(fiber)
-	_ = ioutil.WriteFile("test.json", file, 0644)
+	ioutil.WriteFile("saves/test.json", file, 0644)
 }
 
 func (aw *AutomateWindow) plbItemActivated() {
@@ -159,7 +161,7 @@ func (aw *AutomateWindow) slbItemActivated() {
 }
 
 // CreatePushButton Create a new push button in the fiber
-func CreatePushButton(parent walk.Container, funcName, packageName string, dialog declarative.Dialog) error {
+func CreatePushButton(parent *walk.ScrollView, funcName, packageName string, dialog declarative.Dialog) error {
 	compose, err := walk.NewComposite(parent)
 	if err != nil {
 		return err

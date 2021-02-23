@@ -17,6 +17,7 @@
 *_REMOTE_*.txt
 
 **/*.exe
+**/*.json
 
 # Crash log files
 crash.log
