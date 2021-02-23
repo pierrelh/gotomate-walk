@@ -44,7 +44,7 @@ func CreateNewDialog(funcName string) (interface{}, declarative.Dialog) {
 						declarative.PushButton{
 							AssignTo: &acceptPB,
 							Text:     "OK",
-							Font:     declarative.Font{Family: "Segoe UI", PointSize: 9},
+							Font:     declarative.Font{Family: "Roboto", PointSize: 9},
 							OnClicked: func() {
 								if err := db.Submit(); err != nil {
 									fmt.Println(err)
@@ -57,7 +57,7 @@ func CreateNewDialog(funcName string) (interface{}, declarative.Dialog) {
 						declarative.PushButton{
 							AssignTo:  &cancelPB,
 							Text:      "Cancel",
-							Font:      declarative.Font{Family: "Segoe UI", PointSize: 9},
+							Font:      declarative.Font{Family: "Roboto", PointSize: 9},
 							OnClicked: func() { dlg.Cancel() },
 						},
 					},

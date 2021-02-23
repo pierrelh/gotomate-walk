@@ -58,7 +58,7 @@ func CreateApp() {
 				Children: []declarative.Widget{
 					declarative.ListBox{
 						Name:            "PrimaryList",
-						Font:            declarative.Font{Family: "Segoe UI", PointSize: 9},
+						Font:            declarative.Font{Family: "Roboto", PointSize: 9},
 						MultiSelection:  false,
 						AssignTo:        &aw.plb,
 						Model:           aw.plbmodel,
@@ -66,7 +66,7 @@ func CreateApp() {
 					},
 					declarative.ListBox{
 						Name:            "SecondaryList",
-						Font:            declarative.Font{Family: "Segoe UI", PointSize: 9},
+						Font:            declarative.Font{Family: "Roboto", PointSize: 9},
 						MultiSelection:  false,
 						AssignTo:        &aw.slb,
 						OnItemActivated: aw.slbItemActivated,
@@ -74,7 +74,7 @@ func CreateApp() {
 					declarative.PushButton{
 						MaxSize:    declarative.Size{Width: 100},
 						AssignTo:   &aw.pb,
-						Font:       declarative.Font{Family: "Segoe UI", PointSize: 9, Bold: true},
+						Font:       declarative.Font{Family: "Roboto", PointSize: 9, Bold: true},
 						Background: declarative.SolidColorBrush{Color: walk.RGB(106, 215, 229)},
 						Text:       "RUN",
 						OnClicked: func() {
@@ -84,13 +84,12 @@ func CreateApp() {
 				},
 			},
 			declarative.ScrollView{
-				AssignTo:           &aw.sv,
-				Column:             5,
-				Layout:             declarative.Flow{MarginsZero: true},
-				AlwaysConsumeSpace: true,
-				Background:         declarative.SolidColorBrush{Color: walk.RGB(11, 11, 11)},
-				HorizontalFixed:    false,
-				VerticalFixed:      false,
+				AssignTo:        &aw.sv,
+				Column:          5,
+				Layout:          declarative.Flow{Margins: declarative.Margins{Left: 5, Top: 5, Right: 5, Bottom: 5}},
+				Background:      declarative.SolidColorBrush{Color: walk.RGB(11, 11, 11)},
+				HorizontalFixed: false,
+				VerticalFixed:   false,
 			},
 		},
 	}
@@ -168,16 +167,19 @@ func CreatePushButton(parent *walk.ScrollView, funcName, packageName string, dia
 	}
 
 	compose.SetLayout(walk.NewVBoxLayout())
-	layout := compose.Layout()
-	layout.SetMargins(walk.Margins{HNear: 100, VNear: 30, HFar: 100, VFar: 30})
+	compose.SetMinMaxSizePixels(walk.Size{Width: 300, Height: 150}, walk.Size{Width: 300, Height: 150})
+	bg, err := walk.NewSolidColorBrush(walk.RGB(106, 215, 229))
+	if err == nil {
+		compose.SetBackground(bg)
+	}
 
 	imageView, err := walk.NewImageView(compose)
 	if err != nil {
 		return err
 	}
 
-	imageView.SetMode(0)
-	imageView.SetSize(walk.Size{Width: 64, Height: 64})
+	imageView.SetMinMaxSizePixels(walk.Size{Width: 64, Height: 64}, walk.Size{Width: 64, Height: 64})
+	imageView.SetMode(3)
 
 	path, err := walk.NewImageFromFile(walk.Resources.RootDirPath() + "/func-icons/" + packageName + ".png")
 	if err != nil {
@@ -193,18 +195,11 @@ func CreatePushButton(parent *walk.ScrollView, funcName, packageName string, dia
 		return err
 	}
 
-	bg, err := walk.NewSolidColorBrush(walk.RGB(106, 215, 229))
-	if err == nil {
-		compose.SetBackground(bg)
-		linkLabel.SetBackground(bg)
-	}
-
-	font, err := walk.NewFont("Segoe UI", 9, walk.FontBold)
+	font, err := walk.NewFont("Roboto", 9, walk.FontBold)
 	if err == nil {
 		linkLabel.SetFont(font)
 	}
 	linkLabel.SetText(funcName)
-	linkLabel.SetWidth(500)
 
 	_ = &FiberButton{
 		compose,
