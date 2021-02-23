@@ -8,61 +8,62 @@ import (
 )
 
 // CreateNewDialog Create the dialog for the function & add the needed template
-func CreateNewDialog(funcName string) declarative.Dialog {
+func CreateNewDialog(funcName string) (interface{}, declarative.Dialog) {
 	var dlg *walk.Dialog
 	var db *walk.DataBinder
 	var acceptPB, cancelPB *walk.PushButton
 	source, children := fillDialog(funcName)
 
-	return declarative.Dialog{
-		Icon:          "/icon.ico",
-		Title:         funcName + " Settings",
-		AssignTo:      &dlg,
-		DefaultButton: &acceptPB,
-		CancelButton:  &cancelPB,
-		DataBinder: declarative.DataBinder{
-			AssignTo:       &db,
-			Name:           funcName,
-			DataSource:     source,
-			ErrorPresenter: declarative.ToolTipErrorPresenter{},
-		},
-		MinSize: declarative.Size{
-			Width:  300,
-			Height: 300,
-		},
-		Layout: declarative.VBox{},
-		Children: []declarative.Widget{
-			declarative.Composite{
-				Layout:   declarative.VBox{},
-				Children: children,
+	return source,
+		declarative.Dialog{
+			Icon:          "/icon.ico",
+			Title:         funcName + " Settings",
+			AssignTo:      &dlg,
+			DefaultButton: &acceptPB,
+			CancelButton:  &cancelPB,
+			DataBinder: declarative.DataBinder{
+				AssignTo:       &db,
+				Name:           funcName,
+				DataSource:     source,
+				ErrorPresenter: declarative.ToolTipErrorPresenter{},
 			},
-			declarative.HSplitter{
-				MaxSize: declarative.Size{Height: 30},
-				Children: []declarative.Widget{
-					declarative.HSpacer{},
-					declarative.PushButton{
-						AssignTo: &acceptPB,
-						Text:     "OK",
-						Font:     declarative.Font{Family: "Segoe UI", PointSize: 9},
-						OnClicked: func() {
-							if err := db.Submit(); err != nil {
-								fmt.Println(err)
-								return
-							}
+			MinSize: declarative.Size{
+				Width:  300,
+				Height: 300,
+			},
+			Layout: declarative.VBox{},
+			Children: []declarative.Widget{
+				declarative.Composite{
+					Layout:   declarative.VBox{},
+					Children: children,
+				},
+				declarative.HSplitter{
+					MaxSize: declarative.Size{Height: 30},
+					Children: []declarative.Widget{
+						declarative.HSpacer{},
+						declarative.PushButton{
+							AssignTo: &acceptPB,
+							Text:     "OK",
+							Font:     declarative.Font{Family: "Segoe UI", PointSize: 9},
+							OnClicked: func() {
+								if err := db.Submit(); err != nil {
+									fmt.Println(err)
+									return
+								}
 
-							dlg.Accept()
+								dlg.Accept()
+							},
 						},
-					},
-					declarative.PushButton{
-						AssignTo:  &cancelPB,
-						Text:      "Cancel",
-						Font:      declarative.Font{Family: "Segoe UI", PointSize: 9},
-						OnClicked: func() { dlg.Cancel() },
+						declarative.PushButton{
+							AssignTo:  &cancelPB,
+							Text:      "Cancel",
+							Font:      declarative.Font{Family: "Segoe UI", PointSize: 9},
+							OnClicked: func() { dlg.Cancel() },
+						},
 					},
 				},
 			},
-		},
-	}
+		}
 }
 
 func fillDialog(funcName string) (interface{}, []declarative.Widget) {

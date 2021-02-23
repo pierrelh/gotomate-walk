@@ -1,6 +1,8 @@
 package app
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"strconv"
 	"strings"
 
@@ -119,8 +121,8 @@ type AutomateModel struct {
 }
 
 func (aw *AutomateWindow) saveFiber() {
-	// file, _ := json.Marshal(fiber)
-	// _ = ioutil.WriteFile("test.json", file, 0644)
+	file, _ := json.Marshal(fiber)
+	_ = ioutil.WriteFile("test.json", file, 0644)
 }
 
 func (aw *AutomateWindow) plbItemActivated() {
@@ -144,22 +146,23 @@ func (aw *AutomateWindow) slbItemActivated() {
 		item := &aw.slbmodel.items[i]
 		funcName := item.name
 
-		fiberButton, _ := CreatePushButton(aw.sv, funcName, packageName)
+		data, dialog := CreateNewDialog(funcName)
 
 		newInstruction := &FiberInstruction{
 			Package:  packageName,
 			FuncName: funcName,
-			Button:   fiberButton,
+			Data:     data,
 		}
+		CreatePushButton(aw.sv, funcName, packageName, dialog)
 		fiber.Instructions = append(fiber.Instructions, newInstruction)
 	}
 }
 
 // CreatePushButton Create a new push button in the fiber
-func CreatePushButton(parent walk.Container, funcName, packageName string) (*FiberButton, error) {
+func CreatePushButton(parent walk.Container, funcName, packageName string, dialog declarative.Dialog) error {
 	compose, err := walk.NewComposite(parent)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	compose.SetLayout(walk.NewVBoxLayout())
@@ -168,7 +171,7 @@ func CreatePushButton(parent walk.Container, funcName, packageName string) (*Fib
 
 	imageView, err := walk.NewImageView(compose)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	imageView.SetMode(0)
@@ -185,7 +188,7 @@ func CreatePushButton(parent walk.Container, funcName, packageName string) (*Fib
 
 	linkLabel, err := walk.NewLinkLabel(compose)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
 	bg, err := walk.NewSolidColorBrush(walk.RGB(106, 215, 229))
@@ -201,9 +204,7 @@ func CreatePushButton(parent walk.Container, funcName, packageName string) (*Fib
 	linkLabel.SetText(funcName)
 	linkLabel.SetWidth(500)
 
-	dialog := CreateNewDialog(funcName)
-
-	fiberButton := &FiberButton{
+	_ = &FiberButton{
 		compose,
 		imageView,
 		linkLabel,
@@ -226,18 +227,18 @@ func CreatePushButton(parent walk.Container, funcName, packageName string) (*Fib
 	}
 
 	if err := walk.InitWrapperWindow(fiberComposite); err != nil {
-		return nil, err
+		return err
 	}
 
 	if err := walk.InitWrapperWindow(fiberImageView); err != nil {
-		return nil, err
+		return err
 	}
 
 	if err := walk.InitWrapperWindow(fiberLinkLabel); err != nil {
-		return nil, err
+		return err
 	}
 
-	return fiberButton, nil
+	return nil
 }
 
 // NewAutomateModel Getting the automates packages
