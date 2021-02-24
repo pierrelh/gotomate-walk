@@ -1,7 +1,7 @@
-package app
+package packages
 
 import (
-	"gotomate/battery"
+	"gotomate/packages/battery"
 	"time"
 
 	"gopkg.in/toast.v1"

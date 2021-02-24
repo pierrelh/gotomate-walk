@@ -2,14 +2,14 @@ package app
 
 import (
 	"fmt"
-	"gotomate/battery"
-	"gotomate/clipboard"
-	"gotomate/keyboard"
-	"gotomate/log"
-	"gotomate/mouse"
-	"gotomate/notification"
-	"gotomate/sleep"
-	"gotomate/systime"
+	"gotomate/packages/battery"
+	"gotomate/packages/clipboard"
+	"gotomate/packages/keyboard"
+	"gotomate/packages/log"
+	"gotomate/packages/mouse"
+	"gotomate/packages/notification"
+	"gotomate/packages/sleep"
+	"gotomate/packages/systime"
 	"reflect"
 
 	"github.com/lxn/walk"
@@ -205,9 +205,9 @@ func runFiber() {
 				go func() {
 					stateInstruction := reflect.ValueOf(instruction.Data).Elem()
 					batName := stateInstruction.FieldByName("BatteryName").Interface().(string)
-					batInstruction := varSearch(batName)
+					batInstruction := VarSearch(batName)
 					if batInstruction != nil {
-						val := reflect.ValueOf(instruction.Data).Elem()
+						val := reflect.ValueOf(batInstruction.Data).Elem()
 						bat := val.FieldByName("Battery").Interface().(*battery.Battery)
 						state := battery.GetBatteryState(bat, finished)
 						stateInstruction.FieldByName("State").Set(reflect.ValueOf(state))
@@ -221,9 +221,9 @@ func runFiber() {
 				go func() {
 					percentageInstruction := reflect.ValueOf(instruction.Data).Elem()
 					batName := percentageInstruction.FieldByName("BatteryName").Interface().(string)
-					batInstruction := varSearch(batName)
+					batInstruction := VarSearch(batName)
 					if batInstruction != nil {
-						val := reflect.ValueOf(instruction.Data).Elem()
+						val := reflect.ValueOf(batInstruction.Data).Elem()
 						bat := val.FieldByName("Battery").Interface().(*battery.Battery)
 						percentage := battery.GetBatteryPercentage(bat, finished)
 						percentageInstruction.FieldByName("Percentage").Set(reflect.ValueOf(percentage))
@@ -237,9 +237,9 @@ func runFiber() {
 				go func() {
 					remainingTimeInstruction := reflect.ValueOf(instruction.Data).Elem()
 					batName := remainingTimeInstruction.FieldByName("BatteryName").Interface().(string)
-					batInstruction := varSearch(batName)
+					batInstruction := VarSearch(batName)
 					if batInstruction != nil {
-						val := reflect.ValueOf(instruction.Data).Elem()
+						val := reflect.ValueOf(batInstruction.Data).Elem()
 						bat := val.FieldByName("Battery").Interface().(*battery.Battery)
 						time := battery.GetBatteryRemainingTime(bat, finished)
 						remainingTimeInstruction.FieldByName("RemainingTime").Set(reflect.ValueOf(time))
@@ -253,9 +253,9 @@ func runFiber() {
 				go func() {
 					chargeRateInstruction := reflect.ValueOf(instruction.Data).Elem()
 					batName := chargeRateInstruction.FieldByName("BatteryName").Interface().(string)
-					batInstruction := varSearch(batName)
+					batInstruction := VarSearch(batName)
 					if batInstruction != nil {
-						val := reflect.ValueOf(instruction.Data).Elem()
+						val := reflect.ValueOf(batInstruction.Data).Elem()
 						bat := val.FieldByName("Battery").Interface().(*battery.Battery)
 						rate := battery.GetBatteryChargeRate(bat, finished)
 						chargeRateInstruction.FieldByName("ChargeRate").Set(reflect.ValueOf(rate))
@@ -269,9 +269,9 @@ func runFiber() {
 				go func() {
 					currentCapacityInstruction := reflect.ValueOf(instruction.Data).Elem()
 					batName := currentCapacityInstruction.FieldByName("BatteryName").Interface().(string)
-					batInstruction := varSearch(batName)
+					batInstruction := VarSearch(batName)
 					if batInstruction != nil {
-						val := reflect.ValueOf(instruction.Data).Elem()
+						val := reflect.ValueOf(batInstruction.Data).Elem()
 						bat := val.FieldByName("Battery").Interface().(*battery.Battery)
 						capacity := battery.GetBatteryCurrentCapacity(bat, finished)
 						currentCapacityInstruction.FieldByName("CurrentCapacity").Set(reflect.ValueOf(capacity))
@@ -285,9 +285,9 @@ func runFiber() {
 				go func() {
 					lastCapacityInstruction := reflect.ValueOf(instruction.Data).Elem()
 					batName := lastCapacityInstruction.FieldByName("BatteryName").Interface().(string)
-					batInstruction := varSearch(batName)
+					batInstruction := VarSearch(batName)
 					if batInstruction != nil {
-						val := reflect.ValueOf(instruction.Data).Elem()
+						val := reflect.ValueOf(batInstruction.Data).Elem()
 						bat := val.FieldByName("Battery").Interface().(*battery.Battery)
 						capacity := battery.GetBatteryLastFullCapacity(bat, finished)
 						lastCapacityInstruction.FieldByName("LastFullCapacity").Set(reflect.ValueOf(capacity))
@@ -301,9 +301,9 @@ func runFiber() {
 				go func() {
 					designCapacityInstruction := reflect.ValueOf(instruction.Data).Elem()
 					batName := designCapacityInstruction.FieldByName("BatteryName").Interface().(string)
-					batInstruction := varSearch(batName)
+					batInstruction := VarSearch(batName)
 					if batInstruction != nil {
-						val := reflect.ValueOf(instruction.Data).Elem()
+						val := reflect.ValueOf(batInstruction.Data).Elem()
 						bat := val.FieldByName("Battery").Interface().(*battery.Battery)
 						capacity := battery.GetBatteryDesignCapacity(bat, finished)
 						designCapacityInstruction.FieldByName("DesignCapacity").Set(reflect.ValueOf(capacity))
@@ -317,9 +317,9 @@ func runFiber() {
 				go func() {
 					voltageInstruction := reflect.ValueOf(instruction.Data).Elem()
 					batName := voltageInstruction.FieldByName("BatteryName").Interface().(string)
-					batInstruction := varSearch(batName)
+					batInstruction := VarSearch(batName)
 					if batInstruction != nil {
-						val := reflect.ValueOf(instruction.Data).Elem()
+						val := reflect.ValueOf(batInstruction.Data).Elem()
 						bat := val.FieldByName("Battery").Interface().(*battery.Battery)
 						voltage := battery.GetBatteryVoltage(bat, finished)
 						voltageInstruction.FieldByName("Voltage").Set(reflect.ValueOf(voltage))
@@ -333,9 +333,9 @@ func runFiber() {
 				go func() {
 					designVoltageInstruction := reflect.ValueOf(instruction.Data).Elem()
 					batName := designVoltageInstruction.FieldByName("BatteryName").Interface().(string)
-					batInstruction := varSearch(batName)
+					batInstruction := VarSearch(batName)
 					if batInstruction != nil {
-						val := reflect.ValueOf(instruction.Data).Elem()
+						val := reflect.ValueOf(batInstruction.Data).Elem()
 						bat := val.FieldByName("Battery").Interface().(*battery.Battery)
 						voltage := battery.GetBatteryDesignVoltage(bat, finished)
 						designVoltageInstruction.FieldByName("DesignVoltage").Set(reflect.ValueOf(voltage))
