@@ -14,7 +14,6 @@ import (
 
 	"github.com/lxn/walk"
 	declarative "github.com/lxn/walk/declarative"
-	"github.com/lxn/win"
 	"gopkg.in/toast.v1"
 )
 
@@ -32,18 +31,9 @@ type FiberInstruction struct {
 
 // FiberButton Setting fiber's buttons structure
 type FiberButton struct {
-	*walk.Composite
+	Composite    *walk.Composite
+	LinkLabel    *walk.LinkLabel
 	DialogWindow declarative.Dialog
-}
-
-//WndProc setting the window event of the composite element
-func (fb *FiberButton) WndProc(hwnd win.HWND, msg uint32, wParam, lParam uintptr) uintptr {
-	switch msg {
-	case win.WM_LBUTTONDOWN:
-		go fb.DialogWindow.Run(aw.mw)
-	}
-
-	return fb.Composite.WndProc(hwnd, msg, wParam, lParam)
 }
 
 func runFiber() {
