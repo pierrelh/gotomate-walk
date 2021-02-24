@@ -1,8 +1,7 @@
-package app
+package packages
 
 import (
 	"fmt"
-	"gotomate/packages"
 
 	"github.com/lxn/walk"
 	declarative "github.com/lxn/walk/declarative"
@@ -71,49 +70,49 @@ func CreateNewDialog(funcName string) (interface{}, declarative.Dialog) {
 func FillDialog(funcName string) (interface{}, []declarative.Widget) {
 	switch funcName {
 	case "Sleep":
-		return new(packages.Sleep), packages.SleepTemplate
+		return new(Sleep), SleepTemplate
 	case "MilliSleep":
-		return new(packages.MilliSleep), packages.MilliSleepTemplate
+		return new(MilliSleep), MilliSleepTemplate
 	case "Click":
-		return new(packages.MouseClick), packages.MouseClickTemplate
+		return new(MouseClick), MouseClickTemplate
 	case "Scroll":
-		return new(packages.MouseScroll), packages.MouseScrollTemplate
+		return new(MouseScroll), MouseScrollTemplate
 	case "Move":
-		return new(packages.MouseMove), packages.MouseMoveTemplate
+		return new(MouseMove), MouseMoveTemplate
 	case "Tap":
-		return new(packages.KeyboardTap), packages.KeyboardTapTemplate
+		return new(KeyboardTap), KeyboardTapTemplate
 	case "Write":
-		return new(packages.ClipboardWrite), packages.ClipboardWriteTemplate
+		return new(ClipboardWrite), ClipboardWriteTemplate
 	case "Read":
-		return new(packages.ClipboardRead), packages.ClipboardReadTemplate
+		return new(ClipboardRead), ClipboardReadTemplate
 	case "Print":
-		return new(packages.LogPrint), packages.LogPrintTemplate
+		return new(LogPrint), LogPrintTemplate
 	case "Create":
-		return new(packages.NotificationCreate), packages.NotificationCreateTemplate
+		return new(NotificationCreate), NotificationCreateTemplate
 	case "GetBattery":
-		return new(packages.UserBattery), packages.UserBatteryTemplate
+		return new(UserBattery), UserBatteryTemplate
 	case "GetBatteryState":
-		return new(packages.BatteryState), packages.BatteryParametersTemplate
+		return new(BatteryState), BatteryParametersTemplate
 	case "GetBatteryPercentage":
-		return new(packages.BatteryPercentage), packages.BatteryParametersTemplate
+		return new(BatteryPercentage), BatteryParametersTemplate
 	case "GetBatteryRemainingTime":
-		return new(packages.BatteryRemainingTime), packages.BatteryParametersTemplate
+		return new(BatteryRemainingTime), BatteryParametersTemplate
 	case "GetBatteryChargeRate":
-		return new(packages.BatteryChargeRate), packages.BatteryParametersTemplate
+		return new(BatteryChargeRate), BatteryParametersTemplate
 	case "GetBatteryCurrentCapacity":
-		return new(packages.BatteryCurrentCapacity), packages.BatteryParametersTemplate
+		return new(BatteryCurrentCapacity), BatteryParametersTemplate
 	case "GetBatteryLastFullCapacity":
-		return new(packages.BatteryLastFullCapacity), packages.BatteryParametersTemplate
+		return new(BatteryLastFullCapacity), BatteryParametersTemplate
 	case "GetBatteryDesignCapacity":
-		return new(packages.BatteryDesignCapacity), packages.BatteryParametersTemplate
+		return new(BatteryDesignCapacity), BatteryParametersTemplate
 	case "GetBatteryVoltage":
-		return new(packages.BatteryVoltage), packages.BatteryParametersTemplate
+		return new(BatteryVoltage), BatteryParametersTemplate
 	case "GetBatteryDesignVoltage":
-		return new(packages.BatteryDesignVoltage), packages.BatteryParametersTemplate
+		return new(BatteryDesignVoltage), BatteryParametersTemplate
 	case "GetCurrentSysClock":
-		return new(packages.SysClock), packages.SysClockTemplate
+		return new(SysClock), SysClockTemplate
 	case "GetCurrentSysTime":
-		return new(packages.SysTime), packages.SysClockTemplate
+		return new(SysTime), SysClockTemplate
 	default:
 		return nil, nil
 	}
