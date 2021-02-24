@@ -50,7 +50,7 @@ func CreateApp() {
 						AssignTo: &aw.Menu.Run,
 						Text:     "Run",
 						Image:    "/run.png",
-						Shortcut: declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyR},
+						Shortcut: declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyE},
 						OnTriggered: func() {
 							go newFiber.RunFiber()
 						},
