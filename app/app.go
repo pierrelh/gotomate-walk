@@ -1,27 +1,23 @@
 package app
 
 import (
-	"encoding/json"
 	"fmt"
-	"gotomate/packages"
-	"io/ioutil"
+	"gotomate/app/automate"
+	"gotomate/app/fiber"
 	"log"
-	"strconv"
-	"strings"
 
 	"github.com/lxn/walk"
 	declarative "github.com/lxn/walk/declarative"
 )
 
-var aw = new(AutomateWindow)
-var fiber = new(Fiber)
-var runningFiber = 0
+var aw = new(automate.Window)
+var newFiber = new(fiber.Fiber)
 
 // CreateApp Initiate the app
 func CreateApp() {
 
-	aw.Menu = new(AutomateMenu)
-	aw.PrimaryListBoxModel = NewAutomateModel()
+	aw.Menu = new(automate.Menu)
+	aw.PrimaryListBoxModel = automate.NewAutomateModel()
 
 	if err := (declarative.MainWindow{
 		AssignTo:   &aw.MainWindow,
@@ -56,7 +52,7 @@ func CreateApp() {
 						Image:    "/run.png",
 						Shortcut: declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyR},
 						OnTriggered: func() {
-							runFiber()
+							go newFiber.RunFiber()
 						},
 					},
 					declarative.Action{
@@ -64,7 +60,7 @@ func CreateApp() {
 						Text:        "Save",
 						Image:       "/save.png",
 						Shortcut:    declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyS},
-						OnTriggered: aw.saveFiber,
+						OnTriggered: func() { aw.SaveFiber(newFiber) },
 					},
 					declarative.Action{
 						AssignTo:    &aw.Menu.Exit,
@@ -85,14 +81,14 @@ func CreateApp() {
 						Font:            declarative.Font{Family: "Roboto", PointSize: 9},
 						MultiSelection:  false,
 						Model:           aw.PrimaryListBoxModel,
-						OnItemActivated: aw.plbItemActivated,
+						OnItemActivated: aw.PlbItemActivated,
 					},
 					declarative.ListBox{
 						AssignTo:        &aw.SecondaryListBox,
 						Name:            "SecondaryList",
 						Font:            declarative.Font{Family: "Roboto", PointSize: 9},
 						MultiSelection:  false,
-						OnItemActivated: aw.slbItemActivated,
+						OnItemActivated: func() { aw.SlbItemActivated(newFiber) },
 					},
 					declarative.Composite{
 						Layout: declarative.VBox{},
@@ -125,7 +121,7 @@ func CreateApp() {
 										Font:     declarative.Font{Family: "Roboto", PointSize: 9, Bold: true},
 										Text:     "RUN",
 										OnClicked: func() {
-											go runFiber()
+											go newFiber.RunFiber()
 										},
 									},
 									declarative.PushButton{
@@ -133,7 +129,7 @@ func CreateApp() {
 										MaxSize:   declarative.Size{Width: 100},
 										Font:      declarative.Font{Family: "Roboto", PointSize: 9, Bold: true},
 										Text:      "Save",
-										OnClicked: aw.saveFiber,
+										OnClicked: func() { aw.SaveFiber(newFiber) },
 									},
 								},
 							},
@@ -153,172 +149,6 @@ func CreateApp() {
 		log.Fatal(err)
 	}
 
-	AddSavedFibersActions()
+	aw.AddSavedFibersActions()
 	aw.MainWindow.Run()
-}
-
-// AutomateWindow Setting the automate window structure
-type AutomateWindow struct {
-	MainWindow            *walk.MainWindow
-	Menu                  *AutomateMenu
-	PrimaryListBox        *walk.ListBox
-	PrimaryListBoxModel   *AutomateModel
-	SecondaryListBox      *walk.ListBox
-	SecondaryListBoxModel *AutomateModel
-	FiberNameLabel        *walk.Label
-	FiberNameInput        *walk.TextEdit
-	RunButton             *walk.PushButton
-	SaveButton            *walk.PushButton
-	ScrollView            *walk.ScrollView
-}
-
-//AutomateMenu Setting the automate window's menu structure
-type AutomateMenu struct {
-	WindowMenu *walk.Menu
-	Open       *walk.Action
-	Folders    *walk.Menu
-	Run        *walk.Action
-	Save       *walk.Action
-	Exit       *walk.Action
-}
-
-// AutomateModel Setting the model of automate ListBox
-type AutomateModel struct {
-	walk.ListModelBase
-	items []AutomateItem
-}
-
-// AutomateItem Setting automate packages items
-type AutomateItem struct {
-	name  string
-	value string
-}
-
-func (aw *AutomateWindow) saveFiber() {
-	name := aw.FiberNameInput.Text()
-	if name == "" {
-		var dlg *walk.Dialog
-		var acceptPB *walk.PushButton
-
-		errDialog := declarative.Dialog{
-			Icon:          "/icon.ico",
-			Title:         "Error",
-			AssignTo:      &dlg,
-			DefaultButton: &acceptPB,
-			MinSize: declarative.Size{
-				Width:  200,
-				Height: 150,
-			},
-			Layout: declarative.VBox{},
-			Children: []declarative.Widget{
-				declarative.Composite{
-					Layout: declarative.VBox{},
-					Children: []declarative.Widget{
-						declarative.TextLabel{
-							Text:      "No name given for the fiber",
-							Alignment: declarative.Alignment2D(walk.AlignHCenterVCenter),
-							Font:      declarative.Font{Family: "Roboto", PointSize: 9},
-						},
-						declarative.PushButton{
-							AssignTo: &acceptPB,
-							Text:     "OK",
-							Font:     declarative.Font{Family: "Roboto", PointSize: 9},
-							OnClicked: func() {
-								dlg.Cancel()
-								aw.FiberNameInput.SetFocus()
-							},
-						},
-					},
-				},
-			},
-		}
-
-		errDialog.Run(aw.MainWindow)
-	} else {
-		fiber.Name = name
-		path := "saves/" + name + ".json"
-		file, _ := json.Marshal(fiber)
-		ioutil.WriteFile(path, file, 0644)
-		AddSavedFibersActions()
-	}
-}
-
-func (aw *AutomateWindow) plbItemActivated() {
-	i := aw.PrimaryListBox.CurrentIndex()
-	if i != -1 {
-		item := &aw.PrimaryListBoxModel.items[i]
-		value := item.name
-		newModel := NewAutomateSubModel(value)
-		aw.SecondaryListBox.SetModel(newModel)
-		aw.SecondaryListBoxModel = newModel
-	}
-}
-
-func (aw *AutomateWindow) slbItemActivated() {
-	i := aw.SecondaryListBox.CurrentIndex()
-	if i != -1 {
-		plbIndex := aw.PrimaryListBox.CurrentIndex()
-		plbItem := &aw.PrimaryListBoxModel.items[plbIndex]
-		packageName := plbItem.name
-
-		item := &aw.SecondaryListBoxModel.items[i]
-		funcName := item.name
-
-		data, dialog := CreateNewDialog(funcName)
-
-		newInstruction := &FiberInstruction{
-			Package:  packageName,
-			FuncName: funcName,
-			Data:     data,
-		}
-		CreateFiberButton(aw.ScrollView, funcName, packageName, dialog)
-		fiber.Instructions = append(fiber.Instructions, newInstruction)
-	}
-}
-
-// NewAutomateModel Getting the automates packages
-func NewAutomateModel() *AutomateModel {
-	env := packages.Packages
-
-	m := &AutomateModel{items: make([]AutomateItem, len(env))}
-
-	for i, e := range env {
-		name := strconv.Itoa(i)
-		value := e
-
-		m.items[i] = AutomateItem{value, name}
-	}
-
-	return m
-}
-
-// NewAutomateSubModel Gettings the automate's subpackages
-func NewAutomateSubModel(key string) *AutomateModel {
-	env := packages.SubPackages
-
-	m := &AutomateModel{items: make([]AutomateItem, len(env[key]))}
-
-	for i, e := range env[key] {
-		j := strings.Index(e, "=")
-		if j == 0 {
-			continue
-		}
-
-		name := strconv.Itoa(i)
-		value := e
-
-		m.items[i] = AutomateItem{value, name}
-	}
-
-	return m
-}
-
-// ItemCount return the length of an AutomateModel items
-func (m *AutomateModel) ItemCount() int {
-	return len(m.items)
-}
-
-// Value return the value of an AutomateModel item
-func (m *AutomateModel) Value(index int) interface{} {
-	return m.items[index].name
 }

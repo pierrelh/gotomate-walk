@@ -1,11 +1,11 @@
-package app
+package fiber
 
 import (
 	"reflect"
 )
 
 //VarSearch search a var in the fiber & return the instruction
-func VarSearch(name string) *FiberInstruction {
+func (fiber *Fiber) VarSearch(name string) *Instruction {
 	for i := 0; i < len(fiber.Instructions); i++ {
 		instruction := fiber.Instructions[i]
 		val := reflect.ValueOf(instruction.Data).Elem()
