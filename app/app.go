@@ -2,6 +2,7 @@ package app
 
 import (
 	"encoding/json"
+	"gotomate/packages"
 	"io/ioutil"
 	"log"
 	"strconv"
@@ -336,7 +337,7 @@ func CreatePushButton(parent *walk.ScrollView, funcName, packageName string, dia
 
 // NewAutomateModel Getting the automates packages
 func NewAutomateModel() *AutomateModel {
-	env := Packages
+	env := packages.Packages
 
 	m := &AutomateModel{items: make([]AutomateItem, len(env))}
 
@@ -352,7 +353,7 @@ func NewAutomateModel() *AutomateModel {
 
 // NewAutomateSubModel Gettings the automate's subpackages
 func NewAutomateSubModel(key string) *AutomateModel {
-	env := SubPackages
+	env := packages.SubPackages
 
 	m := &AutomateModel{items: make([]AutomateItem, len(env[key]))}
 

@@ -8,21 +8,21 @@ import (
 
 // Click Simulate a user click
 func Click(btn string, finished chan bool) {
-	fmt.Println("Click initialization: ", btn, " click")
+	fmt.Println("Click initialization ...")
 	robotgo.Click(btn)
 	finished <- true
 }
 
 // Move move the mouse
 func Move(x, y int, finished chan bool) {
-	fmt.Println("Move initialization")
+	fmt.Println("Move initialization ...")
 	robotgo.MoveMouse(x, y)
 	finished <- true
 }
 
 // Scroll scroll the mouse
 func Scroll(x, y int, finished chan bool) {
-	fmt.Println("Scroll initialization")
+	fmt.Println("Scroll initialization ...")
 	robotgo.Scroll(x, y)
 	finished <- true
 }

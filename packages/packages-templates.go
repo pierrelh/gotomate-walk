@@ -1,8 +1,6 @@
-package app
+package packages
 
-import (
-	declarative "github.com/lxn/walk/declarative"
-)
+import "github.com/lxn/walk/declarative"
 
 //SleepTemplate Dialog's Sleep Template
 var SleepTemplate = []declarative.Widget{

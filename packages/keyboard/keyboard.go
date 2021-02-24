@@ -8,7 +8,7 @@ import (
 
 // Tap Simulate a tap on the keyboard
 func Tap(key string, sp []string, finished chan bool) {
-	fmt.Println("Tap initialization")
+	fmt.Println("Tap initialization ...")
 	if len(sp) == 0 {
 		robotgo.KeyTap(key)
 	} else {

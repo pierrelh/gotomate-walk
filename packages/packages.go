@@ -1,4 +1,4 @@
-package app
+package packages
 
 // Packages Export all the available automate's packages
 var Packages = []string{
