@@ -13,17 +13,18 @@ import (
 	declarative "github.com/lxn/walk/declarative"
 )
 
-var aw = &AutomateWindow{}
-var fiber = &Fiber{}
+var aw = new(AutomateWindow)
+var fiber = new(Fiber)
+var runningFiber = 0
 
 // CreateApp Initiate the app
 func CreateApp() {
 
-	aw.plbmodel = NewAutomateModel()
-	var openAction *walk.Action
+	aw.Menu = new(AutomateMenu)
+	aw.PrimaryListBoxModel = NewAutomateModel()
 
 	if err := (declarative.MainWindow{
-		AssignTo:   &aw.mw,
+		AssignTo:   &aw.MainWindow,
 		Icon:       "icon.ico",
 		Title:      "Gotomate",
 		Background: declarative.SolidColorBrush{Color: walk.RGB(11, 11, 11)},
@@ -32,10 +33,11 @@ func CreateApp() {
 		Layout:     declarative.VBox{MarginsZero: true, SpacingZero: true},
 		MenuItems: []declarative.MenuItem{
 			declarative.Menu{
-				Text: "&File",
+				AssignTo: &aw.Menu.WindowMenu,
+				Text:     "&File",
 				Items: []declarative.MenuItem{
 					declarative.Action{
-						AssignTo:    &openAction,
+						AssignTo:    &aw.Menu.Open,
 						Text:        "Open",
 						Image:       "/open.png",
 						Enabled:     declarative.Bind("enabledCB.Checked"),
@@ -44,27 +46,30 @@ func CreateApp() {
 						OnTriggered: func() { fmt.Println("Open a fiber") },
 					},
 					declarative.Menu{
-						AssignTo: &aw.folders,
+						AssignTo: &aw.Menu.Folders,
 						Image:    "/folder.png",
 						Text:     "My Fibers",
 					},
 					declarative.Action{
+						AssignTo: &aw.Menu.Run,
 						Text:     "Run",
 						Image:    "/run.png",
 						Shortcut: declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyR},
 						OnTriggered: func() {
-							go runFiber()
+							runFiber()
 						},
 					},
 					declarative.Action{
+						AssignTo:    &aw.Menu.Save,
 						Text:        "Save",
 						Image:       "/save.png",
 						Shortcut:    declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyS},
 						OnTriggered: aw.saveFiber,
 					},
 					declarative.Action{
+						AssignTo:    &aw.Menu.Exit,
 						Text:        "Exit",
-						OnTriggered: func() { aw.mw.Close() },
+						OnTriggered: func() { aw.MainWindow.Close() },
 					},
 				},
 			},
@@ -75,18 +80,18 @@ func CreateApp() {
 				MaxSize: declarative.Size{Height: 120},
 				Children: []declarative.Widget{
 					declarative.ListBox{
+						AssignTo:        &aw.PrimaryListBox,
 						Name:            "PrimaryList",
 						Font:            declarative.Font{Family: "Roboto", PointSize: 9},
 						MultiSelection:  false,
-						AssignTo:        &aw.plb,
-						Model:           aw.plbmodel,
+						Model:           aw.PrimaryListBoxModel,
 						OnItemActivated: aw.plbItemActivated,
 					},
 					declarative.ListBox{
+						AssignTo:        &aw.SecondaryListBox,
 						Name:            "SecondaryList",
 						Font:            declarative.Font{Family: "Roboto", PointSize: 9},
 						MultiSelection:  false,
-						AssignTo:        &aw.slb,
 						OnItemActivated: aw.slbItemActivated,
 					},
 					declarative.Composite{
@@ -96,13 +101,14 @@ func CreateApp() {
 								Layout: declarative.HBox{},
 								Children: []declarative.Widget{
 									declarative.Label{
+										AssignTo:  &aw.FiberNameLabel,
 										Alignment: declarative.Alignment2D(walk.AlignHFarVCenter),
 										Font:      declarative.Font{Family: "Roboto", PointSize: 12, Underline: true, Bold: true},
 										Text:      "Fiber Name :",
 										TextColor: walk.Color(0xffffff),
 									},
 									declarative.TextEdit{
-										AssignTo:      &aw.name,
+										AssignTo:      &aw.FiberNameInput,
 										Alignment:     declarative.Alignment2D(walk.AlignHNearVCenter),
 										Font:          declarative.Font{Family: "Roboto", PointSize: 9},
 										CompactHeight: true,
@@ -114,20 +120,20 @@ func CreateApp() {
 								Layout: declarative.HBox{},
 								Children: []declarative.Widget{
 									declarative.PushButton{
-										MaxSize:    declarative.Size{Width: 100},
-										Font:       declarative.Font{Family: "Roboto", PointSize: 9, Bold: true},
-										Background: declarative.SolidColorBrush{Color: walk.RGB(106, 215, 229)},
-										Text:       "RUN",
+										AssignTo: &aw.RunButton,
+										MaxSize:  declarative.Size{Width: 100},
+										Font:     declarative.Font{Family: "Roboto", PointSize: 9, Bold: true},
+										Text:     "RUN",
 										OnClicked: func() {
 											go runFiber()
 										},
 									},
 									declarative.PushButton{
-										MaxSize:    declarative.Size{Width: 100},
-										Font:       declarative.Font{Family: "Roboto", PointSize: 9, Bold: true},
-										Background: declarative.SolidColorBrush{Color: walk.RGB(106, 215, 229)},
-										Text:       "Save",
-										OnClicked:  aw.saveFiber,
+										AssignTo:  &aw.SaveButton,
+										MaxSize:   declarative.Size{Width: 100},
+										Font:      declarative.Font{Family: "Roboto", PointSize: 9, Bold: true},
+										Text:      "Save",
+										OnClicked: aw.saveFiber,
 									},
 								},
 							},
@@ -136,7 +142,7 @@ func CreateApp() {
 				},
 			},
 			declarative.ScrollView{
-				AssignTo:        &aw.sv,
+				AssignTo:        &aw.ScrollView,
 				Layout:          declarative.Flow{Margins: declarative.Margins{Left: 5, Top: 5, Right: 5, Bottom: 5}},
 				Background:      declarative.SolidColorBrush{Color: walk.RGB(11, 11, 11)},
 				HorizontalFixed: false,
@@ -148,25 +154,32 @@ func CreateApp() {
 	}
 
 	AddSavedFibersActions()
-	aw.mw.Run()
+	aw.MainWindow.Run()
 }
 
 // AutomateWindow Setting the automate window structure
 type AutomateWindow struct {
-	mw       *walk.MainWindow
-	folders  *walk.Menu
-	name     *walk.TextEdit
-	plb      *walk.ListBox
-	plbmodel *AutomateModel
-	slb      *walk.ListBox
-	slbmodel *AutomateModel
-	sv       *walk.ScrollView
+	MainWindow            *walk.MainWindow
+	Menu                  *AutomateMenu
+	PrimaryListBox        *walk.ListBox
+	PrimaryListBoxModel   *AutomateModel
+	SecondaryListBox      *walk.ListBox
+	SecondaryListBoxModel *AutomateModel
+	FiberNameLabel        *walk.Label
+	FiberNameInput        *walk.TextEdit
+	RunButton             *walk.PushButton
+	SaveButton            *walk.PushButton
+	ScrollView            *walk.ScrollView
 }
 
-// AutomateItem Setting automate packages items
-type AutomateItem struct {
-	name  string
-	value string
+//AutomateMenu Setting the automate window's menu structure
+type AutomateMenu struct {
+	WindowMenu *walk.Menu
+	Open       *walk.Action
+	Folders    *walk.Menu
+	Run        *walk.Action
+	Save       *walk.Action
+	Exit       *walk.Action
 }
 
 // AutomateModel Setting the model of automate ListBox
@@ -175,8 +188,14 @@ type AutomateModel struct {
 	items []AutomateItem
 }
 
+// AutomateItem Setting automate packages items
+type AutomateItem struct {
+	name  string
+	value string
+}
+
 func (aw *AutomateWindow) saveFiber() {
-	name := aw.name.Text()
+	name := aw.FiberNameInput.Text()
 	if name == "" {
 		var dlg *walk.Dialog
 		var acceptPB *walk.PushButton
@@ -206,7 +225,7 @@ func (aw *AutomateWindow) saveFiber() {
 							Font:     declarative.Font{Family: "Roboto", PointSize: 9},
 							OnClicked: func() {
 								dlg.Cancel()
-								aw.name.SetFocus()
+								aw.FiberNameInput.SetFocus()
 							},
 						},
 					},
@@ -214,8 +233,9 @@ func (aw *AutomateWindow) saveFiber() {
 			},
 		}
 
-		errDialog.Run(aw.mw)
+		errDialog.Run(aw.MainWindow)
 	} else {
+		fiber.Name = name
 		path := "saves/" + name + ".json"
 		file, _ := json.Marshal(fiber)
 		ioutil.WriteFile(path, file, 0644)
@@ -224,24 +244,24 @@ func (aw *AutomateWindow) saveFiber() {
 }
 
 func (aw *AutomateWindow) plbItemActivated() {
-	i := aw.plb.CurrentIndex()
+	i := aw.PrimaryListBox.CurrentIndex()
 	if i != -1 {
-		item := &aw.plbmodel.items[i]
+		item := &aw.PrimaryListBoxModel.items[i]
 		value := item.name
 		newModel := NewAutomateSubModel(value)
-		aw.slb.SetModel(newModel)
-		aw.slbmodel = newModel
+		aw.SecondaryListBox.SetModel(newModel)
+		aw.SecondaryListBoxModel = newModel
 	}
 }
 
 func (aw *AutomateWindow) slbItemActivated() {
-	i := aw.slb.CurrentIndex()
+	i := aw.SecondaryListBox.CurrentIndex()
 	if i != -1 {
-		plbIndex := aw.plb.CurrentIndex()
-		plbItem := &aw.plbmodel.items[plbIndex]
+		plbIndex := aw.PrimaryListBox.CurrentIndex()
+		plbItem := &aw.PrimaryListBoxModel.items[plbIndex]
 		packageName := plbItem.name
 
-		item := &aw.slbmodel.items[i]
+		item := &aw.SecondaryListBoxModel.items[i]
 		funcName := item.name
 
 		data, dialog := CreateNewDialog(funcName)
@@ -251,47 +271,9 @@ func (aw *AutomateWindow) slbItemActivated() {
 			FuncName: funcName,
 			Data:     data,
 		}
-		CreateFiberButton(aw.sv, funcName, packageName, dialog)
+		CreateFiberButton(aw.ScrollView, funcName, packageName, dialog)
 		fiber.Instructions = append(fiber.Instructions, newInstruction)
 	}
-}
-
-// CreateFiberButton Create a new Fiberbutton in the fiber
-func CreateFiberButton(parent *walk.ScrollView, funcName, packageName string, dialog declarative.Dialog) error {
-	fb := new(FiberButton)
-	fb.DialogWindow = dialog
-	bmp, err := walk.NewBitmapFromFile(walk.Resources.RootDirPath() + "/func-icons/" + packageName + ".png")
-	if err != nil {
-		bmp, _ = walk.NewBitmapFromFile(walk.Resources.RootDirPath() + "/func-icons/default.png")
-	}
-
-	if err := (declarative.Composite{
-		AssignTo:   &fb.Composite,
-		Layout:     declarative.VBox{MarginsZero: true, SpacingZero: true},
-		Background: declarative.BitmapBrush{Image: bmp},
-		Alignment:  declarative.Alignment2D(walk.AlignHNearVCenter),
-		OnMouseDown: func(x, y int, button walk.MouseButton) {
-			fb.DialogWindow.Run(aw.mw)
-		},
-		Children: []declarative.Widget{
-			declarative.HSpacer{},
-			declarative.LinkLabel{
-				AssignTo:  &fb.LinkLabel,
-				Font:      declarative.Font{Family: "Roboto", PointSize: 9, Bold: true},
-				Text:      funcName,
-				Alignment: declarative.Alignment2D(walk.AlignHCenterVCenter),
-			},
-			declarative.HSpacer{},
-		},
-	}).Create(declarative.NewBuilder(parent)); err != nil {
-		return err
-	}
-	fb.Composite.SetCursor(walk.CursorHand())
-	fb.Composite.SetMinMaxSizePixels(walk.Size{Width: 300, Height: 150}, walk.Size{Width: 300, Height: 150})
-	fb.LinkLabel.SetMinMaxSizePixels(walk.Size{Width: 300, Height: 20}, walk.Size{Width: 300, Height: 20})
-	fb.Composite.Children().At(0).SetMinMaxSizePixels(walk.Size{Width: 300, Height: 100}, walk.Size{Width: 300, Height: 100})
-	fb.Composite.Children().At(2).SetMinMaxSizePixels(walk.Size{Width: 300, Height: 30}, walk.Size{Width: 300, Height: 30})
-	return nil
 }
 
 // NewAutomateModel Getting the automates packages

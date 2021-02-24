@@ -11,7 +11,7 @@ import (
 //AddSavedFibersActions Add all the saved fibers to the My fibers's menu
 func AddSavedFibersActions() {
 	root := "./saves"
-	aw.folders.Actions().Clear()
+	aw.Menu.Folders.Actions().Clear()
 
 	filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if filepath.Ext(path) == ".json" {
@@ -21,7 +21,7 @@ func AddSavedFibersActions() {
 			a := walk.NewAction()
 			a.SetText(name)
 			a.Triggered().Attach(func() { OpenSavedFiber(name) })
-			aw.folders.Actions().Add(a)
+			aw.Menu.Folders.Actions().Add(a)
 		}
 		return nil
 	})
