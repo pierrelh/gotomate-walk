@@ -2,6 +2,7 @@ package app
 
 import (
 	"encoding/json"
+	"fmt"
 	"gotomate/packages"
 	"io/ioutil"
 	"log"
@@ -34,13 +35,13 @@ func CreateApp() {
 				Text: "&File",
 				Items: []declarative.MenuItem{
 					declarative.Action{
-						AssignTo: &openAction,
-						Text:     "Open",
-						Image:    "/open.png",
-						Enabled:  declarative.Bind("enabledCB.Checked"),
-						Visible:  declarative.Bind("!openHiddenCB.Checked"),
-						Shortcut: declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyO},
-						// OnTriggered: aw.openActionTriggered,
+						AssignTo:    &openAction,
+						Text:        "Open",
+						Image:       "/open.png",
+						Enabled:     declarative.Bind("enabledCB.Checked"),
+						Visible:     declarative.Bind("!openHiddenCB.Checked"),
+						Shortcut:    declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyO},
+						OnTriggered: func() { fmt.Println("Open a fiber") },
 					},
 					declarative.Menu{
 						AssignTo: &aw.folders,
@@ -136,7 +137,6 @@ func CreateApp() {
 			},
 			declarative.ScrollView{
 				AssignTo:        &aw.sv,
-				Column:          5,
 				Layout:          declarative.Flow{Margins: declarative.Margins{Left: 5, Top: 5, Right: 5, Bottom: 5}},
 				Background:      declarative.SolidColorBrush{Color: walk.RGB(11, 11, 11)},
 				HorizontalFixed: false,
@@ -264,28 +264,18 @@ func CreatePushButton(parent *walk.ScrollView, funcName, packageName string, dia
 	}
 
 	compose.SetLayout(walk.NewVBoxLayout())
+	compose.SetAlignment(walk.AlignHNearVCenter)
+	compose.SetCursor(walk.CursorHand())
 	compose.SetMinMaxSizePixels(walk.Size{Width: 300, Height: 150}, walk.Size{Width: 300, Height: 150})
-	bg, err := walk.NewSolidColorBrush(walk.RGB(106, 215, 229))
+
+	bmp, err := walk.NewBitmapFromFile(walk.Resources.RootDirPath() + "/func-icons/" + packageName + ".png")
+	bg, err := walk.NewBitmapBrush(bmp)
 	if err == nil {
 		compose.SetBackground(bg)
 	}
 
-	imageView, err := walk.NewImageView(compose)
-	if err != nil {
-		return err
-	}
-
-	imageView.SetMinMaxSizePixels(walk.Size{Width: 64, Height: 64}, walk.Size{Width: 64, Height: 64})
-	imageView.SetMode(3)
-
-	path, err := walk.NewImageFromFile(walk.Resources.RootDirPath() + "/func-icons/" + packageName + ".png")
-	if err != nil {
-		path, _ = walk.NewImageFromFile(walk.Resources.RootDirPath() + "/func-icons/default.png")
-	}
-
-	if err := imageView.SetImage(path); err == nil {
-		imageView.SetImage(path)
-	}
+	topSpacer, _ := walk.NewHSpacer(compose)
+	topSpacer.SetMinMaxSize(walk.Size{Width: 300, Height: 90}, walk.Size{Width: 300, Height: 90})
 
 	linkLabel, err := walk.NewLinkLabel(compose)
 	if err != nil {
@@ -296,39 +286,19 @@ func CreatePushButton(parent *walk.ScrollView, funcName, packageName string, dia
 	if err == nil {
 		linkLabel.SetFont(font)
 	}
+
 	linkLabel.SetText(funcName)
+	linkLabel.SetAlignment(walk.AlignHCenterVCenter)
 
-	_ = &FiberButton{
-		compose,
-		imageView,
-		linkLabel,
-		dialog,
-	}
+	bottomSpacer, _ := walk.NewHSpacer(compose)
+	bottomSpacer.SetMinMaxSize(walk.Size{Width: 300, Height: 50}, walk.Size{Width: 300, Height: 50})
 
-	fiberComposite := &FiberComposite{
+	fiberButton := &FiberButton{
 		compose,
 		dialog,
 	}
 
-	fiberImageView := &FiberImageView{
-		imageView,
-		dialog,
-	}
-
-	fiberLinkLabel := &FiberLinkLabel{
-		linkLabel,
-		dialog,
-	}
-
-	if err := walk.InitWrapperWindow(fiberComposite); err != nil {
-		return err
-	}
-
-	if err := walk.InitWrapperWindow(fiberImageView); err != nil {
-		return err
-	}
-
-	if err := walk.InitWrapperWindow(fiberLinkLabel); err != nil {
+	if err := walk.InitWrapperWindow(fiberButton); err != nil {
 		return err
 	}
 
