@@ -8,12 +8,16 @@ import (
 func (fiber *Fiber) VarSearch(name string) *Instruction {
 	for i := 0; i < len(fiber.Instructions); i++ {
 		instruction := fiber.Instructions[i]
-		val := reflect.ValueOf(instruction.Data).Elem()
-		err := val.FieldByName("Var").Interface().(string)
-		if err != "" {
-			if err == name {
-				return instruction
+		field := reflect.ValueOf(instruction.Data).Elem().FieldByName("Var")
+		if field.IsValid() {
+			value := field.Interface().(string)
+			if value != "" {
+				if value == name {
+					return instruction
+				}
+				continue
 			}
+		} else {
 			continue
 		}
 	}

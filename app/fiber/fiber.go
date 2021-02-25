@@ -144,8 +144,13 @@ func (fiber *Fiber) RunFiber() {
 							for i := 0; i < len(varSlice); i++ {
 								if varSlice[i] != "" {
 									varInstruction := fiber.VarSearch(regexp.QuoteMeta(varSlice[i]))
-									val := reflect.ValueOf(varInstruction.Data).Elem()
-									msg = val.FieldByName("Value").Interface()
+									if varInstruction != nil {
+										val := reflect.ValueOf(varInstruction.Data).Elem()
+										msg = val.FieldByName("Value").Interface()
+									} else {
+										fmt.Println("ERROR: Unable to find the fiber's var: ", regexp.QuoteMeta(varSlice[i]))
+										msg = ""
+									}
 								}
 							}
 						}
