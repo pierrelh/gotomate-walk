@@ -11,7 +11,8 @@ import (
 )
 
 var aw = new(automate.Window)
-var newFiber = new(fiber.Fiber)
+var newFiber = fiber.NewFiber
+var buttons = automate.NewButtons
 
 // CreateApp Initiate the app
 func CreateApp() {
@@ -178,6 +179,6 @@ func CreateApp() {
 		log.Fatal(err)
 	}
 
-	aw.AddSavedFibersActions()
+	aw.AddSavedFibersActions(newFiber)
 	aw.MainWindow.Run()
 }
