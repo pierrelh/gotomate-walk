@@ -10,6 +10,9 @@ import (
 	declarative "github.com/lxn/walk/declarative"
 )
 
+var pressed = false
+var buttons = new(Buttons)
+
 //Window Setting the automate window structure
 type Window struct {
 	MainWindow            *walk.MainWindow
@@ -79,8 +82,8 @@ func (aw *Window) SlbItemActivated(currentFiber *fiber.Fiber) {
 			FuncName: funcName,
 			Data:     data,
 		}
-		aw.CreateFiberButton(aw.ScrollView, funcName, packageName, dialog)
 		currentFiber.Instructions = append(currentFiber.Instructions, newInstruction)
+		aw.CreateFiberButton(aw.ScrollView, currentFiber, dialog)
 	}
 }
 
@@ -132,10 +135,12 @@ func (m *ListModel) Value(index int) interface{} {
 }
 
 // CreateFiberButton Create a new Fiberbutton in the fiber
-func (aw *Window) CreateFiberButton(parent *walk.ScrollView, funcName, packageName string, dialog declarative.Dialog) error {
-	fb := new(fiber.Button)
-	fb.DialogWindow = dialog
-	bmp, err := walk.NewBitmapFromFile(walk.Resources.RootDirPath() + "/func-icons/" + packageName + ".png")
+func (aw *Window) CreateFiberButton(parent *walk.ScrollView, currentFiber *fiber.Fiber, dialog *packages.Dialog) error {
+	instruction := currentFiber.Instructions[len(currentFiber.Instructions)-1]
+	fb := new(Button)
+	buttons.Buttons = append(buttons.Buttons, fb)
+	fb.Dialog = dialog
+	bmp, err := walk.NewBitmapFromFile(walk.Resources.RootDirPath() + "/func-icons/" + instruction.Package + ".png")
 	if err != nil {
 		bmp, _ = walk.NewBitmapFromFile(walk.Resources.RootDirPath() + "/func-icons/default.png")
 	}
@@ -146,14 +151,31 @@ func (aw *Window) CreateFiberButton(parent *walk.ScrollView, funcName, packageNa
 		Background: declarative.BitmapBrush{Image: bmp},
 		Alignment:  declarative.Alignment2D(walk.AlignHNearVCenter),
 		OnMouseDown: func(x, y int, button walk.MouseButton) {
-			fb.DialogWindow.Run(aw.MainWindow)
+			pressed = true
+		},
+		OnMouseMove: func(x, y int, button walk.MouseButton) {
+			pressed = false
+		},
+		OnMouseUp: func(x, y int, button walk.MouseButton) {
+			if pressed {
+				switch button {
+				case 1:
+					fb.Dialog.DialogContent.Run(aw.MainWindow)
+					break
+				case 2:
+					fb.DeleteButton(aw, buttons, currentFiber)
+					break
+				default:
+					break
+				}
+			}
 		},
 		Children: []declarative.Widget{
 			declarative.HSpacer{},
 			declarative.LinkLabel{
 				AssignTo:  &fb.LinkLabel,
 				Font:      declarative.Font{Family: "Roboto", PointSize: 9, Bold: true},
-				Text:      funcName,
+				Text:      instruction.FuncName,
 				Alignment: declarative.Alignment2D(walk.AlignHCenterVCenter),
 			},
 			declarative.HSpacer{},

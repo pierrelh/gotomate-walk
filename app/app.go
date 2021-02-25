@@ -125,6 +125,18 @@ func CreateApp() {
 										CompactHeight: true,
 										MaxSize:       declarative.Size{Width: 150},
 									},
+									declarative.Composite{
+										Layout: declarative.VBox{},
+										Children: []declarative.Widget{
+											declarative.PushButton{
+												AssignTo:  &aw.SaveButton,
+												MaxSize:   declarative.Size{Width: 100},
+												Font:      declarative.Font{Family: "Roboto", PointSize: 9, Bold: true},
+												Text:      "Save",
+												OnClicked: func() { aw.SaveFiber(newFiber) },
+											},
+										},
+									},
 								},
 							},
 							declarative.Composite{
@@ -147,13 +159,6 @@ func CreateApp() {
 										OnClicked: func() {
 											go newFiber.StopFiber()
 										},
-									},
-									declarative.PushButton{
-										AssignTo:  &aw.SaveButton,
-										MaxSize:   declarative.Size{Width: 100},
-										Font:      declarative.Font{Family: "Roboto", PointSize: 9, Bold: true},
-										Text:      "Save",
-										OnClicked: func() { aw.SaveFiber(newFiber) },
 									},
 								},
 							},
