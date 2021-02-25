@@ -47,15 +47,6 @@ func CreateApp() {
 						Text:     "My Fibers",
 					},
 					declarative.Action{
-						AssignTo: &aw.Menu.Run,
-						Text:     "Run",
-						Image:    "/run.png",
-						Shortcut: declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyE},
-						OnTriggered: func() {
-							go newFiber.RunFiber()
-						},
-					},
-					declarative.Action{
 						AssignTo:    &aw.Menu.Save,
 						Text:        "Save",
 						Image:       "/save.png",
@@ -66,6 +57,30 @@ func CreateApp() {
 						AssignTo:    &aw.Menu.Exit,
 						Text:        "Exit",
 						OnTriggered: func() { aw.MainWindow.Close() },
+					},
+				},
+			},
+			declarative.Menu{
+				AssignTo: &aw.Menu.WindowMenu,
+				Text:     "&Fiber",
+				Items: []declarative.MenuItem{
+					declarative.Action{
+						AssignTo: &aw.Menu.Run,
+						Text:     "Run",
+						Image:    "/run.png",
+						Shortcut: declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyE},
+						OnTriggered: func() {
+							go newFiber.RunFiber()
+						},
+					},
+					declarative.Action{
+						AssignTo: &aw.Menu.Stop,
+						Text:     "Stop",
+						Image:    "/stop.png",
+						Shortcut: declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyQ},
+						OnTriggered: func() {
+							go newFiber.StopFiber()
+						},
 					},
 				},
 			},
@@ -122,6 +137,15 @@ func CreateApp() {
 										Text:     "RUN",
 										OnClicked: func() {
 											go newFiber.RunFiber()
+										},
+									},
+									declarative.PushButton{
+										AssignTo: &aw.StopButton,
+										MaxSize:  declarative.Size{Width: 100},
+										Font:     declarative.Font{Family: "Roboto", PointSize: 9, Bold: true},
+										Text:     "STOP",
+										OnClicked: func() {
+											go newFiber.StopFiber()
 										},
 									},
 									declarative.PushButton{
