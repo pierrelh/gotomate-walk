@@ -7,63 +7,70 @@ import (
 	declarative "github.com/lxn/walk/declarative"
 )
 
+//Dialog Setting the requirement of a dialog window
+type Dialog struct {
+	Dialog        *walk.Dialog
+	DialogContent declarative.Dialog
+	DataBinder    *walk.DataBinder
+	AcceptButton  *walk.PushButton
+	CancelButton  *walk.PushButton
+}
+
 // CreateNewDialog Create the dialog for the function & add the needed template
-func CreateNewDialog(funcName string) (interface{}, declarative.Dialog) {
-	var dlg *walk.Dialog
-	var db *walk.DataBinder
-	var acceptPB, cancelPB *walk.PushButton
+func CreateNewDialog(funcName string) (interface{}, *Dialog) {
+	dialog := new(Dialog)
 	source, children := FillDialog(funcName)
-
-	return source,
-		declarative.Dialog{
-			Icon:          "/icon.ico",
-			Title:         funcName + " Settings",
-			AssignTo:      &dlg,
-			DefaultButton: &acceptPB,
-			CancelButton:  &cancelPB,
-			DataBinder: declarative.DataBinder{
-				AssignTo:       &db,
-				Name:           funcName,
-				DataSource:     source,
-				ErrorPresenter: declarative.ToolTipErrorPresenter{},
+	dialog.DialogContent = declarative.Dialog{
+		Icon:          "/icon.ico",
+		Title:         funcName + " Settings",
+		AssignTo:      &dialog.Dialog,
+		DefaultButton: &dialog.AcceptButton,
+		CancelButton:  &dialog.CancelButton,
+		DataBinder: declarative.DataBinder{
+			AssignTo:       &dialog.DataBinder,
+			Name:           funcName,
+			DataSource:     source,
+			ErrorPresenter: declarative.ToolTipErrorPresenter{},
+		},
+		MinSize: declarative.Size{
+			Width:  300,
+			Height: 300,
+		},
+		Layout: declarative.VBox{},
+		Children: []declarative.Widget{
+			declarative.Composite{
+				Layout:   declarative.VBox{},
+				Children: children,
 			},
-			MinSize: declarative.Size{
-				Width:  300,
-				Height: 300,
-			},
-			Layout: declarative.VBox{},
-			Children: []declarative.Widget{
-				declarative.Composite{
-					Layout:   declarative.VBox{},
-					Children: children,
-				},
-				declarative.HSplitter{
-					MaxSize: declarative.Size{Height: 30},
-					Children: []declarative.Widget{
-						declarative.HSpacer{},
-						declarative.PushButton{
-							AssignTo: &acceptPB,
-							Text:     "OK",
-							Font:     declarative.Font{Family: "Roboto", PointSize: 9},
-							OnClicked: func() {
-								if err := db.Submit(); err != nil {
-									fmt.Println(err)
-									return
-								}
+			declarative.HSplitter{
+				MaxSize: declarative.Size{Height: 30},
+				Children: []declarative.Widget{
+					declarative.HSpacer{},
+					declarative.PushButton{
+						AssignTo: &dialog.AcceptButton,
+						Text:     "OK",
+						Font:     declarative.Font{Family: "Roboto", PointSize: 9},
+						OnClicked: func() {
+							if err := dialog.DataBinder.Submit(); err != nil {
+								fmt.Println(err)
+								return
+							}
 
-								dlg.Accept()
-							},
+							dialog.Dialog.Accept()
 						},
-						declarative.PushButton{
-							AssignTo:  &cancelPB,
-							Text:      "Cancel",
-							Font:      declarative.Font{Family: "Roboto", PointSize: 9},
-							OnClicked: func() { dlg.Cancel() },
-						},
+					},
+					declarative.PushButton{
+						AssignTo:  &dialog.CancelButton,
+						Text:      "Cancel",
+						Font:      declarative.Font{Family: "Roboto", PointSize: 9},
+						OnClicked: func() { dialog.Dialog.Cancel() },
 					},
 				},
 			},
-		}
+		},
+	}
+
+	return source, dialog
 }
 
 //FillDialog Getting the right databinder & the right template needed
