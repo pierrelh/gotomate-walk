@@ -1,6 +1,7 @@
 package fiber
 
 import (
+	"encoding/json"
 	"fmt"
 	"gotomate/packages/battery"
 	"gotomate/packages/clipboard"
@@ -17,9 +18,24 @@ import (
 	"gopkg.in/toast.v1"
 )
 
+//NewFiber Define the new automate's fiber
+var NewFiber = new(Fiber)
 var running = 0
 var finished = make(chan bool)
 var stop = make(chan bool)
+
+// LoadingFiber Initialize the loading fiber structure
+type LoadingFiber struct {
+	Name         string
+	Instructions []*LoadingInstruction
+}
+
+// LoadingInstruction Initialize a loading fiber's instruction
+type LoadingInstruction struct {
+	Package  string
+	FuncName string
+	Data     json.RawMessage
+}
 
 // Fiber Initialize the fiber structure
 type Fiber struct {

@@ -1,6 +1,7 @@
 package automate
 
 import (
+	"gotomate/app/automate/list"
 	"gotomate/app/fiber"
 	"gotomate/packages"
 	"strconv"
@@ -11,16 +12,15 @@ import (
 )
 
 var pressed = false
-var buttons = new(Buttons)
 
 //Window Setting the automate window structure
 type Window struct {
 	MainWindow            *walk.MainWindow
 	Menu                  *Menu
 	PrimaryListBox        *walk.ListBox
-	PrimaryListBoxModel   *ListModel
+	PrimaryListBoxModel   *list.Model
 	SecondaryListBox      *walk.ListBox
-	SecondaryListBoxModel *ListModel
+	SecondaryListBoxModel *list.Model
 	FiberNameLabel        *walk.Label
 	FiberNameInput        *walk.TextEdit
 	RunButton             *walk.PushButton
@@ -40,24 +40,12 @@ type Menu struct {
 	Exit       *walk.Action
 }
 
-//ListModel Setting the model of automate ListBox
-type ListModel struct {
-	walk.ListModelBase
-	items []ListItem
-}
-
-//ListItem Setting automate packages items
-type ListItem struct {
-	name  string
-	value string
-}
-
 //PlbItemActivated Fill the Secondary list when an element of the Primary is activated
 func (aw *Window) PlbItemActivated() {
 	i := aw.PrimaryListBox.CurrentIndex()
 	if i != -1 {
-		item := &aw.PrimaryListBoxModel.items[i]
-		value := item.name
+		item := &aw.PrimaryListBoxModel.Items[i]
+		value := item.Name
 		newModel := NewAutomateSubModel(value)
 		aw.SecondaryListBox.SetModel(newModel)
 		aw.SecondaryListBoxModel = newModel
@@ -69,11 +57,11 @@ func (aw *Window) SlbItemActivated(currentFiber *fiber.Fiber) {
 	i := aw.SecondaryListBox.CurrentIndex()
 	if i != -1 {
 		plbIndex := aw.PrimaryListBox.CurrentIndex()
-		plbItem := &aw.PrimaryListBoxModel.items[plbIndex]
-		packageName := plbItem.name
+		plbItem := &aw.PrimaryListBoxModel.Items[plbIndex]
+		packageName := plbItem.Name
 
-		item := &aw.SecondaryListBoxModel.items[i]
-		funcName := item.name
+		item := &aw.SecondaryListBoxModel.Items[i]
+		funcName := item.Name
 
 		data, dialog := packages.CreateNewDialog(funcName)
 
@@ -83,31 +71,31 @@ func (aw *Window) SlbItemActivated(currentFiber *fiber.Fiber) {
 			Data:     data,
 		}
 		currentFiber.Instructions = append(currentFiber.Instructions, newInstruction)
-		aw.CreateFiberButton(aw.ScrollView, currentFiber, dialog)
+		aw.CreateFiberButton(newInstruction, dialog)
 	}
 }
 
 // NewAutomateModel Getting the automates packages
-func NewAutomateModel() *ListModel {
+func NewAutomateModel() *list.Model {
 	env := packages.Packages
 
-	m := &ListModel{items: make([]ListItem, len(env))}
+	m := &list.Model{Items: make([]list.Item, len(env))}
 
 	for i, e := range env {
 		name := strconv.Itoa(i)
 		value := e
 
-		m.items[i] = ListItem{value, name}
+		m.Items[i] = list.Item{value, name}
 	}
 
 	return m
 }
 
 // NewAutomateSubModel Gettings the automate's subpackages
-func NewAutomateSubModel(key string) *ListModel {
+func NewAutomateSubModel(key string) *list.Model {
 	env := packages.SubPackages
 
-	m := &ListModel{items: make([]ListItem, len(env[key]))}
+	m := &list.Model{Items: make([]list.Item, len(env[key]))}
 
 	for i, e := range env[key] {
 		j := strings.Index(e, "=")
@@ -118,27 +106,16 @@ func NewAutomateSubModel(key string) *ListModel {
 		name := strconv.Itoa(i)
 		value := e
 
-		m.items[i] = ListItem{value, name}
+		m.Items[i] = list.Item{value, name}
 	}
 
 	return m
 }
 
-// ItemCount return the length of an AutomateModel items
-func (m *ListModel) ItemCount() int {
-	return len(m.items)
-}
-
-// Value return the value of an AutomateModel item
-func (m *ListModel) Value(index int) interface{} {
-	return m.items[index].name
-}
-
 // CreateFiberButton Create a new Fiberbutton in the fiber
-func (aw *Window) CreateFiberButton(parent *walk.ScrollView, currentFiber *fiber.Fiber, dialog *packages.Dialog) error {
-	instruction := currentFiber.Instructions[len(currentFiber.Instructions)-1]
+func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *packages.Dialog) error {
 	fb := new(Button)
-	buttons.Buttons = append(buttons.Buttons, fb)
+	NewButtons.Buttons = append(NewButtons.Buttons, fb)
 	fb.Dialog = dialog
 	bmp, err := walk.NewBitmapFromFile(walk.Resources.RootDirPath() + "/func-icons/" + instruction.Package + ".png")
 	if err != nil {
@@ -163,7 +140,7 @@ func (aw *Window) CreateFiberButton(parent *walk.ScrollView, currentFiber *fiber
 					fb.Dialog.DialogContent.Run(aw.MainWindow)
 					break
 				case 2:
-					fb.DeleteButton(aw, buttons, currentFiber)
+					fb.DeleteButton(aw, fiber.NewFiber)
 					break
 				default:
 					break
@@ -180,7 +157,7 @@ func (aw *Window) CreateFiberButton(parent *walk.ScrollView, currentFiber *fiber
 			},
 			declarative.HSpacer{},
 		},
-	}).Create(declarative.NewBuilder(parent)); err != nil {
+	}).Create(declarative.NewBuilder(aw.ScrollView)); err != nil {
 		return err
 	}
 	fb.Composite.SetCursor(walk.CursorHand())

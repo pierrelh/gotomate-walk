@@ -9,6 +9,9 @@ import (
 	declarative "github.com/lxn/walk/declarative"
 )
 
+//NewButtons Create the automate's list of buttons
+var NewButtons = new(Buttons)
+
 //Buttons set the list of the fiber's buttons
 type Buttons struct {
 	Buttons []*Button
@@ -22,7 +25,7 @@ type Button struct {
 }
 
 //DeleteButton Delete the button from automate's screen & remove the associated instruction from the fiber
-func (btn *Button) DeleteButton(aw *Window, buttons *Buttons, currentFiber *fiber.Fiber) {
+func (btn *Button) DeleteButton(aw *Window, currentFiber *fiber.Fiber) {
 	var dlg *walk.Dialog
 	var acceptPB, cancelPB *walk.PushButton
 
@@ -62,9 +65,9 @@ func (btn *Button) DeleteButton(aw *Window, buttons *Buttons, currentFiber *fibe
 								Text:     "YES",
 								Font:     declarative.Font{Family: "Roboto", PointSize: 9},
 								OnClicked: func() {
-									for i := 0; i < len(buttons.Buttons); i++ {
-										if btn == buttons.Buttons[i] {
-											buttons.Buttons = append(buttons.Buttons[:i], buttons.Buttons[i+1:]...)
+									for i := 0; i < len(NewButtons.Buttons); i++ {
+										if btn == NewButtons.Buttons[i] {
+											NewButtons.Buttons = append(NewButtons.Buttons[:i], NewButtons.Buttons[i+1:]...)
 											currentFiber.Instructions = append(currentFiber.Instructions[:i], currentFiber.Instructions[i+1:]...)
 											btn.Composite.Dispose()
 											btn.LinkLabel.Dispose()

@@ -17,9 +17,14 @@ type Dialog struct {
 }
 
 // CreateNewDialog Create the dialog for the function & add the needed template
-func CreateNewDialog(funcName string) (interface{}, *Dialog) {
+func CreateNewDialog(funcName string, databinder ...interface{}) (interface{}, *Dialog) {
 	dialog := new(Dialog)
 	source, children := FillDialog(funcName)
+
+	if len(databinder) != 0 {
+		source = databinder[0]
+	}
+
 	dialog.DialogContent = declarative.Dialog{
 		Icon:          "/icon.ico",
 		Title:         funcName + " Settings",
