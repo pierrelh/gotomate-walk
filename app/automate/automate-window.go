@@ -82,10 +82,10 @@ func NewAutomateModel() *list.Model {
 	m := &list.Model{Items: make([]list.Item, len(env))}
 
 	for i, e := range env {
-		name := strconv.Itoa(i)
-		value := e
+		value := strconv.Itoa(i)
+		name := e
 
-		m.Items[i] = list.Item{value, name}
+		m.Items[i] = list.Item{Name: name, Value: value}
 	}
 
 	return m
@@ -103,10 +103,10 @@ func NewAutomateSubModel(key string) *list.Model {
 			continue
 		}
 
-		name := strconv.Itoa(i)
-		value := e
+		value := strconv.Itoa(i)
+		name := e
 
-		m.Items[i] = list.Item{value, name}
+		m.Items[i] = list.Item{Name: name, Value: value}
 	}
 
 	return m
