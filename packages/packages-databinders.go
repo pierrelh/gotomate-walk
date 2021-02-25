@@ -79,8 +79,8 @@ type ClipboardWrite struct {
 
 //ClipboardRead Define the ClipboardRead parameters
 type ClipboardRead struct {
-	Var     string
-	Content string
+	Var   string
+	Value string
 }
 
 //LogPrint Define the LogPrint parameters
@@ -97,81 +97,81 @@ type NotificationCreate struct {
 
 //UserBattery Define the UserBattery parameters
 type UserBattery struct {
-	Var     string
-	Battery *battery.Battery
+	Var   string
+	Value *battery.Battery
 }
 
 //BatteryState Define the BatteryState parameters
 type BatteryState struct {
 	BatteryName string
 	Var         string
-	State       battery.State
+	Value       battery.State
 }
 
 //BatteryPercentage Define the BatteryPercentage parameters
 type BatteryPercentage struct {
 	BatteryName string
 	Var         string
-	Percentage  float64
+	Value       float64
 }
 
 //BatteryRemainingTime Define the BatteryRemainingTime parameters
 type BatteryRemainingTime struct {
-	BatteryName   string
-	Var           string
-	RemainingTime time.Duration
+	BatteryName string
+	Var         string
+	Value       time.Duration
 }
 
 //BatteryChargeRate Define the BatteryChargeRate parameters
 type BatteryChargeRate struct {
 	BatteryName string
 	Var         string
-	ChargeRate  time.Duration
+	Value       time.Duration
 }
 
 //BatteryCurrentCapacity Define the BatteryCurrentCapacity parameters
 type BatteryCurrentCapacity struct {
-	BatteryName     string
-	Var             string
-	CurrentCapacity float64
+	BatteryName string
+	Var         string
+	Value       float64
 }
 
 //BatteryLastFullCapacity Define the BatteryLastFullCapacity parameters
 type BatteryLastFullCapacity struct {
-	BatteryName      string
-	Var              string
-	LastFullCapacity float64
+	BatteryName string
+	Var         string
+	Value       float64
 }
 
 //BatteryDesignCapacity Define the BatteryDesignCapacity parameters
 type BatteryDesignCapacity struct {
-	BatteryName    string
-	Var            string
-	DesignCapacity float64
+	BatteryName string
+	Var         string
+	Value       float64
 }
 
 //BatteryVoltage Define the BatteryVoltage parameters
 type BatteryVoltage struct {
 	BatteryName string
 	Var         string
-	Voltage     float64
+	Value       float64
 }
 
 //BatteryDesignVoltage Define the BatteryDesignVoltage parameters
 type BatteryDesignVoltage struct {
-	BatteryName   string
-	Var           string
-	DesignVoltage float64
+	BatteryName string
+	Var         string
+	Value       float64
 }
 
 //SysClock Define the SysClock parameters
 type SysClock struct {
-	Var  string
-	Time [3]int
+	Var   string
+	Value [3]int
 }
 
 //SysTime Define the SysTime parameters
 type SysTime struct {
-	Var  string
-	Time time.Time
+	Var   string
+	Value time.Time
 }
