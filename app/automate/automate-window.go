@@ -21,6 +21,7 @@ type Window struct {
 	FiberNameLabel        *walk.Label
 	FiberNameInput        *walk.TextEdit
 	RunButton             *walk.PushButton
+	StopButton            *walk.PushButton
 	SaveButton            *walk.PushButton
 	ScrollView            *walk.ScrollView
 }
@@ -31,6 +32,7 @@ type Menu struct {
 	Open       *walk.Action
 	Folders    *walk.Menu
 	Run        *walk.Action
+	Stop       *walk.Action
 	Save       *walk.Action
 	Exit       *walk.Action
 }
