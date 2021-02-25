@@ -11,6 +11,8 @@ import (
 	"gotomate/packages/sleep"
 	"gotomate/packages/systime"
 	"reflect"
+	"regexp"
+	"strings"
 
 	"gopkg.in/toast.v1"
 )
@@ -34,7 +36,7 @@ type Instruction struct {
 func (fiber *Fiber) RunFiber() {
 	running++
 	if running > 1 {
-		fmt.Println("A fiber is already running")
+		fmt.Println("FIBER: A fiber is already running")
 	} else {
 
 		fmt.Println("| Fiber Start |")
@@ -56,7 +58,7 @@ func (fiber *Fiber) RunFiber() {
 					go sleep.MilliSleep(duration, finished)
 					<-finished
 				default:
-					fmt.Println("This function is not integrated yet: " + instruction.FuncName)
+					fmt.Println("FIBER: This function is not integrated yet: " + instruction.FuncName)
 					continue
 				}
 			case "Mouse":
@@ -79,7 +81,7 @@ func (fiber *Fiber) RunFiber() {
 					go mouse.Move(x, y, finished)
 					<-finished
 				default:
-					fmt.Println("This function is not integrated yet: " + instruction.FuncName)
+					fmt.Println("FIBER: This function is not integrated yet: " + instruction.FuncName)
 					continue
 				}
 			case "Keyboard":
@@ -97,7 +99,7 @@ func (fiber *Fiber) RunFiber() {
 					go keyboard.Tap(input, special, finished)
 					<-finished
 				default:
-					fmt.Println("This function is not integrated yet: " + instruction.FuncName)
+					fmt.Println("FIBER: This function is not integrated yet: " + instruction.FuncName)
 					continue
 				}
 			case "Clipboard":
@@ -111,22 +113,34 @@ func (fiber *Fiber) RunFiber() {
 					go func() {
 						content, _ := clipboard.Read(finished)
 						val := reflect.ValueOf(instruction.Data).Elem()
-						val.FieldByName("Content").SetString(content)
+						val.FieldByName("Value").SetString(content)
 					}()
 					<-finished
 				default:
-					fmt.Println("This function is not integrated yet: " + instruction.FuncName)
+					fmt.Println("FIBER: This function is not integrated yet: " + instruction.FuncName)
 					continue
 				}
 			case "Log":
 				switch instruction.FuncName {
 				case "Print":
 					val := reflect.ValueOf(instruction.Data).Elem()
-					msg := val.FieldByName("Log").Interface().(string)
+					logValue := val.FieldByName("Log").Interface().(string)
+					matched, _ := regexp.MatchString(`=.*`, logValue)
+					msg := val.FieldByName("Log").Interface()
+					if matched {
+						varSlice := strings.Split(logValue, "=")
+						for i := 0; i < len(varSlice); i++ {
+							if varSlice[i] != "" {
+								varInstruction := fiber.VarSearch(regexp.QuoteMeta(varSlice[i]))
+								val := reflect.ValueOf(varInstruction.Data).Elem()
+								msg = val.FieldByName("Value").Interface()
+							}
+						}
+					}
 					go log.Print(msg, finished)
 					<-finished
 				default:
-					fmt.Println("This function is not integrated yet: " + instruction.FuncName)
+					fmt.Println("FIBER: This function is not integrated yet: " + instruction.FuncName)
 					continue
 				}
 			case "Notification":
@@ -139,7 +153,7 @@ func (fiber *Fiber) RunFiber() {
 					go notification.Create(title, msg, actions, finished)
 					<-finished
 				default:
-					fmt.Println("This function is not integrated yet: " + instruction.FuncName)
+					fmt.Println("FIBER: This function is not integrated yet: " + instruction.FuncName)
 					continue
 				}
 			case "Battery":
@@ -148,7 +162,7 @@ func (fiber *Fiber) RunFiber() {
 					go func() {
 						bat := battery.GetBattery(finished)
 						val := reflect.ValueOf(instruction.Data).Elem()
-						val.FieldByName("Battery").Set(reflect.ValueOf(bat))
+						val.FieldByName("Value").Set(reflect.ValueOf(bat))
 					}()
 					<-finished
 				case "GetBatteryState":
@@ -158,11 +172,11 @@ func (fiber *Fiber) RunFiber() {
 						batInstruction := fiber.VarSearch(batName)
 						if batInstruction != nil {
 							val := reflect.ValueOf(batInstruction.Data).Elem()
-							bat := val.FieldByName("Battery").Interface().(*battery.Battery)
+							bat := val.FieldByName("Value").Interface().(*battery.Battery)
 							state := battery.GetBatteryState(bat, finished)
-							stateInstruction.FieldByName("State").Set(reflect.ValueOf(state))
+							stateInstruction.FieldByName("Value").Set(reflect.ValueOf(state))
 						} else {
-							fmt.Println("Unable to find the battery named: ", batName)
+							fmt.Println("FIBER: Unable to find the battery named: ", batName)
 							finished <- true
 						}
 					}()
@@ -174,11 +188,11 @@ func (fiber *Fiber) RunFiber() {
 						batInstruction := fiber.VarSearch(batName)
 						if batInstruction != nil {
 							val := reflect.ValueOf(batInstruction.Data).Elem()
-							bat := val.FieldByName("Battery").Interface().(*battery.Battery)
+							bat := val.FieldByName("Value").Interface().(*battery.Battery)
 							percentage := battery.GetBatteryPercentage(bat, finished)
-							percentageInstruction.FieldByName("Percentage").Set(reflect.ValueOf(percentage))
+							percentageInstruction.FieldByName("Value").Set(reflect.ValueOf(percentage))
 						} else {
-							fmt.Println("Unable to find the battery named: ", batName)
+							fmt.Println("FIBER: Unable to find the battery named: ", batName)
 							finished <- true
 						}
 					}()
@@ -190,11 +204,11 @@ func (fiber *Fiber) RunFiber() {
 						batInstruction := fiber.VarSearch(batName)
 						if batInstruction != nil {
 							val := reflect.ValueOf(batInstruction.Data).Elem()
-							bat := val.FieldByName("Battery").Interface().(*battery.Battery)
+							bat := val.FieldByName("Value").Interface().(*battery.Battery)
 							time := battery.GetBatteryRemainingTime(bat, finished)
-							remainingTimeInstruction.FieldByName("RemainingTime").Set(reflect.ValueOf(time))
+							remainingTimeInstruction.FieldByName("Value").Set(reflect.ValueOf(time))
 						} else {
-							fmt.Println("Unable to find the battery named: ", batName)
+							fmt.Println("FIBER: Unable to find the battery named: ", batName)
 							finished <- true
 						}
 					}()
@@ -206,11 +220,11 @@ func (fiber *Fiber) RunFiber() {
 						batInstruction := fiber.VarSearch(batName)
 						if batInstruction != nil {
 							val := reflect.ValueOf(batInstruction.Data).Elem()
-							bat := val.FieldByName("Battery").Interface().(*battery.Battery)
+							bat := val.FieldByName("Value").Interface().(*battery.Battery)
 							rate := battery.GetBatteryChargeRate(bat, finished)
-							chargeRateInstruction.FieldByName("ChargeRate").Set(reflect.ValueOf(rate))
+							chargeRateInstruction.FieldByName("Value").Set(reflect.ValueOf(rate))
 						} else {
-							fmt.Println("Unable to find the battery named: ", batName)
+							fmt.Println("FIBER: Unable to find the battery named: ", batName)
 							finished <- true
 						}
 					}()
@@ -222,11 +236,11 @@ func (fiber *Fiber) RunFiber() {
 						batInstruction := fiber.VarSearch(batName)
 						if batInstruction != nil {
 							val := reflect.ValueOf(batInstruction.Data).Elem()
-							bat := val.FieldByName("Battery").Interface().(*battery.Battery)
+							bat := val.FieldByName("Value").Interface().(*battery.Battery)
 							capacity := battery.GetBatteryCurrentCapacity(bat, finished)
-							currentCapacityInstruction.FieldByName("CurrentCapacity").Set(reflect.ValueOf(capacity))
+							currentCapacityInstruction.FieldByName("Value").Set(reflect.ValueOf(capacity))
 						} else {
-							fmt.Println("Unable to find the battery named: ", batName)
+							fmt.Println("FIBER: Unable to find the battery named: ", batName)
 							finished <- true
 						}
 					}()
@@ -238,11 +252,11 @@ func (fiber *Fiber) RunFiber() {
 						batInstruction := fiber.VarSearch(batName)
 						if batInstruction != nil {
 							val := reflect.ValueOf(batInstruction.Data).Elem()
-							bat := val.FieldByName("Battery").Interface().(*battery.Battery)
+							bat := val.FieldByName("Value").Interface().(*battery.Battery)
 							capacity := battery.GetBatteryLastFullCapacity(bat, finished)
-							lastCapacityInstruction.FieldByName("LastFullCapacity").Set(reflect.ValueOf(capacity))
+							lastCapacityInstruction.FieldByName("Value").Set(reflect.ValueOf(capacity))
 						} else {
-							fmt.Println("Unable to find the battery named: ", batName)
+							fmt.Println("FIBER: Unable to find the battery named: ", batName)
 							finished <- true
 						}
 					}()
@@ -254,11 +268,11 @@ func (fiber *Fiber) RunFiber() {
 						batInstruction := fiber.VarSearch(batName)
 						if batInstruction != nil {
 							val := reflect.ValueOf(batInstruction.Data).Elem()
-							bat := val.FieldByName("Battery").Interface().(*battery.Battery)
+							bat := val.FieldByName("Value").Interface().(*battery.Battery)
 							capacity := battery.GetBatteryDesignCapacity(bat, finished)
-							designCapacityInstruction.FieldByName("DesignCapacity").Set(reflect.ValueOf(capacity))
+							designCapacityInstruction.FieldByName("Value").Set(reflect.ValueOf(capacity))
 						} else {
-							fmt.Println("Unable to find the battery named: ", batName)
+							fmt.Println("FIBER: Unable to find the battery named: ", batName)
 							finished <- true
 						}
 					}()
@@ -270,11 +284,11 @@ func (fiber *Fiber) RunFiber() {
 						batInstruction := fiber.VarSearch(batName)
 						if batInstruction != nil {
 							val := reflect.ValueOf(batInstruction.Data).Elem()
-							bat := val.FieldByName("Battery").Interface().(*battery.Battery)
+							bat := val.FieldByName("Value").Interface().(*battery.Battery)
 							voltage := battery.GetBatteryVoltage(bat, finished)
-							voltageInstruction.FieldByName("Voltage").Set(reflect.ValueOf(voltage))
+							voltageInstruction.FieldByName("Value").Set(reflect.ValueOf(voltage))
 						} else {
-							fmt.Println("Unable to find the battery named: ", batName)
+							fmt.Println("FIBER: Unable to find the battery named: ", batName)
 							finished <- true
 						}
 					}()
@@ -286,17 +300,17 @@ func (fiber *Fiber) RunFiber() {
 						batInstruction := fiber.VarSearch(batName)
 						if batInstruction != nil {
 							val := reflect.ValueOf(batInstruction.Data).Elem()
-							bat := val.FieldByName("Battery").Interface().(*battery.Battery)
+							bat := val.FieldByName("Value").Interface().(*battery.Battery)
 							voltage := battery.GetBatteryDesignVoltage(bat, finished)
-							designVoltageInstruction.FieldByName("DesignVoltage").Set(reflect.ValueOf(voltage))
+							designVoltageInstruction.FieldByName("Value").Set(reflect.ValueOf(voltage))
 						} else {
-							fmt.Println("Unable to find the battery named: ", batName)
+							fmt.Println("FIBER: Unable to find the battery named: ", batName)
 							finished <- true
 						}
 					}()
 					<-finished
 				default:
-					fmt.Println("This function is not integrated yet: " + instruction.FuncName)
+					fmt.Println("FIBER: This function is not integrated yet: " + instruction.FuncName)
 					continue
 				}
 			case "Systime":
@@ -306,22 +320,22 @@ func (fiber *Fiber) RunFiber() {
 						h, m, s := systime.GetCurrentSysClock(finished)
 						clock := [3]int{h, m, s}
 						val := reflect.ValueOf(instruction.Data).Elem()
-						val.FieldByName("Time").Set(reflect.ValueOf(clock))
+						val.FieldByName("Value").Set(reflect.ValueOf(clock))
 					}()
 					<-finished
 				case "GetCurrentSysTime":
 					go func() {
 						time := systime.GetCurrentSysTime(finished)
 						val := reflect.ValueOf(instruction.Data).Elem()
-						val.FieldByName("Time").Set(reflect.ValueOf(time))
+						val.FieldByName("Value").Set(reflect.ValueOf(time))
 					}()
 					<-finished
 				default:
-					fmt.Println("This function is not integrated yet: " + instruction.FuncName)
+					fmt.Println("FIBER: This function is not integrated yet: " + instruction.FuncName)
 					continue
 				}
 			default:
-				fmt.Println("This package is not integrated yet: " + instruction.Package)
+				fmt.Println("FIBER: This package is not integrated yet: " + instruction.Package)
 				continue
 			}
 		}

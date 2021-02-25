@@ -10,7 +10,7 @@ import (
 
 // Create create a new notification with presets & push it
 func Create(title, message string, actions []toast.Action, finished chan bool) {
-	fmt.Println("Notification initialization ...")
+	fmt.Println("FIBER: Creating notification ...")
 	createdNotif := toast.Notification{
 		AppID:   "Gotomate",
 		Title:   title,

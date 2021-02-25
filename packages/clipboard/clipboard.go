@@ -57,7 +57,7 @@ func waitOpenClipboard() error {
 
 // Read read string from clipboard
 func Read(finished chan bool) (string, error) {
-	fmt.Println("Clipboard Reading initialization ...")
+	fmt.Println("FIBER: Clipboard Reading ...")
 	content, err := robotgo.ReadAll()
 	finished <- true
 	return content, err
@@ -65,7 +65,7 @@ func Read(finished chan bool) (string, error) {
 
 // Write write string to clipboard
 func Write(text string, finished chan bool) error {
-	fmt.Println("Clipboard Writing initialization ...")
+	fmt.Println("FIBER: Clipboard Writing ...")
 	err := robotgo.WriteAll(text)
 	finished <- true
 	return err

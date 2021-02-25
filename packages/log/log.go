@@ -3,8 +3,8 @@ package log
 import "fmt"
 
 // Print log a value
-func Print(msg string, finished chan bool) {
-	fmt.Println("Log initialization ...")
-	fmt.Println(msg)
+func Print(msg interface{}, finished chan bool) {
+	fmt.Println("FIBER: Logging ...")
+	fmt.Println("LOG: ", msg)
 	finished <- true
 }
