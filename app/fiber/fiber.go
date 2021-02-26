@@ -209,6 +209,7 @@ func (fiber *Fiber) RunFiber() {
 								state := battery.GetBatteryState(bat, finished)
 								stateInstruction.FieldByName("Value").Set(reflect.ValueOf(state))
 							} else {
+								stateInstruction.FieldByName("Value").Set(reflect.Zero(stateInstruction.FieldByName("Value").Type()))
 								fmt.Println("FIBER: Unable to find the battery named: ", batName)
 								finished <- true
 							}
@@ -225,6 +226,7 @@ func (fiber *Fiber) RunFiber() {
 								percentage := battery.GetBatteryPercentage(bat, finished)
 								percentageInstruction.FieldByName("Value").Set(reflect.ValueOf(percentage))
 							} else {
+								percentageInstruction.FieldByName("Value").Set(reflect.Zero(percentageInstruction.FieldByName("Value").Type()))
 								fmt.Println("FIBER: Unable to find the battery named: ", batName)
 								finished <- true
 							}
@@ -241,6 +243,7 @@ func (fiber *Fiber) RunFiber() {
 								time := battery.GetBatteryRemainingTime(bat, finished)
 								remainingTimeInstruction.FieldByName("Value").Set(reflect.ValueOf(time))
 							} else {
+								remainingTimeInstruction.FieldByName("Value").Set(reflect.Zero(remainingTimeInstruction.FieldByName("Value").Type()))
 								fmt.Println("FIBER: Unable to find the battery named: ", batName)
 								finished <- true
 							}
@@ -257,6 +260,7 @@ func (fiber *Fiber) RunFiber() {
 								rate := battery.GetBatteryChargeRate(bat, finished)
 								chargeRateInstruction.FieldByName("Value").Set(reflect.ValueOf(rate))
 							} else {
+								chargeRateInstruction.FieldByName("Value").Set(reflect.Zero(chargeRateInstruction.FieldByName("Value").Type()))
 								fmt.Println("FIBER: Unable to find the battery named: ", batName)
 								finished <- true
 							}
@@ -273,6 +277,7 @@ func (fiber *Fiber) RunFiber() {
 								capacity := battery.GetBatteryCurrentCapacity(bat, finished)
 								currentCapacityInstruction.FieldByName("Value").Set(reflect.ValueOf(capacity))
 							} else {
+								currentCapacityInstruction.FieldByName("Value").Set(reflect.Zero(currentCapacityInstruction.FieldByName("Value").Type()))
 								fmt.Println("FIBER: Unable to find the battery named: ", batName)
 								finished <- true
 							}
@@ -289,6 +294,7 @@ func (fiber *Fiber) RunFiber() {
 								capacity := battery.GetBatteryLastFullCapacity(bat, finished)
 								lastCapacityInstruction.FieldByName("Value").Set(reflect.ValueOf(capacity))
 							} else {
+								lastCapacityInstruction.FieldByName("Value").Set(reflect.Zero(lastCapacityInstruction.FieldByName("Value").Type()))
 								fmt.Println("FIBER: Unable to find the battery named: ", batName)
 								finished <- true
 							}
@@ -305,6 +311,7 @@ func (fiber *Fiber) RunFiber() {
 								capacity := battery.GetBatteryDesignCapacity(bat, finished)
 								designCapacityInstruction.FieldByName("Value").Set(reflect.ValueOf(capacity))
 							} else {
+								designCapacityInstruction.FieldByName("Value").Set(reflect.Zero(designCapacityInstruction.FieldByName("Value").Type()))
 								fmt.Println("FIBER: Unable to find the battery named: ", batName)
 								finished <- true
 							}
@@ -321,6 +328,7 @@ func (fiber *Fiber) RunFiber() {
 								voltage := battery.GetBatteryVoltage(bat, finished)
 								voltageInstruction.FieldByName("Value").Set(reflect.ValueOf(voltage))
 							} else {
+								voltageInstruction.FieldByName("Value").Set(reflect.Zero(voltageInstruction.FieldByName("Value").Type()))
 								fmt.Println("FIBER: Unable to find the battery named: ", batName)
 								finished <- true
 							}
@@ -337,6 +345,7 @@ func (fiber *Fiber) RunFiber() {
 								voltage := battery.GetBatteryDesignVoltage(bat, finished)
 								designVoltageInstruction.FieldByName("Value").Set(reflect.ValueOf(voltage))
 							} else {
+								designVoltageInstruction.FieldByName("Value").Set(reflect.Zero(designVoltageInstruction.FieldByName("Value").Type()))
 								fmt.Println("FIBER: Unable to find the battery named: ", batName)
 								finished <- true
 							}
