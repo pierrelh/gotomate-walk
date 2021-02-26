@@ -50,6 +50,12 @@ type Instruction struct {
 	Data     interface{}
 }
 
+//CleanFiber Delete all the instructions of the current fiber
+func (fiber *Fiber) CleanFiber() {
+	p := reflect.ValueOf(fiber).Elem()
+	p.Set(reflect.Zero(p.Type()))
+}
+
 //StopFiber stop the current fiber
 func (fiber *Fiber) StopFiber() {
 	finished <- true
