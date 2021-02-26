@@ -32,6 +32,7 @@ type Window struct {
 //Menu Setting the automate window's menu structure
 type Menu struct {
 	WindowMenu *walk.Menu
+	New        *walk.Action
 	Open       *walk.Action
 	Folders    *walk.Menu
 	Run        *walk.Action
