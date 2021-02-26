@@ -43,6 +43,7 @@ func CreateApp() {
 						Image:    "/menu-icons/new.png",
 						Shortcut: declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyN},
 						OnTriggered: func() {
+							aw.FiberNameInput.SetText("")
 							buttons.CleanButtons()
 							newFiber.CleanFiber()
 						},
