@@ -1,7 +1,6 @@
 package app
 
 import (
-	"fmt"
 	"gotomate/app/automate"
 	"gotomate/app/automate/button"
 	"gotomate/app/automate/listbox"
@@ -55,7 +54,7 @@ func CreateApp() {
 						Enabled:     declarative.Bind("enabledCB.Checked"),
 						Visible:     declarative.Bind("!openHiddenCB.Checked"),
 						Shortcut:    declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyO},
-						OnTriggered: func() { fmt.Println("Open a fiber") },
+						OnTriggered: func() { aw.ImportFiber() },
 					},
 					declarative.Menu{
 						AssignTo: &aw.Menu.Folders,
@@ -67,7 +66,7 @@ func CreateApp() {
 						Text:        "Save",
 						Image:       "/save.png",
 						Shortcut:    declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyS},
-						OnTriggered: func() { aw.SaveFiber(newFiber) },
+						OnTriggered: func() { aw.SaveFiber() },
 					},
 					declarative.Action{
 						AssignTo:    &aw.Menu.Exit,
@@ -151,7 +150,7 @@ func CreateApp() {
 												MaxSize:   declarative.Size{Width: 100},
 												Font:      declarative.Font{Family: "Roboto", PointSize: 9, Bold: true},
 												Text:      "Save",
-												OnClicked: func() { aw.SaveFiber(newFiber) },
+												OnClicked: func() { aw.SaveFiber() },
 											},
 										},
 									},
@@ -196,6 +195,6 @@ func CreateApp() {
 		log.Fatal(err)
 	}
 
-	aw.AddSavedFibersActions(newFiber)
+	aw.AddSavedFibersActions()
 	aw.MainWindow.Run()
 }

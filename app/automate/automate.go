@@ -18,6 +18,7 @@ import (
 
 //NewButtons Create the automate's list of buttons
 var NewButtons = button.NewButtons
+var currentFiber = fiber.NewFiber
 var pressed = false
 
 //Window Setting the automate window structure
@@ -97,7 +98,7 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 					fb.Dialog.DialogContent.Run(aw.MainWindow)
 					break
 				case 2:
-					aw.DeleteFiberButton(fb, fiber.NewFiber)
+					aw.DeleteFiberButton(fb)
 					break
 				default:
 					break
@@ -126,7 +127,7 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 }
 
 //DeleteFiberButton Delete the button from automate's screen & remove the associated instruction from the fiber
-func (aw *Window) DeleteFiberButton(btn *button.Button, currentFiber *fiber.Fiber) {
+func (aw *Window) DeleteFiberButton(btn *button.Button) {
 	var dlg *walk.Dialog
 	var acceptPB, cancelPB *walk.PushButton
 
@@ -190,27 +191,46 @@ func (aw *Window) DeleteFiberButton(btn *button.Button, currentFiber *fiber.Fibe
 }
 
 //AddSavedFibersActions Add all the saved fibers to the My fibers's menu
-func (aw *Window) AddSavedFibersActions(currentFiber *fiber.Fiber) {
+func (aw *Window) AddSavedFibersActions() {
 	root := "./saves"
 	aw.Menu.Folders.Actions().Clear()
 
 	filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if filepath.Ext(path) == ".json" {
+			fullPath, _ := filepath.Abs(path)
 			var file = filepath.Base(path)
 			var extension = filepath.Ext(file)
 			var name = file[0 : len(file)-len(extension)]
 			a := walk.NewAction()
 			a.SetText(name)
-			a.Triggered().Attach(func() { aw.OpenSavedFiber(path, currentFiber) })
+			a.Triggered().Attach(func() { aw.OpenFiber(fullPath) })
 			aw.Menu.Folders.Actions().Add(a)
 		}
 		return nil
 	})
 }
 
-//OpenSavedFiber Open a saved fiber from the menu My Fibers
-func (aw *Window) OpenSavedFiber(path string, currentFiber *fiber.Fiber) {
-	jsonFile, err := os.Open("./" + path)
+//ImportFiber Open a dialog window for user file selection
+func (aw *Window) ImportFiber() error {
+	dlg := new(walk.FileDialog)
+
+	dlg.Filter = "JSON File (*.json)|*.json"
+	dlg.Title = "Select a Fiber file"
+
+	if ok, err := dlg.ShowOpen(aw.MainWindow); err != nil {
+		return err
+	} else if !ok {
+		return nil
+	}
+
+	aw.OpenFiber(dlg.FilePath)
+
+	return nil
+}
+
+//OpenFiber Open a saved fiber from the menu My Fibers
+func (aw *Window) OpenFiber(path string) {
+	jsonFile, err := os.Open(path)
 
 	if err != nil {
 		fmt.Println("ERROR: Unable to open the saved fiber")
@@ -250,7 +270,7 @@ func (aw *Window) OpenSavedFiber(path string, currentFiber *fiber.Fiber) {
 }
 
 //SaveFiber save the current fiber
-func (aw *Window) SaveFiber(currentFiber *fiber.Fiber) {
+func (aw *Window) SaveFiber() {
 	name := aw.FiberNameInput.Text()
 	if name == "" {
 		var dlg *walk.Dialog
@@ -295,6 +315,6 @@ func (aw *Window) SaveFiber(currentFiber *fiber.Fiber) {
 		path := "saves/" + name + ".json"
 		file, _ := json.Marshal(currentFiber)
 		ioutil.WriteFile(path, file, 0644)
-		aw.AddSavedFibersActions(currentFiber)
+		aw.AddSavedFibersActions()
 	}
 }
