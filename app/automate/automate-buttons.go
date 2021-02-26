@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gotomate/app/fiber"
 	"gotomate/packages"
+	"reflect"
 
 	"github.com/lxn/walk"
 	declarative "github.com/lxn/walk/declarative"
@@ -22,6 +23,16 @@ type Button struct {
 	Composite *walk.Composite
 	LinkLabel *walk.LinkLabel
 	Dialog    *packages.Dialog
+}
+
+//CleanButtons Delete all the automate's buttons & delete all the button
+func (btns *Buttons) CleanButtons() {
+	for i := 0; i < len(btns.Buttons); i++ {
+		btns.Buttons[i].Composite.Dispose()
+		btns.Buttons[i].LinkLabel.Dispose()
+	}
+	p := reflect.ValueOf(btns).Elem()
+	p.Set(reflect.Zero(p.Type()))
 }
 
 //DeleteButton Delete the button from automate's screen & remove the associated instruction from the fiber

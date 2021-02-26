@@ -8,7 +8,6 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
-	"reflect"
 
 	"github.com/lxn/walk"
 	declarative "github.com/lxn/walk/declarative"
@@ -46,8 +45,8 @@ func (aw *Window) OpenSavedFiber(path string, currentFiber *fiber.Fiber) {
 	err = json.Unmarshal(byteValue, &loadingFiber)
 	aw.FiberNameInput.SetText(loadingFiber.Name)
 
-	p := reflect.ValueOf(currentFiber).Elem()
-	p.Set(reflect.Zero(p.Type()))
+	NewButtons.CleanButtons()
+	currentFiber.CleanFiber()
 
 	currentFiber.Name = loadingFiber.Name
 	if err != nil {
