@@ -54,58 +54,7 @@ func (aw *Window) OpenSavedFiber(path string, currentFiber *fiber.Fiber) {
 	}
 
 	for _, instruction := range loadingFiber.Instructions {
-		var structure interface{}
-		switch instruction.FuncName {
-		case "Log":
-			structure = new(packages.LogPrint)
-		case "Sleep":
-			structure = new(packages.Sleep)
-		case "MilliSleep":
-			structure = new(packages.MilliSleep)
-		case "Click":
-			structure = new(packages.MouseClick)
-		case "Scroll":
-			structure = new(packages.MouseScroll)
-		case "Move":
-			structure = new(packages.MouseMove)
-		case "Tap":
-			structure = new(packages.KeyboardTap)
-		case "Write":
-			structure = new(packages.ClipboardWrite)
-		case "Read":
-			structure = new(packages.ClipboardRead)
-		case "Print":
-			structure = new(packages.LogPrint)
-		case "Create":
-			structure = new(packages.NotificationCreate)
-		case "GetBattery":
-			structure = new(packages.UserBattery)
-		case "GetBatteryState":
-			structure = new(packages.BatteryState)
-		case "GetBatteryPercentage":
-			structure = new(packages.BatteryPercentage)
-		case "GetBatteryRemainingTime":
-			structure = new(packages.BatteryRemainingTime)
-		case "GetBatteryChargeRate":
-			structure = new(packages.BatteryChargeRate)
-		case "GetBatteryCurrentCapacity":
-			structure = new(packages.BatteryCurrentCapacity)
-		case "GetBatteryLastFullCapacity":
-			structure = new(packages.BatteryLastFullCapacity)
-		case "GetBatteryDesignCapacity":
-			structure = new(packages.BatteryDesignCapacity)
-		case "GetBatteryVoltage":
-			structure = new(packages.BatteryVoltage)
-		case "GetBatteryDesignVoltage":
-			structure = new(packages.BatteryDesignVoltage)
-		case "GetCurrentSysClock":
-			structure = new(packages.SysClock)
-		case "GetCurrentSysTime":
-			structure = new(packages.SysTime)
-		default:
-			fmt.Println("ERROR: Unable to find the function")
-			structure = nil
-		}
+		structure := packages.PackageDecode(instruction)
 
 		err := json.Unmarshal(instruction.Data, structure)
 		if err != nil {
