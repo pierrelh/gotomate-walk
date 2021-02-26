@@ -34,6 +34,16 @@ func CreateApp() {
 				Text:     "&File",
 				Items: []declarative.MenuItem{
 					declarative.Action{
+						AssignTo: &aw.Menu.New,
+						Text:     "New",
+						Image:    "/new.png",
+						Shortcut: declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyN},
+						OnTriggered: func() {
+							buttons.CleanButtons()
+							newFiber.CleanFiber()
+						},
+					},
+					declarative.Action{
 						AssignTo:    &aw.Menu.Open,
 						Text:        "Open",
 						Image:       "/open.png",
