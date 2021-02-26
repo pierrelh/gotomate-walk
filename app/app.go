@@ -40,7 +40,7 @@ func CreateApp() {
 					declarative.Action{
 						AssignTo: &aw.Menu.New,
 						Text:     "New",
-						Image:    "/new.png",
+						Image:    "/menu-icons/new.png",
 						Shortcut: declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyN},
 						OnTriggered: func() {
 							buttons.CleanButtons()
@@ -48,9 +48,9 @@ func CreateApp() {
 						},
 					},
 					declarative.Action{
-						AssignTo:    &aw.Menu.Open,
-						Text:        "Open",
-						Image:       "/open.png",
+						AssignTo:    &aw.Menu.Import,
+						Text:        "Import",
+						Image:       "/menu-icons/import.png",
 						Enabled:     declarative.Bind("enabledCB.Checked"),
 						Visible:     declarative.Bind("!openHiddenCB.Checked"),
 						Shortcut:    declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyO},
@@ -58,15 +58,24 @@ func CreateApp() {
 					},
 					declarative.Menu{
 						AssignTo: &aw.Menu.Folders,
-						Image:    "/folder.png",
+						Image:    "/menu-icons/folder.png",
 						Text:     "My Fibers",
 					},
 					declarative.Action{
 						AssignTo:    &aw.Menu.Save,
 						Text:        "Save",
-						Image:       "/save.png",
+						Image:       "/menu-icons/save.png",
 						Shortcut:    declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyS},
-						OnTriggered: func() { aw.SaveFiber() },
+						OnTriggered: func() { aw.InitSaveFiber() },
+					},
+					declarative.Action{
+						AssignTo:    &aw.Menu.Export,
+						Text:        "Export",
+						Image:       "/menu-icons/export.png",
+						Enabled:     declarative.Bind("enabledCB.Checked"),
+						Visible:     declarative.Bind("!openHiddenCB.Checked"),
+						Shortcut:    declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyO},
+						OnTriggered: func() { aw.ExportFiber() },
 					},
 					declarative.Action{
 						AssignTo:    &aw.Menu.Exit,
@@ -82,7 +91,7 @@ func CreateApp() {
 					declarative.Action{
 						AssignTo: &aw.Menu.Run,
 						Text:     "Run",
-						Image:    "/run.png",
+						Image:    "/menu-icons/run.png",
 						Shortcut: declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyE},
 						OnTriggered: func() {
 							go newFiber.RunFiber()
@@ -91,7 +100,7 @@ func CreateApp() {
 					declarative.Action{
 						AssignTo: &aw.Menu.Stop,
 						Text:     "Stop",
-						Image:    "/stop.png",
+						Image:    "/menu-icons/stop.png",
 						Shortcut: declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyQ},
 						OnTriggered: func() {
 							go newFiber.StopFiber()
@@ -150,7 +159,7 @@ func CreateApp() {
 												MaxSize:   declarative.Size{Width: 100},
 												Font:      declarative.Font{Family: "Roboto", PointSize: 9, Bold: true},
 												Text:      "Save",
-												OnClicked: func() { aw.SaveFiber() },
+												OnClicked: func() { aw.InitSaveFiber() },
 											},
 										},
 									},

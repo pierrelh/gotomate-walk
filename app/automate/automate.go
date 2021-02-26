@@ -210,12 +210,71 @@ func (aw *Window) AddSavedFibersActions() {
 	})
 }
 
+//ExportFiber Open a dialog window for user directory selection
+func (aw *Window) ExportFiber() error {
+	name := aw.FiberNameInput.Text()
+	if name == "" {
+		var dlg *walk.Dialog
+		var acceptPB *walk.PushButton
+
+		errDialog := declarative.Dialog{
+			Icon:          "/icon.ico",
+			Title:         "Error",
+			AssignTo:      &dlg,
+			DefaultButton: &acceptPB,
+			MinSize: declarative.Size{
+				Width:  200,
+				Height: 150,
+			},
+			Layout: declarative.VBox{},
+			Children: []declarative.Widget{
+				declarative.Composite{
+					Layout: declarative.VBox{},
+					Children: []declarative.Widget{
+						declarative.TextLabel{
+							Text:      "No name given for the fiber",
+							Alignment: declarative.Alignment2D(walk.AlignHCenterVCenter),
+							Font:      declarative.Font{Family: "Roboto", PointSize: 9},
+						},
+						declarative.PushButton{
+							AssignTo: &acceptPB,
+							Text:     "OK",
+							Font:     declarative.Font{Family: "Roboto", PointSize: 9},
+							OnClicked: func() {
+								dlg.Cancel()
+								aw.FiberNameInput.SetFocus()
+							},
+						},
+					},
+				},
+			},
+		}
+
+		errDialog.Run(aw.MainWindow)
+	} else {
+		dlg := new(walk.FileDialog)
+
+		dlg.Filter = "JSON File (*.json)|*.json"
+		dlg.Title = "Export a fiber"
+
+		if ok, err := dlg.ShowSave(aw.MainWindow); err != nil {
+			return err
+		} else if !ok {
+			return nil
+		}
+
+		aw.SaveFiber(dlg.FilePath)
+
+	}
+	return nil
+}
+
 //ImportFiber Open a dialog window for user file selection
 func (aw *Window) ImportFiber() error {
 	dlg := new(walk.FileDialog)
 
 	dlg.Filter = "JSON File (*.json)|*.json"
-	dlg.Title = "Select a Fiber file"
+	dlg.Title = "Open a fiber"
 
 	if ok, err := dlg.ShowOpen(aw.MainWindow); err != nil {
 		return err
@@ -269,8 +328,8 @@ func (aw *Window) OpenFiber(path string) {
 	}
 }
 
-//SaveFiber save the current fiber
-func (aw *Window) SaveFiber() {
+//InitSaveFiber Check if the fiber can be saved & save it if possible
+func (aw *Window) InitSaveFiber() {
 	name := aw.FiberNameInput.Text()
 	if name == "" {
 		var dlg *walk.Dialog
@@ -311,10 +370,16 @@ func (aw *Window) SaveFiber() {
 
 		errDialog.Run(aw.MainWindow)
 	} else {
-		currentFiber.Name = name
-		path := "saves/" + name + ".json"
-		file, _ := json.Marshal(currentFiber)
-		ioutil.WriteFile(path, file, 0644)
+		aw.SaveFiber("saves/" + name)
 		aw.AddSavedFibersActions()
 	}
+}
+
+//SaveFiber save the current fiber to the path parameter
+func (aw *Window) SaveFiber(path string) {
+	name := aw.FiberNameInput.Text()
+	currentFiber.Name = name
+	fullPath := path + ".json"
+	file, _ := json.Marshal(currentFiber)
+	ioutil.WriteFile(fullPath, file, 0644)
 }
