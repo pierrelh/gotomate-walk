@@ -3,6 +3,9 @@ package app
 import (
 	"fmt"
 	"gotomate/app/automate"
+	"gotomate/app/automate/button"
+	"gotomate/app/automate/listbox"
+	"gotomate/app/automate/menu"
 	"gotomate/app/fiber"
 	"log"
 
@@ -10,15 +13,17 @@ import (
 	declarative "github.com/lxn/walk/declarative"
 )
 
-var aw = new(automate.Window)
+var aw = &automate.Window{
+	Menu:             new(menu.Menu),
+	PrimaryListBox:   &listbox.ListBox{Model: listbox.NewPrimaryListModel()},
+	SecondaryListBox: new(listbox.ListBox),
+}
+
 var newFiber = fiber.NewFiber
-var buttons = automate.NewButtons
+var buttons = button.NewButtons
 
 // CreateApp Initiate the app
 func CreateApp() {
-
-	aw.Menu = new(automate.Menu)
-	aw.PrimaryListBoxModel = automate.NewAutomateModel()
 
 	if err := (declarative.MainWindow{
 		AssignTo:   &aw.MainWindow,
@@ -102,19 +107,21 @@ func CreateApp() {
 				MaxSize: declarative.Size{Height: 120},
 				Children: []declarative.Widget{
 					declarative.ListBox{
-						AssignTo:        &aw.PrimaryListBox,
+						AssignTo:        &aw.PrimaryListBox.ListBox,
 						Name:            "PrimaryList",
 						Font:            declarative.Font{Family: "Roboto", PointSize: 9},
 						MultiSelection:  false,
-						Model:           aw.PrimaryListBoxModel,
+						Model:           aw.PrimaryListBox.Model,
 						OnItemActivated: aw.PlbItemActivated,
 					},
 					declarative.ListBox{
-						AssignTo:        &aw.SecondaryListBox,
-						Name:            "SecondaryList",
-						Font:            declarative.Font{Family: "Roboto", PointSize: 9},
-						MultiSelection:  false,
-						OnItemActivated: func() { aw.SlbItemActivated(newFiber) },
+						AssignTo:       &aw.SecondaryListBox.ListBox,
+						Name:           "SecondaryList",
+						Font:           declarative.Font{Family: "Roboto", PointSize: 9},
+						MultiSelection: false,
+						OnItemActivated: func() {
+							aw.SlbItemActivated(newFiber)
+						},
 					},
 					declarative.Composite{
 						Layout: declarative.VBox{},

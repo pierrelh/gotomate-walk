@@ -1,17 +1,15 @@
-package list
+package listboxmodel
 
-import "github.com/lxn/walk"
+import (
+	"gotomate/app/automate/listbox/listboxitem"
+
+	"github.com/lxn/walk"
+)
 
 //Model Setting the model of automate ListBox
 type Model struct {
 	walk.ListModelBase
-	Items []Item
-}
-
-//Item Setting automate packages items
-type Item struct {
-	Name  string
-	Value string
+	Items []listboxitem.Item
 }
 
 // ItemCount return the length of an AutomateModel items
