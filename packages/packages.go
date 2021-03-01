@@ -8,6 +8,7 @@ var Packages = []string{
 	"Log",
 	"Mouse",
 	"Notification",
+	"Screen",
 	"Sleep",
 	"Systime",
 }
@@ -43,6 +44,12 @@ var SubPackages = map[string][]string{
 	},
 	"Notification": {
 		"Create",
+	},
+	"Screen": {
+		"GetMouseColor",
+		"GetPixelColor",
+		// "GetScreenSize",
+		"SaveCapture",
 	},
 	"Sleep": {
 		"MilliSleep",

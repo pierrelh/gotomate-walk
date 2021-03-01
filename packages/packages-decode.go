@@ -55,6 +55,12 @@ func PackageDecode(instruction *fiber.LoadingInstruction) interface{} {
 		structure = new(SysClock)
 	case "GetCurrentSysTime":
 		structure = new(SysTime)
+	case "GetPixelColor":
+		structure = new(PixelColor)
+	case "GetMouseColor":
+		structure = new(MouseColor)
+	case "SaveCapture":
+		structure = new(SaveCapture)
 	default:
 		fmt.Println("ERROR: Unable to find the function")
 		structure = nil
