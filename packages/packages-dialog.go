@@ -7,7 +7,7 @@ import (
 	declarative "github.com/lxn/walk/declarative"
 )
 
-//Dialog Setting the requirement of a dialog window
+// Dialog Setting the requirement of a dialog window
 type Dialog struct {
 	Dialog        *walk.Dialog
 	DialogContent declarative.Dialog
@@ -78,7 +78,7 @@ func CreateNewDialog(funcName string, databinder ...interface{}) (interface{}, *
 	return source, dialog
 }
 
-//FillDialog Getting the right databinder & the right template needed
+// FillDialog Getting the right databinder & the right template needed
 func FillDialog(funcName string) (interface{}, []declarative.Widget) {
 	switch funcName {
 	case "Sleep":

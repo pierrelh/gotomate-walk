@@ -1,8 +1,9 @@
 package packages
 
 import (
-	"gotomate/packages/battery"
 	"time"
+
+	"github.com/distatus/battery"
 
 	"gopkg.in/toast.v1"
 )

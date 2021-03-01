@@ -2,7 +2,7 @@ package packages
 
 import "github.com/lxn/walk/declarative"
 
-//SleepTemplate Dialog's Sleep Template
+// SleepTemplate Dialog's Sleep Template
 var SleepTemplate = []declarative.Widget{
 	declarative.Label{
 		Font: declarative.Font{Family: "Roboto", PointSize: 9},
@@ -16,7 +16,7 @@ var SleepTemplate = []declarative.Widget{
 	},
 }
 
-//MilliSleepTemplate Dialog's MilliSleep Template
+// MilliSleepTemplate Dialog's MilliSleep Template
 var MilliSleepTemplate = []declarative.Widget{
 	declarative.Label{
 		Font: declarative.Font{Family: "Roboto", PointSize: 9},
@@ -30,7 +30,7 @@ var MilliSleepTemplate = []declarative.Widget{
 	},
 }
 
-//MouseClickTemplate Dialog's MouseClic Template
+// MouseClickTemplate Dialog's MouseClic Template
 var MouseClickTemplate = []declarative.Widget{
 	declarative.Label{
 		Font: declarative.Font{Family: "Roboto", PointSize: 9},
@@ -45,7 +45,7 @@ var MouseClickTemplate = []declarative.Widget{
 	},
 }
 
-//MouseScrollTemplate Dialog's MouseScroll Template
+// MouseScrollTemplate Dialog's MouseScroll Template
 var MouseScrollTemplate = []declarative.Widget{
 	declarative.Label{
 		Font: declarative.Font{Family: "Roboto", PointSize: 9},
@@ -67,7 +67,7 @@ var MouseScrollTemplate = []declarative.Widget{
 	},
 }
 
-//MouseMoveTemplate Dialog's MouseMove Template
+// MouseMoveTemplate Dialog's MouseMove Template
 var MouseMoveTemplate = []declarative.Widget{
 	declarative.Label{
 		Font: declarative.Font{Family: "Roboto", PointSize: 9},
@@ -91,7 +91,7 @@ var MouseMoveTemplate = []declarative.Widget{
 	},
 }
 
-//KeyboardTapTemplate Dialog's KeyboardTap Template
+// KeyboardTapTemplate Dialog's KeyboardTap Template
 var KeyboardTapTemplate = []declarative.Widget{
 	declarative.Label{
 		Font: declarative.Font{Family: "Roboto", PointSize: 9},
@@ -127,7 +127,7 @@ var KeyboardTapTemplate = []declarative.Widget{
 	},
 }
 
-//ClipboardWriteTemplate Dialog's ClipboardWrite Template
+// ClipboardWriteTemplate Dialog's ClipboardWrite Template
 var ClipboardWriteTemplate = []declarative.Widget{
 	declarative.Label{
 		Font: declarative.Font{Family: "Roboto", PointSize: 9},
@@ -139,7 +139,7 @@ var ClipboardWriteTemplate = []declarative.Widget{
 	},
 }
 
-//ClipboardReadTemplate Dialog's ClipboardRead Template
+// ClipboardReadTemplate Dialog's ClipboardRead Template
 var ClipboardReadTemplate = []declarative.Widget{
 	declarative.Label{
 		Font: declarative.Font{Family: "Roboto", PointSize: 9},
@@ -152,7 +152,7 @@ var ClipboardReadTemplate = []declarative.Widget{
 	},
 }
 
-//LogPrintTemplate Dialog's LogPrint Template
+// LogPrintTemplate Dialog's LogPrint Template
 var LogPrintTemplate = []declarative.Widget{
 	declarative.Label{
 		Font: declarative.Font{Family: "Roboto", PointSize: 9},
@@ -165,7 +165,7 @@ var LogPrintTemplate = []declarative.Widget{
 	},
 }
 
-//NotificationCreateTemplate Dialog's NotificationCreate Template
+// NotificationCreateTemplate Dialog's NotificationCreate Template
 var NotificationCreateTemplate = []declarative.Widget{
 	declarative.Label{
 		Font: declarative.Font{Family: "Roboto", PointSize: 9},
@@ -187,7 +187,7 @@ var NotificationCreateTemplate = []declarative.Widget{
 	},
 }
 
-//UserBatteryTemplate Dialog's UserBattery Template
+// UserBatteryTemplate Dialog's UserBattery Template
 var UserBatteryTemplate = []declarative.Widget{
 	declarative.Label{
 		Font: declarative.Font{Family: "Roboto", PointSize: 9},
@@ -200,7 +200,7 @@ var UserBatteryTemplate = []declarative.Widget{
 	},
 }
 
-//BatteryParametersTemplate Dialog's BatteryParameters Template
+// BatteryParametersTemplate Dialog's BatteryParameters Template
 var BatteryParametersTemplate = []declarative.Widget{
 	declarative.Label{
 		Font: declarative.Font{Family: "Roboto", PointSize: 9},

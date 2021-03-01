@@ -5,7 +5,7 @@ import (
 	"gotomate/app/fiber"
 )
 
-//PackageDecode return the struct to use to decode an unmarshalled data
+// PackageDecode return the struct to use to decode an unmarshalled data
 func PackageDecode(instruction *fiber.LoadingInstruction) interface{} {
 	var structure interface{}
 	switch instruction.FuncName {
