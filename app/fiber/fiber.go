@@ -9,6 +9,7 @@ import (
 	"gotomate/packages/log"
 	"gotomate/packages/mouse"
 	"gotomate/packages/notification"
+	"gotomate/packages/screen"
 	"gotomate/packages/sleep"
 	"gotomate/packages/systime"
 	"reflect"
@@ -377,6 +378,33 @@ func (fiber *Fiber) RunFiber() {
 							val := reflect.ValueOf(instruction.Data).Elem()
 							val.FieldByName("Value").Set(reflect.ValueOf(time))
 						}()
+						<-finished
+					default:
+						fmt.Println("FIBER: This function is not integrated yet: " + instruction.FuncName)
+						continue
+					}
+				case "Screen":
+					switch instruction.FuncName {
+					case "GetMouseColor":
+						go func() {
+							value := screen.GetMouseColor(finished)
+							datas := reflect.ValueOf(instruction.Data).Elem()
+							datas.FieldByName("Value").Set(reflect.ValueOf(value))
+						}()
+						<-finished
+					case "GetPixelColor":
+						go func() {
+							datas := reflect.ValueOf(instruction.Data).Elem()
+							x := datas.FieldByName("X").Interface().(int)
+							y := datas.FieldByName("Y").Interface().(int)
+							value := screen.GetPixelColor(x, y, finished)
+							datas.FieldByName("Value").Set(reflect.ValueOf(value))
+						}()
+						<-finished
+					case "SaveCapture":
+						stateInstruction := reflect.ValueOf(instruction.Data).Elem()
+						path := stateInstruction.FieldByName("Path").Interface().(string)
+						go screen.SaveCapture(finished, path)
 						<-finished
 					default:
 						fmt.Println("FIBER: This function is not integrated yet: " + instruction.FuncName)

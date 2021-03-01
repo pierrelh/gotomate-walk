@@ -125,6 +125,12 @@ func FillDialog(funcName string) (interface{}, []declarative.Widget) {
 		return new(SysClock), SysClockTemplate
 	case "GetCurrentSysTime":
 		return new(SysTime), SysClockTemplate
+	case "GetPixelColor":
+		return new(PixelColor), PixelColorTemplate
+	case "GetMouseColor":
+		return new(MouseColor), MouseColorTemplate
+	case "SaveCapture":
+		return new(SaveCapture), SaveCaptureTemplate
 	default:
 		return nil, nil
 	}
