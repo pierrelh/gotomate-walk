@@ -2,6 +2,16 @@ package packages
 
 import (
 	"fmt"
+	"gotomate/packages/battery"
+	"gotomate/packages/clipboard"
+	"gotomate/packages/keyboard"
+	"gotomate/packages/log"
+	"gotomate/packages/mouse"
+	"gotomate/packages/notification"
+	"gotomate/packages/process"
+	"gotomate/packages/screen"
+	"gotomate/packages/sleep"
+	"gotomate/packages/systime"
 
 	"github.com/lxn/walk"
 	declarative "github.com/lxn/walk/declarative"
@@ -82,57 +92,57 @@ func CreateNewDialog(funcName string, databinder ...interface{}) (interface{}, *
 func FillDialog(funcName string) (interface{}, []declarative.Widget) {
 	switch funcName {
 	case "Sleep":
-		return new(Sleep), SleepTemplate
+		return new(sleep.SleepDatabinder), sleep.SleepTemplate
 	case "MilliSleep":
-		return new(MilliSleep), MilliSleepTemplate
+		return new(sleep.MilliSleepDatabinder), sleep.MilliSleepTemplate
 	case "Click":
-		return new(MouseClick), MouseClickTemplate
+		return new(mouse.ClickDatabinder), mouse.ClickTemplate
 	case "Scroll":
-		return new(MouseScroll), MouseScrollTemplate
+		return new(mouse.ScrollDatabinder), mouse.ScrollTemplate
 	case "Move":
-		return new(MouseMove), MouseMoveTemplate
+		return new(mouse.MoveDatabinder), mouse.MoveTemplate
 	case "Tap":
-		return new(KeyboardTap), KeyboardTapTemplate
+		return new(keyboard.TapDatabinder), keyboard.TapTemplate
 	case "Write":
-		return new(ClipboardWrite), ClipboardWriteTemplate
+		return new(clipboard.WriteDatabinder), clipboard.WriteTemplate
 	case "Read":
-		return new(ClipboardRead), ClipboardReadTemplate
+		return new(clipboard.ReadDatabinder), clipboard.ReadTemplate
 	case "Print":
-		return new(LogPrint), LogPrintTemplate
+		return new(log.PrintDatabinder), log.PrintTemplate
 	case "Create":
-		return new(NotificationCreate), NotificationCreateTemplate
+		return new(notification.CreateDatabinder), notification.CreateTemplate
 	case "GetBattery":
-		return new(UserBattery), UserBatteryTemplate
+		return new(battery.UserBatteryDatabinder), battery.UserBatteryTemplate
 	case "GetBatteryState":
-		return new(BatteryState), BatteryParametersTemplate
+		return new(battery.StateDatabinder), battery.ParametersTemplate
 	case "GetBatteryPercentage":
-		return new(BatteryPercentage), BatteryParametersTemplate
+		return new(battery.PercentageDatabinder), battery.ParametersTemplate
 	case "GetBatteryRemainingTime":
-		return new(BatteryRemainingTime), BatteryParametersTemplate
+		return new(battery.RemainingTimeDatabinder), battery.ParametersTemplate
 	case "GetBatteryChargeRate":
-		return new(BatteryChargeRate), BatteryParametersTemplate
+		return new(battery.ChargeRateDatabinder), battery.ParametersTemplate
 	case "GetBatteryCurrentCapacity":
-		return new(BatteryCurrentCapacity), BatteryParametersTemplate
+		return new(battery.CurrentCapacityDatabinder), battery.ParametersTemplate
 	case "GetBatteryLastFullCapacity":
-		return new(BatteryLastFullCapacity), BatteryParametersTemplate
+		return new(battery.LastFullCapacityDatabinder), battery.ParametersTemplate
 	case "GetBatteryDesignCapacity":
-		return new(BatteryDesignCapacity), BatteryParametersTemplate
+		return new(battery.DesignCapacityDatabinder), battery.ParametersTemplate
 	case "GetBatteryVoltage":
-		return new(BatteryVoltage), BatteryParametersTemplate
+		return new(battery.VoltageDatabinder), battery.ParametersTemplate
 	case "GetBatteryDesignVoltage":
-		return new(BatteryDesignVoltage), BatteryParametersTemplate
+		return new(battery.DesignVoltageDatabinder), battery.ParametersTemplate
 	case "GetCurrentSysClock":
-		return new(SysClock), SysClockTemplate
+		return new(systime.ClockDatabinder), systime.SysClockTemplate
 	case "GetCurrentSysTime":
-		return new(SysTime), SysClockTemplate
+		return new(systime.TimeDatabinder), systime.SysClockTemplate
 	case "GetPixelColor":
-		return new(PixelColor), PixelColorTemplate
+		return new(screen.PixelColorDatabinder), screen.PixelColorTemplate
 	case "GetMouseColor":
-		return new(MouseColor), MouseColorTemplate
+		return new(screen.MouseColorDatabinder), screen.MouseColorTemplate
 	case "SaveCapture":
-		return new(SaveCapture), SaveCaptureTemplate
+		return new(screen.SaveCaptureDatabinder), screen.SaveCaptureTemplate
 	case "StartProcess":
-		return new(StartProcess), StartProcessTemplate
+		return new(process.StartProcessDatabinder), process.StartProcessTemplate
 	default:
 		return nil, nil
 	}
