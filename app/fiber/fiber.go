@@ -18,7 +18,6 @@ import (
 	"strings"
 
 	batType "github.com/distatus/battery"
-	"gopkg.in/toast.v1"
 )
 
 //NewFiber Define the new automate's fiber
@@ -182,8 +181,7 @@ func (fiber *Fiber) RunFiber() {
 					case "Create":
 						title := data.FieldByName("Title").Interface().(string)
 						msg := data.FieldByName("Message").Interface().(string)
-						actions := data.FieldByName("Actions").Interface().([]toast.Action)
-						go notification.Create(title, msg, actions, finished)
+						go notification.Create(title, msg, finished)
 						<-finished
 					default:
 						fmt.Println("FIBER: This function is not integrated yet: " + instruction.FuncName)

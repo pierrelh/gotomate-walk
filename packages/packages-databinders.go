@@ -4,8 +4,6 @@ import (
 	"time"
 
 	"github.com/distatus/battery"
-
-	"gopkg.in/toast.v1"
 )
 
 // Sleep Define the Sleep parameters
@@ -93,7 +91,6 @@ type LogPrint struct {
 type NotificationCreate struct {
 	Title   string
 	Message string
-	Actions []toast.Action
 }
 
 // UserBattery Define the UserBattery parameters
