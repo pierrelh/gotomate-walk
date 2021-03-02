@@ -202,3 +202,10 @@ type ScreenSize struct {
 type SaveCapture struct {
 	Path string
 }
+
+// StartProcess Define the StartProcess databinder
+type StartProcess struct {
+	Path string
+	Var  string
+	Pid  int
+}

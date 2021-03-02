@@ -131,6 +131,8 @@ func FillDialog(funcName string) (interface{}, []declarative.Widget) {
 		return new(MouseColor), MouseColorTemplate
 	case "SaveCapture":
 		return new(SaveCapture), SaveCaptureTemplate
+	case "StartProcess":
+		return new(StartProcess), StartProcessTemplate
 	default:
 		return nil, nil
 	}

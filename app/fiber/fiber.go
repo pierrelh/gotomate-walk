@@ -9,6 +9,7 @@ import (
 	"gotomate/packages/log"
 	"gotomate/packages/mouse"
 	"gotomate/packages/notification"
+	"gotomate/packages/process"
 	"gotomate/packages/screen"
 	"gotomate/packages/sleep"
 	"gotomate/packages/systime"
@@ -382,6 +383,19 @@ func (fiber *Fiber) RunFiber() {
 					case "SaveCapture":
 						path := data.FieldByName("Path").Interface().(string)
 						go screen.SaveCapture(finished, path)
+						<-finished
+					default:
+						fmt.Println("FIBER: This function is not integrated yet: " + instruction.FuncName)
+						continue
+					}
+				case "Process":
+					switch instruction.FuncName {
+					case "StartProcess":
+						go func() {
+							path := data.FieldByName("Path").Interface().(string)
+							value := process.StartProcess(finished, path)
+							data.FieldByName("Pid").Set(reflect.ValueOf(value))
+						}()
 						<-finished
 					default:
 						fmt.Println("FIBER: This function is not integrated yet: " + instruction.FuncName)
