@@ -5,6 +5,7 @@ import (
 	"gotomate/app/fiber"
 	"gotomate/packages/battery"
 	"gotomate/packages/clipboard"
+	"gotomate/packages/input"
 	"gotomate/packages/keyboard"
 	"gotomate/packages/log"
 	"gotomate/packages/mouse"
@@ -71,6 +72,12 @@ func PackageDecode(instruction *fiber.LoadingInstruction) interface{} {
 		structure = new(screen.SaveCaptureDatabinder)
 	case "StartProcess":
 		structure = new(process.StartProcessDatabinder)
+	case "String":
+		structure = new(input.StringDatabinder)
+	case "Int":
+		structure = new(input.IntDatabinder)
+	case "Bool":
+		structure = new(input.BoolDatabinder)
 	default:
 		fmt.Println("ERROR: Unable to find the function")
 		structure = nil

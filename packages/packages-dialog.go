@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"gotomate/packages/battery"
 	"gotomate/packages/clipboard"
+	"gotomate/packages/input"
 	"gotomate/packages/keyboard"
 	"gotomate/packages/log"
 	"gotomate/packages/mouse"
@@ -143,6 +144,12 @@ func FillDialog(funcName string) (interface{}, []declarative.Widget) {
 		return new(screen.SaveCaptureDatabinder), screen.SaveCaptureTemplate
 	case "StartProcess":
 		return new(process.StartProcessDatabinder), process.StartProcessTemplate
+	case "String":
+		return new(input.StringDatabinder), input.InputTemplate
+	case "Int":
+		return new(input.IntDatabinder), input.InputTemplate
+	case "Bool":
+		return new(input.BoolDatabinder), input.InputTemplate
 	default:
 		return nil, nil
 	}

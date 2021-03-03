@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"gotomate/packages/battery"
 	"gotomate/packages/clipboard"
+	"gotomate/packages/input"
 	"gotomate/packages/keyboard"
 	"gotomate/packages/log"
 	"gotomate/packages/mouse"
@@ -393,6 +394,33 @@ func (fiber *Fiber) RunFiber() {
 							path := data.FieldByName("Path").Interface().(string)
 							value := process.StartProcess(finished, path)
 							data.FieldByName("Pid").Set(reflect.ValueOf(value))
+						}()
+						<-finished
+					default:
+						fmt.Println("FIBER: This function is not integrated yet: " + instruction.FuncName)
+						continue
+					}
+				case "Input":
+					switch instruction.FuncName {
+					case "String":
+						go func() {
+							msg := data.FieldByName("Message").Interface().(string)
+							value := input.String(finished, msg)
+							data.FieldByName("Value").Set(reflect.ValueOf(value))
+						}()
+						<-finished
+					case "Int":
+						go func() {
+							msg := data.FieldByName("Message").Interface().(string)
+							value := input.Int(finished, msg)
+							data.FieldByName("Value").Set(reflect.ValueOf(value))
+						}()
+						<-finished
+					case "Bool":
+						go func() {
+							msg := data.FieldByName("Message").Interface().(string)
+							value := input.Bool(finished, msg)
+							data.FieldByName("Value").Set(reflect.ValueOf(value))
 						}()
 						<-finished
 					default:
