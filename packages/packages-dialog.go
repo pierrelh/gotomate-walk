@@ -58,10 +58,10 @@ func CreateNewDialog(funcName string, databinder ...interface{}) (interface{}, *
 				Layout:   declarative.VBox{},
 				Children: children,
 			},
-			declarative.HSplitter{
-				MaxSize: declarative.Size{Height: 30},
+			declarative.Composite{
+				Alignment: declarative.Alignment2D(walk.AlignHCenterVCenter),
+				Layout:    declarative.HBox{},
 				Children: []declarative.Widget{
-					declarative.HSpacer{},
 					declarative.PushButton{
 						AssignTo: &dialog.AcceptButton,
 						Text:     "OK",

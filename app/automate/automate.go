@@ -33,7 +33,6 @@ type Window struct {
 	FiberNameInput   *walk.TextEdit
 	RunButton        *walk.PushButton
 	StopButton       *walk.PushButton
-	SaveButton       *walk.PushButton
 	ScrollView       *walk.ScrollView
 }
 
@@ -86,7 +85,7 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 		AssignTo:   &fb.Composite,
 		Layout:     declarative.VBox{MarginsZero: true, SpacingZero: true},
 		Background: declarative.BitmapBrush{Image: bmp},
-		Alignment:  declarative.Alignment2D(walk.AlignHNearVCenter),
+		Alignment:  declarative.Alignment2D(walk.AlignHCenterVCenter),
 		OnMouseDown: func(x, y int, button walk.MouseButton) {
 			pressed = true
 		},

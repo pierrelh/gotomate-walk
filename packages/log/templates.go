@@ -6,7 +6,7 @@ import "github.com/lxn/walk/declarative"
 var PrintTemplate = []declarative.Widget{
 	declarative.Label{
 		Font: declarative.Font{Family: "Roboto", PointSize: 9},
-		Text: "Log: ",
+		Text: "Log:",
 	},
 	declarative.TextEdit{
 		Font:          declarative.Font{Family: "Roboto", PointSize: 9},

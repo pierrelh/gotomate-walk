@@ -11,7 +11,7 @@ var SleepTemplate = []declarative.Widget{
 	declarative.NumberEdit{
 		Font:     declarative.Font{Family: "Roboto", PointSize: 9},
 		Value:    declarative.Bind("Duration"),
-		Suffix:   "s",
+		Suffix:   " s",
 		Decimals: 0,
 	},
 }
@@ -25,7 +25,7 @@ var MilliSleepTemplate = []declarative.Widget{
 	declarative.NumberEdit{
 		Font:     declarative.Font{Family: "Roboto", PointSize: 9},
 		Value:    declarative.Bind("Duration"),
-		Suffix:   "ms",
+		Suffix:   " ms",
 		Decimals: 0,
 	},
 }
