@@ -7,6 +7,7 @@ import (
 	"gotomate/app/fiber"
 	"log"
 
+	"github.com/gonutz/w32"
 	"github.com/lxn/walk"
 	declarative "github.com/lxn/walk/declarative"
 )
@@ -101,6 +102,29 @@ func CreateApp() {
 						Shortcut: declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyQ},
 						OnTriggered: func() {
 							go newFiber.StopFiber()
+						},
+					},
+					declarative.Action{
+						AssignTo: &aw.Menu.Console,
+						Checked:  true,
+						Text:     "Show Console",
+						Shortcut: declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyC},
+						OnTriggered: func() {
+							console := w32.GetConsoleWindow()
+							if console != 0 {
+								_, consoleProcID := w32.GetWindowThreadProcessId(console)
+								if aw.Menu.Console.Checked() {
+									if w32.GetCurrentProcessId() == consoleProcID {
+										w32.ShowWindowAsync(console, w32.SW_HIDE)
+										aw.Menu.Console.SetChecked(false)
+									}
+								} else {
+									if w32.GetCurrentProcessId() == consoleProcID {
+										w32.ShowWindowAsync(console, w32.SW_SHOW)
+										aw.Menu.Console.SetChecked(true)
+									}
+								}
+							}
 						},
 					},
 				},

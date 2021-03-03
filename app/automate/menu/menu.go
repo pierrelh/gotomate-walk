@@ -10,6 +10,7 @@ type Menu struct {
 	Folders    *walk.Menu
 	Run        *walk.Action
 	Stop       *walk.Action
+	Console    *walk.Action
 	Save       *walk.Action
 	Export     *walk.Action
 	Exit       *walk.Action
