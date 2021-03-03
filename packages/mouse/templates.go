@@ -48,7 +48,7 @@ var MoveTemplate = []declarative.Widget{
 	declarative.NumberEdit{
 		Font:     declarative.Font{Family: "Roboto", PointSize: 9},
 		Value:    declarative.Bind("X"),
-		Suffix:   "px",
+		Suffix:   " px",
 		Decimals: 0,
 	},
 	declarative.Label{
@@ -58,7 +58,7 @@ var MoveTemplate = []declarative.Widget{
 	declarative.NumberEdit{
 		Font:     declarative.Font{Family: "Roboto", PointSize: 9},
 		Value:    declarative.Bind("Y"),
-		Suffix:   "px",
+		Suffix:   " px",
 		Decimals: 0,
 	},
 }

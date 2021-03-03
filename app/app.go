@@ -26,7 +26,7 @@ func CreateApp() {
 		AssignTo:   &aw.MainWindow,
 		Icon:       "icon.ico",
 		Title:      "Gotomate",
-		Background: declarative.SolidColorBrush{Color: walk.RGB(11, 11, 11)},
+		Background: declarative.SolidColorBrush{Color: walk.RGB(106, 215, 229)},
 		MinSize:    declarative.Size{Width: 320, Height: 240},
 		Size:       declarative.Size{Width: 800, Height: 600},
 		Layout:     declarative.VBox{MarginsZero: true, SpacingZero: true},
@@ -139,7 +139,6 @@ func CreateApp() {
 										Alignment: declarative.Alignment2D(walk.AlignHFarVCenter),
 										Font:      declarative.Font{Family: "Roboto", PointSize: 12, Underline: true, Bold: true},
 										Text:      "Fiber Name :",
-										TextColor: walk.Color(0xffffff),
 									},
 									declarative.TextEdit{
 										AssignTo:      &aw.FiberNameInput,
@@ -147,18 +146,6 @@ func CreateApp() {
 										Font:          declarative.Font{Family: "Roboto", PointSize: 9},
 										CompactHeight: true,
 										MaxSize:       declarative.Size{Width: 150},
-									},
-									declarative.Composite{
-										Layout: declarative.VBox{},
-										Children: []declarative.Widget{
-											declarative.PushButton{
-												AssignTo:  &aw.SaveButton,
-												MaxSize:   declarative.Size{Width: 100},
-												Font:      declarative.Font{Family: "Roboto", PointSize: 9, Bold: true},
-												Text:      "Save",
-												OnClicked: func() { aw.InitSaveFiber() },
-											},
-										},
 									},
 								},
 							},
