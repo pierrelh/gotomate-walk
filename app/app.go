@@ -2,7 +2,6 @@ package app
 
 import (
 	"gotomate/app/automate"
-	"gotomate/app/automate/button"
 	"gotomate/app/automate/listbox"
 	"gotomate/app/automate/menu"
 	"gotomate/app/fiber"
@@ -19,7 +18,6 @@ var aw = &automate.Window{
 }
 
 var newFiber = fiber.NewFiber
-var buttons = button.NewButtons
 
 // CreateApp Initiate the app
 func CreateApp() {
@@ -43,9 +41,7 @@ func CreateApp() {
 						Image:    "/menu-icons/new.png",
 						Shortcut: declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyN},
 						OnTriggered: func() {
-							aw.FiberNameInput.SetText("")
-							buttons.CleanButtons()
-							newFiber.CleanFiber()
+							aw.CreateNewFiber()
 						},
 					},
 					declarative.Action{
@@ -55,7 +51,7 @@ func CreateApp() {
 						Enabled:     declarative.Bind("enabledCB.Checked"),
 						Visible:     declarative.Bind("!openHiddenCB.Checked"),
 						Shortcut:    declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyO},
-						OnTriggered: func() { aw.ImportFiber() },
+						OnTriggered: func() { aw.InitImportFiber() },
 					},
 					declarative.Menu{
 						AssignTo: &aw.Menu.Folders,

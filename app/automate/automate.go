@@ -1,9 +1,11 @@
 package automate
 
 import (
+	"bytes"
 	"encoding/json"
 	"fmt"
 	"gotomate/app/automate/button"
+	"gotomate/app/automate/dialogs"
 	"gotomate/app/automate/listbox"
 	"gotomate/app/automate/menu"
 	"gotomate/app/fiber"
@@ -128,66 +130,19 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 
 //DeleteFiberButton Delete the button from automate's screen & remove the associated instruction from the fiber
 func (aw *Window) DeleteFiberButton(btn *button.Button) {
-	var dlg *walk.Dialog
-	var acceptPB, cancelPB *walk.PushButton
-
-	confirmDialog := declarative.Dialog{
-		Icon:          "/icon.ico",
-		Title:         "Confirm",
-		AssignTo:      &dlg,
-		DefaultButton: &cancelPB,
-		CancelButton:  &cancelPB,
-		MinSize: declarative.Size{
-			Width:  200,
-			Height: 150,
-		},
-		Layout: declarative.VBox{},
-		Children: []declarative.Widget{
-			declarative.Composite{
-				Layout: declarative.VBox{},
-				Children: []declarative.Widget{
-					declarative.TextLabel{
-						Text:      "Do you really want to delete",
-						Alignment: declarative.Alignment2D(walk.AlignHCenterVCenter),
-						Font:      declarative.Font{Family: "Roboto", PointSize: 9},
-					},
-					declarative.Composite{
-						Layout: declarative.HBox{},
-						Children: []declarative.Widget{
-							declarative.PushButton{
-								AssignTo: &cancelPB,
-								Text:     "NO",
-								Font:     declarative.Font{Family: "Roboto", PointSize: 9},
-								OnClicked: func() {
-									dlg.Cancel()
-								},
-							},
-							declarative.PushButton{
-								AssignTo: &acceptPB,
-								Text:     "YES",
-								Font:     declarative.Font{Family: "Roboto", PointSize: 9},
-								OnClicked: func() {
-									for i := 0; i < len(NewButtons.Buttons); i++ {
-										if btn == NewButtons.Buttons[i] {
-											NewButtons.Buttons = append(NewButtons.Buttons[:i], NewButtons.Buttons[i+1:]...)
-											currentFiber.Instructions = append(currentFiber.Instructions[:i], currentFiber.Instructions[i+1:]...)
-											btn.Composite.Dispose()
-											btn.LinkLabel.Dispose()
-											dlg.Accept()
-											return
-										}
-									}
-									fmt.Println("ERROR: Unable to delete the fiber's instruction")
-									dlg.Accept()
-								},
-							},
-						},
-					},
-				},
-			},
-		},
+	dialogs.DeleteFiberButtonDialog.Run(aw.MainWindow)
+	if dialogs.Dlg.Result() == 1 {
+		for i := 0; i < len(NewButtons.Buttons); i++ {
+			if btn == NewButtons.Buttons[i] {
+				NewButtons.Buttons = append(NewButtons.Buttons[:i], NewButtons.Buttons[i+1:]...)
+				currentFiber.Instructions = append(currentFiber.Instructions[:i], currentFiber.Instructions[i+1:]...)
+				btn.Composite.Dispose()
+				btn.LinkLabel.Dispose()
+				return
+			}
+		}
+		fmt.Println("ERROR: Unable to delete the fiber's instruction")
 	}
-	confirmDialog.Run(aw.MainWindow)
 }
 
 //AddSavedFibersActions Add all the saved fibers to the My fibers's menu
@@ -203,7 +158,7 @@ func (aw *Window) AddSavedFibersActions() {
 			var name = file[0 : len(file)-len(extension)]
 			a := walk.NewAction()
 			a.SetText(name)
-			a.Triggered().Attach(func() { aw.OpenFiber(fullPath) })
+			a.Triggered().Attach(func() { aw.InitOpenFiber(fullPath) })
 			aw.Menu.Folders.Actions().Add(a)
 		}
 		return nil
@@ -212,43 +167,24 @@ func (aw *Window) AddSavedFibersActions() {
 
 //NoFiberNameSet Show an error to tell user that the fiber as no name setted
 func (aw *Window) NoFiberNameSet() {
-	var dlg *walk.Dialog
-	var acceptPB *walk.PushButton
+	dialogs.NoFiberNameSetDialog.Run(aw.MainWindow)
+	aw.FiberNameInput.SetFocus()
+}
 
-	errDialog := declarative.Dialog{
-		Icon:          "/icon.ico",
-		Title:         "Error",
-		AssignTo:      &dlg,
-		DefaultButton: &acceptPB,
-		MinSize: declarative.Size{
-			Width:  200,
-			Height: 150,
-		},
-		Layout: declarative.VBox{},
-		Children: []declarative.Widget{
-			declarative.Composite{
-				Layout: declarative.VBox{},
-				Children: []declarative.Widget{
-					declarative.TextLabel{
-						Text:      "No name given for the fiber",
-						Alignment: declarative.Alignment2D(walk.AlignHCenterVCenter),
-						Font:      declarative.Font{Family: "Roboto", PointSize: 9},
-					},
-					declarative.PushButton{
-						AssignTo: &acceptPB,
-						Text:     "OK",
-						Font:     declarative.Font{Family: "Roboto", PointSize: 9},
-						OnClicked: func() {
-							dlg.Cancel()
-							aw.FiberNameInput.SetFocus()
-						},
-					},
-				},
-			},
-		},
+// CreateNewFiber Init a new fiber creation
+func (aw *Window) CreateNewFiber() {
+	if aw.IsFiberSaved() {
+		aw.FiberNameInput.SetText("")
+		NewButtons.CleanButtons()
+		currentFiber.CleanFiber()
+	} else {
+		dialogs.FiberNotSavedDialog.Run(aw.MainWindow)
+		if dialogs.Dlg.Result() == 1 {
+			aw.FiberNameInput.SetText("")
+			NewButtons.CleanButtons()
+			currentFiber.CleanFiber()
+		}
 	}
-
-	errDialog.Run(aw.MainWindow)
 }
 
 //InitSaveFiber Check if the fiber can be saved & save it if possible
@@ -258,8 +194,12 @@ func (aw *Window) InitSaveFiber() error {
 		aw.NoFiberNameSet()
 		return nil
 	}
-	aw.SaveFiber("saves/" + name)
-	aw.AddSavedFibersActions()
+
+	// Checking if the fiber is already saved
+	if !aw.IsFiberSaved() {
+		aw.SaveFiber("saves/" + name)
+		aw.AddSavedFibersActions()
+	}
 	return nil
 }
 
@@ -289,11 +229,21 @@ func (aw *Window) ExportFiber() error {
 
 //SaveFiber save the current fiber to the path parameter
 func (aw *Window) SaveFiber(path string) {
-	name := aw.FiberNameInput.Text()
-	currentFiber.Name = name
 	fullPath := path + ".json"
 	file, _ := json.Marshal(currentFiber)
 	ioutil.WriteFile(fullPath, file, 0644)
+}
+
+// InitImportFiber prepare for the importation of a fiber
+func (aw *Window) InitImportFiber() {
+	if aw.IsFiberSaved() {
+		aw.ImportFiber()
+	} else {
+		dialogs.FiberNotSavedDialog.Run(aw.MainWindow)
+		if dialogs.Dlg.Result() == 1 {
+			aw.ImportFiber()
+		}
+	}
 }
 
 //ImportFiber Open a dialog window for user file selection
@@ -312,6 +262,18 @@ func (aw *Window) ImportFiber() error {
 	aw.OpenFiber(dlg.FilePath)
 
 	return nil
+}
+
+// InitOpenFiber prepare for the opening of a fiber
+func (aw *Window) InitOpenFiber(path string) {
+	if aw.IsFiberSaved() {
+		aw.OpenFiber(path)
+	} else {
+		dialogs.FiberNotSavedDialog.Run(aw.MainWindow)
+		if dialogs.Dlg.Result() == 1 {
+			aw.OpenFiber(path)
+		}
+	}
 }
 
 //OpenFiber Open a saved fiber from the menu My Fibers
@@ -353,4 +315,28 @@ func (aw *Window) OpenFiber(path string) {
 		currentFiber.Instructions = append(currentFiber.Instructions, newInstruction)
 		aw.CreateFiberButton(newInstruction, dialog)
 	}
+}
+
+// IsFiberSaved Check if the fiber is saved
+func (aw *Window) IsFiberSaved() bool {
+	exist := false
+	name := aw.FiberNameInput.Text()
+	currentFiber.Name = name
+	file, _ := json.Marshal(currentFiber)
+
+	root := "./saves"
+
+	filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
+		if filepath.Ext(path) == ".json" {
+			fullPath, _ := filepath.Abs(path)
+			jsonFile, _ := os.Open(fullPath)
+			byteValue, _ := ioutil.ReadAll(jsonFile)
+			if bytes.Compare(file, byteValue) == 0 {
+				exist = true
+			}
+		}
+		return nil
+	})
+
+	return exist
 }
