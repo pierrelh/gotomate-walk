@@ -4,6 +4,7 @@ package packages
 var Packages = []string{
 	"Battery",
 	"Clipboard",
+	"Input",
 	"Keyboard",
 	"Log",
 	"Mouse",
@@ -31,6 +32,11 @@ var SubPackages = map[string][]string{
 	"Clipboard": {
 		"Read",
 		"Write",
+	},
+	"Input": {
+		"Bool",
+		"Int",
+		"String",
 	},
 	"Keyboard": {
 		"Tap",
