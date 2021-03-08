@@ -1,7 +1,7 @@
 package button
 
 import (
-	"gotomate/packages"
+	"gotomate/fiber/packages"
 	"reflect"
 
 	"github.com/lxn/walk"

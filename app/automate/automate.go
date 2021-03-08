@@ -8,8 +8,8 @@ import (
 	"gotomate/app/automate/dialogs"
 	"gotomate/app/automate/listbox"
 	"gotomate/app/automate/menu"
-	"gotomate/app/fiber"
-	"gotomate/packages"
+	"gotomate/fiber"
+	"gotomate/fiber/packages"
 	"io/ioutil"
 	"os"
 	"path/filepath"
@@ -62,9 +62,9 @@ func (aw *Window) SlbItemActivated(currentFiber *fiber.Fiber) {
 		data, dialog := packages.CreateNewDialog(funcName)
 
 		newInstruction := &fiber.Instruction{
-			Package:  packageName,
-			FuncName: funcName,
-			Data:     data,
+			Package:         packageName,
+			FuncName:        funcName,
+			InstructionData: data,
 		}
 		currentFiber.Instructions = append(currentFiber.Instructions, newInstruction)
 		aw.CreateFiberButton(newInstruction, dialog)
@@ -299,15 +299,15 @@ func (aw *Window) OpenFiber(path string) {
 	for _, instruction := range loadingFiber.Instructions {
 		structure := packages.PackageDecode(instruction)
 
-		err := json.Unmarshal(instruction.Data, structure)
+		err := json.Unmarshal(instruction.InstructionData, structure)
 		if err != nil {
 			fmt.Println("ERROR: ", err)
 		}
 
 		newInstruction := &fiber.Instruction{
-			Package:  instruction.Package,
-			FuncName: instruction.FuncName,
-			Data:     structure,
+			Package:         instruction.Package,
+			FuncName:        instruction.FuncName,
+			InstructionData: structure,
 		}
 		_, dialog := packages.CreateNewDialog(instruction.FuncName, structure)
 
