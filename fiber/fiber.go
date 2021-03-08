@@ -14,6 +14,7 @@ import (
 	"gotomate/fiber/packages/screen"
 	"gotomate/fiber/packages/sleep"
 	"gotomate/fiber/packages/systime"
+	"gotomate/fiber/value"
 	"reflect"
 )
 
@@ -67,6 +68,7 @@ func (fiber *Fiber) RunFiber() {
 	if running > 1 {
 		fmt.Println("FIBER: A fiber is already running")
 	} else {
+		value.FiberValues = nil
 		fmt.Println("| Fiber Start |")
 
 		for i := 0; i < len(fiber.Instructions); i++ {
