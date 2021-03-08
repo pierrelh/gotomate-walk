@@ -5,6 +5,7 @@ A Windows automate in Golang
 ## Requirements:
 
 Golang
+
 This program currently use go-vgo/robotgo so be sure to have their requirements like "Golang, GCC" using MinGW-w64 (recommended)
 
 ## Installation:
