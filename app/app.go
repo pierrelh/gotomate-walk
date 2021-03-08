@@ -4,7 +4,7 @@ import (
 	"gotomate/app/automate"
 	"gotomate/app/automate/listbox"
 	"gotomate/app/automate/menu"
-	"gotomate/app/fiber"
+	"gotomate/fiber"
 	"log"
 
 	"github.com/gonutz/w32"

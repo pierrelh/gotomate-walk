@@ -3,7 +3,7 @@ package listbox
 import (
 	"gotomate/app/automate/listbox/listboxitem"
 	"gotomate/app/automate/listbox/listboxmodel"
-	"gotomate/packages"
+	"gotomate/fiber/packages"
 	"strconv"
 	"strings"
 
