@@ -1,22 +1,7 @@
 package packages
 
-// Packages Export all the available automate's packages
-var Packages = []string{
-	"Battery",
-	"Clipboard",
-	"Input",
-	"Keyboard",
-	"Log",
-	"Mouse",
-	"Notification",
-	"Process",
-	"Screen",
-	"Sleep",
-	"Systime",
-}
-
-// SubPackages Export all the available functions
-var SubPackages = map[string][]string{
+// Packages Export all the available packages & their functions
+var Packages = map[string][]string{
 	"Battery": {
 		"GetBattery",
 		"GetBatteryState",

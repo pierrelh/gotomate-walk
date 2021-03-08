@@ -5,7 +5,6 @@ import (
 	"gotomate/app/automate/listbox/listboxmodel"
 	"gotomate/fiber/packages"
 	"strconv"
-	"strings"
 
 	"github.com/lxn/walk"
 )
@@ -19,14 +18,15 @@ type ListBox struct {
 // NewPrimaryListModel Getting the automates packages
 func NewPrimaryListModel() *listboxmodel.Model {
 	env := packages.Packages
+	i := 0
 
 	m := &listboxmodel.Model{Items: make([]listboxitem.Item, len(env))}
 
-	for i, e := range env {
+	for name := range env {
 		value := strconv.Itoa(i)
-		name := e
 
 		m.Items[i] = listboxitem.Item{Name: name, Value: value}
+		i++
 	}
 
 	return m
@@ -34,16 +34,11 @@ func NewPrimaryListModel() *listboxmodel.Model {
 
 //NewSecondaryListModel Fill the SecondaryListModel with the adapted datas
 func (list *ListBox) NewSecondaryListModel(key string) *listboxmodel.Model {
-	env := packages.SubPackages
+	env := packages.Packages
 
 	m := &listboxmodel.Model{Items: make([]listboxitem.Item, len(env[key]))}
 
 	for i, e := range env[key] {
-		j := strings.Index(e, "=")
-		if j == 0 {
-			continue
-		}
-
 		value := strconv.Itoa(i)
 		name := e
 
