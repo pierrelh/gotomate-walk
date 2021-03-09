@@ -2,17 +2,17 @@ package packages
 
 import (
 	"fmt"
-	"gotomate/fiber/packages/battery"
-	"gotomate/fiber/packages/clipboard"
-	"gotomate/fiber/packages/input"
-	"gotomate/fiber/packages/keyboard"
-	"gotomate/fiber/packages/log"
-	"gotomate/fiber/packages/mouse"
-	"gotomate/fiber/packages/notification"
-	"gotomate/fiber/packages/process"
-	"gotomate/fiber/packages/screen"
-	"gotomate/fiber/packages/sleep"
-	"gotomate/fiber/packages/systime"
+	battery "gotomate/fiber/packages/Battery"
+	clipboard "gotomate/fiber/packages/Clipboard"
+	input "gotomate/fiber/packages/Input"
+	keyboard "gotomate/fiber/packages/Keyboard"
+	log "gotomate/fiber/packages/Log"
+	mouse "gotomate/fiber/packages/Mouse"
+	notification "gotomate/fiber/packages/Notification"
+	process "gotomate/fiber/packages/Process"
+	screen "gotomate/fiber/packages/Screen"
+	sleep "gotomate/fiber/packages/Sleep"
+	systime "gotomate/fiber/packages/Systime"
 
 	"github.com/lxn/walk"
 	declarative "github.com/lxn/walk/declarative"
@@ -39,6 +39,7 @@ func CreateNewDialog(funcName string, databinder ...interface{}) (interface{}, *
 	dialog.DialogContent = declarative.Dialog{
 		Icon:          "/icon.ico",
 		Title:         funcName + " Settings",
+		Font:          declarative.Font{Family: "Roboto", PointSize: 9},
 		AssignTo:      &dialog.Dialog,
 		DefaultButton: &dialog.AcceptButton,
 		CancelButton:  &dialog.CancelButton,

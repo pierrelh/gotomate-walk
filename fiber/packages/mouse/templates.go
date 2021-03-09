@@ -5,11 +5,9 @@ import "github.com/lxn/walk/declarative"
 // ClickTemplate Dialog's MouseClic Template
 var ClickTemplate = []declarative.Widget{
 	declarative.Label{
-		Font: declarative.Font{Family: "Roboto", PointSize: 9},
 		Text: "Click:",
 	},
 	declarative.ComboBox{
-		Font:          declarative.Font{Family: "Roboto", PointSize: 9},
 		Value:         declarative.Bind("MouseButtonName", declarative.SelRequired{}),
 		BindingMember: "ID",
 		DisplayMember: "Name",
@@ -20,20 +18,16 @@ var ClickTemplate = []declarative.Widget{
 // ScrollTemplate Dialog's MouseScroll Template
 var ScrollTemplate = []declarative.Widget{
 	declarative.Label{
-		Font: declarative.Font{Family: "Roboto", PointSize: 9},
-		Text: "Horizontal: ",
+		Text: "Horizontal:",
 	},
 	declarative.NumberEdit{
-		Font:     declarative.Font{Family: "Roboto", PointSize: 9},
 		Value:    declarative.Bind("X"),
 		Decimals: 2,
 	},
 	declarative.Label{
-		Font: declarative.Font{Family: "Roboto", PointSize: 9},
-		Text: "Vertical: ",
+		Text: "Vertical:",
 	},
 	declarative.NumberEdit{
-		Font:     declarative.Font{Family: "Roboto", PointSize: 9},
 		Value:    declarative.Bind("Y"),
 		Decimals: 2,
 	},
@@ -42,21 +36,17 @@ var ScrollTemplate = []declarative.Widget{
 // MoveTemplate Dialog's MouseMove Template
 var MoveTemplate = []declarative.Widget{
 	declarative.Label{
-		Font: declarative.Font{Family: "Roboto", PointSize: 9},
-		Text: "Horizontal: ",
+		Text: "Horizontal:",
 	},
 	declarative.NumberEdit{
-		Font:     declarative.Font{Family: "Roboto", PointSize: 9},
 		Value:    declarative.Bind("X"),
 		Suffix:   " px",
 		Decimals: 0,
 	},
 	declarative.Label{
-		Font: declarative.Font{Family: "Roboto", PointSize: 9},
-		Text: "Vertical: ",
+		Text: "Vertical:",
 	},
 	declarative.NumberEdit{
-		Font:     declarative.Font{Family: "Roboto", PointSize: 9},
 		Value:    declarative.Bind("Y"),
 		Suffix:   " px",
 		Decimals: 0,
