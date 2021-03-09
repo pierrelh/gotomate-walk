@@ -4,6 +4,7 @@ import (
 	"gotomate/app/automate/listbox/listboxitem"
 	"gotomate/app/automate/listbox/listboxmodel"
 	"gotomate/fiber/packages"
+	"sort"
 	"strconv"
 
 	"github.com/lxn/walk"
@@ -18,17 +19,18 @@ type ListBox struct {
 // NewPrimaryListModel Getting the automates packages
 func NewPrimaryListModel() *listboxmodel.Model {
 	env := packages.Packages
-	i := 0
-
+	var allPackages []string
 	m := &listboxmodel.Model{Items: make([]listboxitem.Item, len(env))}
 
 	for name := range env {
-		value := strconv.Itoa(i)
-
-		m.Items[i] = listboxitem.Item{Name: name, Value: value}
-		i++
+		allPackages = append(allPackages, name)
 	}
+	sort.Strings(allPackages)
 
+	for i, name := range allPackages {
+		value := strconv.Itoa(i)
+		m.Items[i] = listboxitem.Item{Name: name, Value: value}
+	}
 	return m
 }
 
