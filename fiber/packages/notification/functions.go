@@ -26,7 +26,7 @@ func Create(title, message string, finished chan bool) {
 		fmt.Println("ERROR: ", err)
 	}
 
-	icon, err := walk.Resources.Icon("/icon.ico")
+	icon, err := walk.Resources.Icon("/img/icon.ico")
 	if err != nil {
 		fmt.Println("ERROR: ", err)
 	}

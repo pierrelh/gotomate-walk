@@ -25,7 +25,7 @@ func CreateApp() {
 
 	if err := (declarative.MainWindow{
 		AssignTo:   &aw.MainWindow,
-		Icon:       "icon.ico",
+		Icon:       "/img/icon.ico",
 		Title:      "Gotomate",
 		Background: declarative.SolidColorBrush{Color: walk.RGB(106, 215, 229)},
 		MinSize:    declarative.Size{Width: 320, Height: 240},
@@ -39,7 +39,7 @@ func CreateApp() {
 					declarative.Action{
 						AssignTo: &aw.Menu.New,
 						Text:     "New",
-						Image:    "/menu-icons/new.png",
+						Image:    "/img/menu-icons/new.png",
 						Shortcut: declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyN},
 						OnTriggered: func() {
 							aw.CreateNewFiber()
@@ -48,7 +48,7 @@ func CreateApp() {
 					declarative.Action{
 						AssignTo:    &aw.Menu.Import,
 						Text:        "Import",
-						Image:       "/menu-icons/import.png",
+						Image:       "/img/menu-icons/import.png",
 						Enabled:     declarative.Bind("enabledCB.Checked"),
 						Visible:     declarative.Bind("!openHiddenCB.Checked"),
 						Shortcut:    declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyO},
@@ -56,20 +56,20 @@ func CreateApp() {
 					},
 					declarative.Menu{
 						AssignTo: &aw.Menu.Folders,
-						Image:    "/menu-icons/folder.png",
+						Image:    "/img/menu-icons/folder.png",
 						Text:     "My Fibers",
 					},
 					declarative.Action{
 						AssignTo:    &aw.Menu.Save,
 						Text:        "Save",
-						Image:       "/menu-icons/save.png",
+						Image:       "/img/menu-icons/save.png",
 						Shortcut:    declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyS},
 						OnTriggered: func() { aw.InitSaveFiber() },
 					},
 					declarative.Action{
 						AssignTo:    &aw.Menu.Export,
 						Text:        "Export",
-						Image:       "/menu-icons/export.png",
+						Image:       "/img/menu-icons/export.png",
 						Enabled:     declarative.Bind("enabledCB.Checked"),
 						Visible:     declarative.Bind("!openHiddenCB.Checked"),
 						Shortcut:    declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyO},
@@ -89,7 +89,7 @@ func CreateApp() {
 					declarative.Action{
 						AssignTo: &aw.Menu.Run,
 						Text:     "Run",
-						Image:    "/menu-icons/run.png",
+						Image:    "/img/menu-icons/run.png",
 						Shortcut: declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyE},
 						OnTriggered: func() {
 							go newFiber.RunFiber()
@@ -98,7 +98,7 @@ func CreateApp() {
 					declarative.Action{
 						AssignTo: &aw.Menu.Stop,
 						Text:     "Stop",
-						Image:    "/menu-icons/stop.png",
+						Image:    "/img/menu-icons/stop.png",
 						Shortcut: declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyQ},
 						OnTriggered: func() {
 							go newFiber.StopFiber()
@@ -162,7 +162,7 @@ func CreateApp() {
 										AssignTo:  &aw.FiberNameLabel,
 										Alignment: declarative.Alignment2D(walk.AlignHFarVCenter),
 										Font:      declarative.Font{Family: "Roboto", PointSize: 12, Underline: true, Bold: true},
-										Text:      "Fiber Name :",
+										Text:      "Fiber Name:",
 									},
 									declarative.TextEdit{
 										AssignTo:      &aw.FiberNameInput,

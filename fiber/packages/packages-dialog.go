@@ -37,7 +37,7 @@ func CreateNewDialog(funcName string, databinder ...interface{}) (interface{}, *
 	}
 
 	dialog.DialogContent = declarative.Dialog{
-		Icon:          "/icon.ico",
+		Icon:          "/img/icon.ico",
 		Title:         funcName + " Settings",
 		Font:          declarative.Font{Family: "Roboto", PointSize: 9},
 		AssignTo:      &dialog.Dialog,
