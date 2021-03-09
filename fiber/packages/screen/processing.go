@@ -11,22 +11,21 @@ func Processing(funcName string, instructionData reflect.Value, finished chan bo
 	switch funcName {
 	case "GetMouseColor":
 		go func() {
-			newValue := &value.InstructionValue{
-				Key:   instructionData.FieldByName("Output").Interface().(string),
-				Value: GetMouseColor(finished),
-			}
-			value.FiberValues = append(value.FiberValues, newValue)
+			value.SetValue(instructionData.FieldByName("Output").Interface().(string), GetMouseColor(finished))
 		}()
 		<-finished
 	case "GetPixelColor":
 		go func() {
 			x := instructionData.FieldByName("X").Interface().(int)
 			y := instructionData.FieldByName("Y").Interface().(int)
-			newValue := &value.InstructionValue{
-				Key:   instructionData.FieldByName("Output").Interface().(string),
-				Value: GetPixelColor(x, y, finished),
-			}
-			value.FiberValues = append(value.FiberValues, newValue)
+			value.SetValue(instructionData.FieldByName("Output").Interface().(string), GetPixelColor(x, y, finished))
+		}()
+		<-finished
+	case "GetScreenSize":
+		go func() {
+			w, h := GetScreenSize(finished)
+			value.SetValue(instructionData.FieldByName("HeightOutput").Interface().(string), h)
+			value.SetValue(instructionData.FieldByName("WidthOutput").Interface().(string), w)
 		}()
 		<-finished
 	case "SaveCapture":

@@ -136,11 +136,13 @@ func FillDialog(funcName string) (interface{}, []declarative.Widget) {
 	case "GetCurrentSysClock":
 		return new(systime.ClockDatabinder), systime.SysClockTemplate
 	case "GetCurrentSysTime":
-		return new(systime.TimeDatabinder), systime.SysClockTemplate
+		return new(systime.TimeDatabinder), systime.SysTimeTemplate
 	case "GetPixelColor":
 		return new(screen.PixelColorDatabinder), screen.PixelColorTemplate
 	case "GetMouseColor":
 		return new(screen.MouseColorDatabinder), screen.MouseColorTemplate
+	case "GetScreenSize":
+		return new(screen.SizeDatabinder), screen.ScreenSizeTemplate
 	case "SaveCapture":
 		return new(screen.SaveCaptureDatabinder), screen.SaveCaptureTemplate
 	case "StartProcess":

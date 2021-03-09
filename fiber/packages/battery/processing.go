@@ -13,11 +13,7 @@ func Processing(funcName string, instructionData reflect.Value, finished chan bo
 	switch funcName {
 	case "GetBattery":
 		go func() {
-			newValue := &value.InstructionValue{
-				Key:   instructionData.FieldByName("Output").Interface().(string),
-				Value: GetBattery(finished),
-			}
-			value.FiberValues = append(value.FiberValues, newValue)
+			value.SetValue(instructionData.FieldByName("Output").Interface().(string), GetBattery(finished))
 		}()
 		<-finished
 	case "GetBatteryState":
@@ -26,11 +22,7 @@ func Processing(funcName string, instructionData reflect.Value, finished chan bo
 			batInstruction := value.KeySearch(batName)
 			if batInstruction != nil {
 				val := reflect.ValueOf(batInstruction.Value).Interface().(*batType.Battery)
-				newValue := &value.InstructionValue{
-					Key:   instructionData.FieldByName("Output").Interface().(string),
-					Value: GetBatteryState(val, finished),
-				}
-				value.FiberValues = append(value.FiberValues, newValue)
+				value.SetValue(instructionData.FieldByName("Output").Interface().(string), GetBatteryState(val, finished))
 			} else {
 				fmt.Println("FIBER: Unable to find the battery named: ", batName)
 				finished <- true
@@ -43,11 +35,7 @@ func Processing(funcName string, instructionData reflect.Value, finished chan bo
 			batInstruction := value.KeySearch(batName)
 			if batInstruction != nil {
 				val := reflect.ValueOf(batInstruction.Value).Interface().(*batType.Battery)
-				newValue := &value.InstructionValue{
-					Key:   instructionData.FieldByName("Output").Interface().(string),
-					Value: GetBatteryPercentage(val, finished),
-				}
-				value.FiberValues = append(value.FiberValues, newValue)
+				value.SetValue(instructionData.FieldByName("Output").Interface().(string), GetBatteryPercentage(val, finished))
 			} else {
 				fmt.Println("FIBER: Unable to find the battery named: ", batName)
 				finished <- true
@@ -60,11 +48,7 @@ func Processing(funcName string, instructionData reflect.Value, finished chan bo
 			batInstruction := value.KeySearch(batName)
 			if batInstruction != nil {
 				val := reflect.ValueOf(batInstruction.Value).Interface().(*batType.Battery)
-				newValue := &value.InstructionValue{
-					Key:   instructionData.FieldByName("Output").Interface().(string),
-					Value: GetBatteryRemainingTime(val, finished),
-				}
-				value.FiberValues = append(value.FiberValues, newValue)
+				value.SetValue(instructionData.FieldByName("Output").Interface().(string), GetBatteryRemainingTime(val, finished))
 			} else {
 				fmt.Println("FIBER: Unable to find the battery named: ", batName)
 				finished <- true
@@ -77,11 +61,7 @@ func Processing(funcName string, instructionData reflect.Value, finished chan bo
 			batInstruction := value.KeySearch(batName)
 			if batInstruction != nil {
 				val := reflect.ValueOf(batInstruction.Value).Interface().(*batType.Battery)
-				newValue := &value.InstructionValue{
-					Key:   instructionData.FieldByName("Output").Interface().(string),
-					Value: GetBatteryChargeRate(val, finished),
-				}
-				value.FiberValues = append(value.FiberValues, newValue)
+				value.SetValue(instructionData.FieldByName("Output").Interface().(string), GetBatteryChargeRate(val, finished))
 			} else {
 				fmt.Println("FIBER: Unable to find the battery named: ", batName)
 				finished <- true
@@ -94,11 +74,7 @@ func Processing(funcName string, instructionData reflect.Value, finished chan bo
 			batInstruction := value.KeySearch(batName)
 			if batInstruction != nil {
 				val := reflect.ValueOf(batInstruction.Value).Interface().(*batType.Battery)
-				newValue := &value.InstructionValue{
-					Key:   instructionData.FieldByName("Output").Interface().(string),
-					Value: GetBatteryCurrentCapacity(val, finished),
-				}
-				value.FiberValues = append(value.FiberValues, newValue)
+				value.SetValue(instructionData.FieldByName("Output").Interface().(string), GetBatteryCurrentCapacity(val, finished))
 			} else {
 				fmt.Println("FIBER: Unable to find the battery named: ", batName)
 				finished <- true
@@ -111,11 +87,7 @@ func Processing(funcName string, instructionData reflect.Value, finished chan bo
 			batInstruction := value.KeySearch(batName)
 			if batInstruction != nil {
 				val := reflect.ValueOf(batInstruction.Value).Interface().(*batType.Battery)
-				newValue := &value.InstructionValue{
-					Key:   instructionData.FieldByName("Output").Interface().(string),
-					Value: GetBatteryLastFullCapacity(val, finished),
-				}
-				value.FiberValues = append(value.FiberValues, newValue)
+				value.SetValue(instructionData.FieldByName("Output").Interface().(string), GetBatteryLastFullCapacity(val, finished))
 			} else {
 				fmt.Println("FIBER: Unable to find the battery named: ", batName)
 				finished <- true
@@ -128,11 +100,7 @@ func Processing(funcName string, instructionData reflect.Value, finished chan bo
 			batInstruction := value.KeySearch(batName)
 			if batInstruction != nil {
 				val := reflect.ValueOf(batInstruction.Value).Interface().(*batType.Battery)
-				newValue := &value.InstructionValue{
-					Key:   instructionData.FieldByName("Output").Interface().(string),
-					Value: GetBatteryDesignCapacity(val, finished),
-				}
-				value.FiberValues = append(value.FiberValues, newValue)
+				value.SetValue(instructionData.FieldByName("Output").Interface().(string), GetBatteryDesignCapacity(val, finished))
 			} else {
 				fmt.Println("FIBER: Unable to find the battery named: ", batName)
 				finished <- true
@@ -145,11 +113,7 @@ func Processing(funcName string, instructionData reflect.Value, finished chan bo
 			batInstruction := value.KeySearch(batName)
 			if batInstruction != nil {
 				val := reflect.ValueOf(batInstruction.Value).Interface().(*batType.Battery)
-				newValue := &value.InstructionValue{
-					Key:   instructionData.FieldByName("Output").Interface().(string),
-					Value: GetBatteryVoltage(val, finished),
-				}
-				value.FiberValues = append(value.FiberValues, newValue)
+				value.SetValue(instructionData.FieldByName("Output").Interface().(string), GetBatteryVoltage(val, finished))
 			} else {
 				fmt.Println("FIBER: Unable to find the battery named: ", batName)
 				finished <- true
@@ -162,11 +126,7 @@ func Processing(funcName string, instructionData reflect.Value, finished chan bo
 			batInstruction := value.KeySearch(batName)
 			if batInstruction != nil {
 				val := reflect.ValueOf(batInstruction.Value).Interface().(*batType.Battery)
-				newValue := &value.InstructionValue{
-					Key:   instructionData.FieldByName("Output").Interface().(string),
-					Value: GetBatteryDesignVoltage(val, finished),
-				}
-				value.FiberValues = append(value.FiberValues, newValue)
+				value.SetValue(instructionData.FieldByName("Output").Interface().(string), GetBatteryDesignVoltage(val, finished))
 			} else {
 				fmt.Println("FIBER: Unable to find the battery named: ", batName)
 				finished <- true

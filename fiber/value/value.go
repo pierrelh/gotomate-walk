@@ -25,3 +25,18 @@ func KeySearch(name string) *InstructionValue {
 	}
 	return nil
 }
+
+// SetValue create or update a key / value in fiber's values
+func SetValue(key string, value interface{}) {
+	for i := 0; i < len(FiberValues); i++ {
+		if FiberValues[i].Key == key {
+			FiberValues[i].Value = value
+			return
+		}
+	}
+	newValue := &InstructionValue{
+		Key:   key,
+		Value: value,
+	}
+	FiberValues = append(FiberValues, newValue)
+}

@@ -12,11 +12,7 @@ func Processing(funcName string, instructionData reflect.Value, finished chan bo
 	case "StartProcess":
 		go func() {
 			path := instructionData.FieldByName("Path").Interface().(string)
-			newValue := &value.InstructionValue{
-				Key:   instructionData.FieldByName("Output").Interface().(string),
-				Value: StartProcess(finished, path),
-			}
-			value.FiberValues = append(value.FiberValues, newValue)
+			value.SetValue(instructionData.FieldByName("Output").Interface().(string), StartProcess(finished, path))
 		}()
 		<-finished
 	default:
