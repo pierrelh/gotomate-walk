@@ -12,31 +12,19 @@ func Processing(funcName string, instructionData reflect.Value, finished chan bo
 	case "String":
 		go func() {
 			msg := instructionData.FieldByName("Message").Interface().(string)
-			newValue := &value.InstructionValue{
-				Key:   instructionData.FieldByName("Output").Interface().(string),
-				Value: String(finished, msg),
-			}
-			value.FiberValues = append(value.FiberValues, newValue)
+			value.SetValue(instructionData.FieldByName("Output").Interface().(string), String(finished, msg))
 		}()
 		<-finished
 	case "Int":
 		go func() {
 			msg := instructionData.FieldByName("Message").Interface().(string)
-			newValue := &value.InstructionValue{
-				Key:   instructionData.FieldByName("Output").Interface().(string),
-				Value: Int(finished, msg),
-			}
-			value.FiberValues = append(value.FiberValues, newValue)
+			value.SetValue(instructionData.FieldByName("Output").Interface().(string), Int(finished, msg))
 		}()
 		<-finished
 	case "Bool":
 		go func() {
 			msg := instructionData.FieldByName("Message").Interface().(string)
-			newValue := &value.InstructionValue{
-				Key:   instructionData.FieldByName("Output").Interface().(string),
-				Value: Bool(finished, msg),
-			}
-			value.FiberValues = append(value.FiberValues, newValue)
+			value.SetValue(instructionData.FieldByName("Output").Interface().(string), Bool(finished, msg))
 		}()
 		<-finished
 	default:

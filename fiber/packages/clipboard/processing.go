@@ -16,11 +16,7 @@ func Processing(funcName string, instructionData reflect.Value, finished chan bo
 	case "Read":
 		go func() {
 			content, _ := Read(finished)
-			newValue := &value.InstructionValue{
-				Key:   instructionData.FieldByName("Output").Interface().(string),
-				Value: content,
-			}
-			value.FiberValues = append(value.FiberValues, newValue)
+			value.SetValue(instructionData.FieldByName("Output").Interface().(string), content)
 		}()
 		<-finished
 	default:

@@ -12,21 +12,14 @@ func Processing(funcName string, instructionData reflect.Value, finished chan bo
 	case "GetCurrentSysClock":
 		go func() {
 			h, m, s := GetCurrentSysClock(finished)
-			clock := [3]int{h, m, s}
-			newValue := &value.InstructionValue{
-				Key:   instructionData.FieldByName("Output").Interface().(string),
-				Value: clock,
-			}
-			value.FiberValues = append(value.FiberValues, newValue)
+			value.SetValue(instructionData.FieldByName("HoursOutput").Interface().(string), h)
+			value.SetValue(instructionData.FieldByName("MinutesOutput").Interface().(string), m)
+			value.SetValue(instructionData.FieldByName("SecondsOutput").Interface().(string), s)
 		}()
 		<-finished
 	case "GetCurrentSysTime":
 		go func() {
-			newValue := &value.InstructionValue{
-				Key:   instructionData.FieldByName("Output").Interface().(string),
-				Value: GetCurrentSysTime(finished),
-			}
-			value.FiberValues = append(value.FiberValues, newValue)
+			value.SetValue(instructionData.FieldByName("Output").Interface().(string), GetCurrentSysTime(finished))
 		}()
 		<-finished
 	default:
