@@ -14,10 +14,11 @@ type MouseColorDatabinder struct {
 
 // SizeDatabinder Define the GetScreenSize databinder
 type SizeDatabinder struct {
-	Output string
+	HeightOutput string
+	WidthOutput  string
 }
 
-// SaveCaptureDatabinder Define the SaveCapture databinder
+// SaveCaptureDatabinder Define theSaveCapture databinder
 type SaveCaptureDatabinder struct {
 	Path string
 }

@@ -141,6 +141,8 @@ func FillDialog(funcName string) (interface{}, []declarative.Widget) {
 		return new(screen.PixelColorDatabinder), screen.PixelColorTemplate
 	case "GetMouseColor":
 		return new(screen.MouseColorDatabinder), screen.MouseColorTemplate
+	case "GetScreenSize":
+		return new(screen.SizeDatabinder), screen.ScreenSizeTemplate
 	case "SaveCapture":
 		return new(screen.SaveCaptureDatabinder), screen.SaveCaptureTemplate
 	case "StartProcess":

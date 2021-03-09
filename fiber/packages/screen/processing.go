@@ -29,6 +29,21 @@ func Processing(funcName string, instructionData reflect.Value, finished chan bo
 			value.FiberValues = append(value.FiberValues, newValue)
 		}()
 		<-finished
+	case "GetScreenSize":
+		go func() {
+			w, h := GetScreenSize(finished)
+			newValue := &value.InstructionValue{
+				Key:   instructionData.FieldByName("HeightOutput").Interface().(string),
+				Value: h,
+			}
+			value.FiberValues = append(value.FiberValues, newValue)
+			newValue = &value.InstructionValue{
+				Key:   instructionData.FieldByName("WidthOutput").Interface().(string),
+				Value: w,
+			}
+			value.FiberValues = append(value.FiberValues, newValue)
+		}()
+		<-finished
 	case "SaveCapture":
 		path := instructionData.FieldByName("Path").Interface().(string)
 		go SaveCapture(finished, path)

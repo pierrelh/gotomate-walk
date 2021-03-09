@@ -23,12 +23,12 @@ func GetMouseColor(finished chan bool) string {
 }
 
 // GetScreenSize Get the screen size
-// func GetScreenSize(finished chan bool) (int, int) {
-// 	fmt.Println("FIBER: Getting screen size ...")
-// 	w, h := robotgo.GetScreenSize()
-// 	finished <- true
-// 	return w, h
-// }
+func GetScreenSize(finished chan bool) (int, int) {
+	fmt.Println("FIBER: Getting screen size ...")
+	w, h := robotgo.GetScreenSize()
+	finished <- true
+	return w, h
+}
 
 // SaveCapture Save a screen shot
 func SaveCapture(finished chan bool, spath string) {
