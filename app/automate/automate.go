@@ -76,9 +76,9 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 	fb := new(button.Button)
 	NewButtons.Buttons = append(NewButtons.Buttons, fb)
 	fb.Dialog = dialog
-	bmp, err := walk.NewBitmapFromFile(walk.Resources.RootDirPath() + "/func-icons/" + instruction.Package + ".png")
+	bmp, err := walk.NewBitmapFromFile(walk.Resources.RootDirPath() + "/fiber/packages/" + instruction.Package + "/icon.png")
 	if err != nil {
-		bmp, _ = walk.NewBitmapFromFile(walk.Resources.RootDirPath() + "/func-icons/default.png")
+		bmp, _ = walk.NewBitmapFromFile(walk.Resources.RootDirPath() + "/img/default.png")
 	}
 
 	if err := (declarative.Composite{

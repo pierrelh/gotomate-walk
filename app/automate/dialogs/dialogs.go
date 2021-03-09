@@ -13,7 +13,7 @@ var cancelPB *walk.PushButton
 
 // FiberNotSavedDialog This dialog is showed when a not saved fiber is about to be deleted / replaced
 var FiberNotSavedDialog = declarative.Dialog{
-	Icon:          "/icon.ico",
+	Icon:          "/img/icon.ico",
 	Title:         "Error",
 	AssignTo:      &Dlg,
 	DefaultButton: &cancelPB,
@@ -59,7 +59,7 @@ var FiberNotSavedDialog = declarative.Dialog{
 
 // DeleteFiberButtonDialog This dialog is showed to confirm that user whant to delete a fiber's button
 var DeleteFiberButtonDialog = declarative.Dialog{
-	Icon:          "/icon.ico",
+	Icon:          "/img/icon.ico",
 	Title:         "Confirm",
 	AssignTo:      &Dlg,
 	DefaultButton: &cancelPB,
@@ -106,7 +106,7 @@ var DeleteFiberButtonDialog = declarative.Dialog{
 
 // NoFiberNameSetDialog This dialog is showed when a user whant to save a fiber without having a name setteed
 var NoFiberNameSetDialog = declarative.Dialog{
-	Icon:          "/icon.ico",
+	Icon:          "/img/icon.ico",
 	Title:         "Error",
 	AssignTo:      &Dlg,
 	DefaultButton: &acceptPB,
