@@ -6,6 +6,7 @@ import (
 	"gotomate/app/automate/menu"
 	"gotomate/fiber"
 	"log"
+	"os/exec"
 
 	"github.com/gonutz/w32"
 	"github.com/lxn/walk"
@@ -33,7 +34,7 @@ func CreateApp() {
 		Layout:     declarative.VBox{MarginsZero: true, SpacingZero: true},
 		MenuItems: []declarative.MenuItem{
 			declarative.Menu{
-				AssignTo: &aw.Menu.WindowMenu,
+				AssignTo: &aw.Menu.FileMenu,
 				Text:     "&File",
 				Items: []declarative.MenuItem{
 					declarative.Action{
@@ -55,7 +56,7 @@ func CreateApp() {
 						OnTriggered: func() { aw.InitImportFiber() },
 					},
 					declarative.Menu{
-						AssignTo: &aw.Menu.Folders,
+						AssignTo: &aw.Menu.FoldersMenu,
 						Image:    "/img/menu-icons/folder.png",
 						Text:     "My Fibers",
 					},
@@ -83,7 +84,7 @@ func CreateApp() {
 				},
 			},
 			declarative.Menu{
-				AssignTo: &aw.Menu.WindowMenu,
+				AssignTo: &aw.Menu.FiberMenu,
 				Text:     "&Fiber",
 				Items: []declarative.MenuItem{
 					declarative.Action{
@@ -127,6 +128,26 @@ func CreateApp() {
 							}
 						},
 					},
+				},
+			},
+			declarative.Menu{
+				AssignTo: &aw.Menu.HelpMenu,
+				Text:     "&Help",
+				Items: []declarative.MenuItem{
+					declarative.Action{
+						AssignTo: &aw.Menu.Documentation,
+						Text:     "Documentation",
+						OnTriggered: func() {
+							exec.Command("cmd", "/c", "start", "https://production-gotomate.herokuapp.com/documentation").Start()
+						},
+					},
+					// declarative.Action{
+					// 	AssignTo: &aw.Menu.Packages,
+					// 	Text:     "Packages",
+					// 	OnTriggered: func() {
+					// 		exec.Command("cmd", "/c", "start", "https://production-gotomate.herokuapp.com/packages").Start()
+					// 	},
+					// },
 				},
 			},
 		},
