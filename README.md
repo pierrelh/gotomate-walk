@@ -25,3 +25,9 @@ go build
 ```
 go get -u github.com/pierrelh/gotomate
 ```
+
+## Documentation:
+
+See the documentation at:
+
+https://production-gotomate.herokuapp.com/documentation

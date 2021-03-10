@@ -147,7 +147,7 @@ func (aw *Window) DeleteFiberButton(btn *button.Button) {
 //AddSavedFibersActions Add all the saved fibers to the My fibers's menu
 func (aw *Window) AddSavedFibersActions() {
 	root := "./saves"
-	aw.Menu.Folders.Actions().Clear()
+	aw.Menu.FoldersMenu.Actions().Clear()
 
 	filepath.Walk(root, func(path string, info os.FileInfo, err error) error {
 		if filepath.Ext(path) == ".json" {
@@ -158,7 +158,7 @@ func (aw *Window) AddSavedFibersActions() {
 			a := walk.NewAction()
 			a.SetText(name)
 			a.Triggered().Attach(func() { aw.InitOpenFiber(fullPath) })
-			aw.Menu.Folders.Actions().Add(a)
+			aw.Menu.FoldersMenu.Actions().Add(a)
 		}
 		return nil
 	})
