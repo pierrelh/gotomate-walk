@@ -28,9 +28,9 @@ type Dialog struct {
 }
 
 // CreateNewDialog Create the dialog for the function & add the needed template
-func CreateNewDialog(funcName string, databinder ...interface{}) (interface{}, *Dialog) {
+func CreateNewDialog(packageName string, funcName string, databinder ...interface{}) (interface{}, *Dialog) {
 	dialog := new(Dialog)
-	source, children := FillDialog(funcName)
+	source, children := FillDialog(packageName, funcName)
 
 	if len(databinder) != 0 {
 		source = databinder[0]
@@ -91,69 +91,32 @@ func CreateNewDialog(funcName string, databinder ...interface{}) (interface{}, *
 }
 
 // FillDialog Getting the right databinder & the right template needed
-func FillDialog(funcName string) (interface{}, []declarative.Widget) {
-	switch funcName {
+func FillDialog(packageName string, funcName string) (interface{}, []declarative.Widget) {
+	switch packageName {
+	case "Battery":
+		return battery.Build(funcName)
+	case "Clipboard":
+		return clipboard.Build(funcName)
+	case "Input":
+		return input.Build(funcName)
+	case "Keyboard":
+		return keyboard.Build(funcName)
+	case "Log":
+		return log.Build(funcName)
+	case "Mouse":
+		return mouse.Build(funcName)
+	case "Notification":
+		return notification.Build(funcName)
+	case "Process":
+		return process.Build(funcName)
+	case "Screen":
+		return screen.Build(funcName)
 	case "Sleep":
-		return new(sleep.Databinder), sleep.SleepTemplate
-	case "MilliSleep":
-		return new(sleep.Databinder), sleep.MilliSleepTemplate
-	case "Click":
-		return new(mouse.ClickDatabinder), mouse.ClickTemplate
-	case "Scroll":
-		return new(mouse.ScrollDatabinder), mouse.ScrollTemplate
-	case "Move":
-		return new(mouse.MoveDatabinder), mouse.MoveTemplate
-	case "Tap":
-		return new(keyboard.TapDatabinder), keyboard.TapTemplate
-	case "Write":
-		return new(clipboard.WriteDatabinder), clipboard.WriteTemplate
-	case "Read":
-		return new(clipboard.ReadDatabinder), clipboard.ReadTemplate
-	case "Print":
-		return new(log.PrintDatabinder), log.PrintTemplate
-	case "Create":
-		return new(notification.CreateDatabinder), notification.CreateTemplate
-	case "GetBattery":
-		return new(battery.BatParameterDatabinder), battery.UserBatteryTemplate
-	case "GetBatteryState":
-		return new(battery.BatParameterDatabinder), battery.ParametersTemplate
-	case "GetBatteryPercentage":
-		return new(battery.BatParameterDatabinder), battery.ParametersTemplate
-	case "GetBatteryRemainingTime":
-		return new(battery.BatParameterDatabinder), battery.ParametersTemplate
-	case "GetBatteryChargeRate":
-		return new(battery.BatParameterDatabinder), battery.ParametersTemplate
-	case "GetBatteryCurrentCapacity":
-		return new(battery.BatParameterDatabinder), battery.ParametersTemplate
-	case "GetBatteryLastFullCapacity":
-		return new(battery.BatParameterDatabinder), battery.ParametersTemplate
-	case "GetBatteryDesignCapacity":
-		return new(battery.BatParameterDatabinder), battery.ParametersTemplate
-	case "GetBatteryVoltage":
-		return new(battery.BatParameterDatabinder), battery.ParametersTemplate
-	case "GetBatteryDesignVoltage":
-		return new(battery.BatParameterDatabinder), battery.ParametersTemplate
-	case "GetCurrentSysClock":
-		return new(systime.ClockDatabinder), systime.SysClockTemplate
-	case "GetCurrentSysTime":
-		return new(systime.TimeDatabinder), systime.SysTimeTemplate
-	case "GetPixelColor":
-		return new(screen.PixelColorDatabinder), screen.PixelColorTemplate
-	case "GetMouseColor":
-		return new(screen.MouseColorDatabinder), screen.MouseColorTemplate
-	case "GetScreenSize":
-		return new(screen.SizeDatabinder), screen.ScreenSizeTemplate
-	case "SaveCapture":
-		return new(screen.SaveCaptureDatabinder), screen.SaveCaptureTemplate
-	case "StartProcess":
-		return new(process.StartProcessDatabinder), process.StartProcessTemplate
-	case "String":
-		return new(input.StringDatabinder), input.InputTemplate
-	case "Int":
-		return new(input.IntDatabinder), input.InputTemplate
-	case "Bool":
-		return new(input.BoolDatabinder), input.InputTemplate
+		return sleep.Build(funcName)
+	case "Systime":
+		return systime.Build(funcName)
 	default:
+		fmt.Println("ERROR: Unable to find the package")
 		return nil, nil
 	}
 }
