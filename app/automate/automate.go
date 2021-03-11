@@ -59,7 +59,7 @@ func (aw *Window) SlbItemActivated(currentFiber *fiber.Fiber) {
 		item := &aw.SecondaryListBox.Model.Items[i]
 		funcName := item.Name
 
-		data, dialog := packages.CreateNewDialog(funcName)
+		data, dialog := packages.CreateNewDialog(packageName, funcName)
 
 		newInstruction := &fiber.Instruction{
 			Package:         packageName,
@@ -309,7 +309,7 @@ func (aw *Window) OpenFiber(path string) {
 			FuncName:        instruction.FuncName,
 			InstructionData: structure,
 		}
-		_, dialog := packages.CreateNewDialog(instruction.FuncName, structure)
+		_, dialog := packages.CreateNewDialog(instruction.Package, instruction.FuncName, structure)
 
 		currentFiber.Instructions = append(currentFiber.Instructions, newInstruction)
 		aw.CreateFiberButton(newInstruction, dialog)
