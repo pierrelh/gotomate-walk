@@ -14,6 +14,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/go-vgo/robotgo"
 	"github.com/lxn/walk"
 	declarative "github.com/lxn/walk/declarative"
 )
@@ -22,6 +23,9 @@ import (
 var NewButtons = button.NewButtons
 var currentFiber = fiber.NewFiber
 var pressed = false
+var moved = false
+var clientX = 0
+var clientY = 0
 
 //Window Setting the automate window structure
 type Window struct {
@@ -83,17 +87,42 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 
 	if err := (declarative.Composite{
 		AssignTo:   &fb.Composite,
-		Layout:     declarative.VBox{MarginsZero: true, SpacingZero: true},
+		Layout:     declarative.VBox{},
 		Background: declarative.BitmapBrush{Image: bmp},
 		Alignment:  declarative.Alignment2D(walk.AlignHCenterVCenter),
 		OnMouseDown: func(x, y int, button walk.MouseButton) {
 			pressed = true
+			clientX, clientY = robotgo.GetMousePos()
+		},
+		OnSizeChanged: func() {
+
 		},
 		OnMouseMove: func(x, y int, button walk.MouseButton) {
-			pressed = false
+			if pressed {
+				mx, my := robotgo.GetMousePos()
+				difX := clientX - mx
+				difY := clientY - my
+				clientX = mx
+				clientY = my
+				moved = true
+				if fb.Composite.XPixels()-difX < 0 {
+					fb.Composite.SetXPixels(0)
+				} else if (fb.Composite.X() - difX) > aw.ScrollView.Layout().Margins().HFar {
+					fb.Composite.SetX(aw.ScrollView.Layout().Margins().HFar)
+				} else {
+					fb.Composite.SetXPixels(fb.Composite.XPixels() - difX)
+				}
+				if fb.Composite.YPixels()-difY < 0 {
+					fb.Composite.SetYPixels(0)
+				} else if (fb.Composite.Y() - difY) > aw.ScrollView.Layout().Margins().VFar {
+					fb.Composite.SetY(aw.ScrollView.Layout().Margins().VFar)
+				} else {
+					fb.Composite.SetYPixels(fb.Composite.YPixels() - difY)
+				}
+			}
 		},
 		OnMouseUp: func(x, y int, button walk.MouseButton) {
-			if pressed {
+			if pressed && !moved {
 				switch button {
 				case 1:
 					fb.Dialog.DialogContent.Run(aw.MainWindow)
@@ -105,6 +134,8 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 					break
 				}
 			}
+			pressed = false
+			moved = false
 		},
 		Children: []declarative.Widget{
 			declarative.HSpacer{},

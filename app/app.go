@@ -223,7 +223,7 @@ func CreateApp() {
 			},
 			declarative.ScrollView{
 				AssignTo:        &aw.ScrollView,
-				Layout:          declarative.Flow{Margins: declarative.Margins{Left: 5, Top: 5, Right: 5, Bottom: 5}},
+				Layout:          declarative.Grid{Margins: declarative.Margins{Bottom: 1500, Right: 1500}},
 				Background:      declarative.SolidColorBrush{Color: walk.RGB(11, 11, 11)},
 				HorizontalFixed: false,
 				VerticalFixed:   false,
