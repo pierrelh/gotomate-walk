@@ -10,7 +10,7 @@ import (
 func Build(function string) (interface{}, []declarative.Widget) {
 	switch function {
 	case "GetBattery":
-		return new(BatParameterDatabinder), UserBatteryTemplate
+		return new(UserBatDatabinder), UserBatteryTemplate
 	case "GetBatteryState":
 		return new(BatParameterDatabinder), ParametersTemplate
 	case "GetBatteryPercentage":

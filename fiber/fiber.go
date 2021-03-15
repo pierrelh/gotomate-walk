@@ -34,6 +34,8 @@ type LoadingFiber struct {
 type LoadingInstruction struct {
 	Package         string
 	FuncName        string
+	X               int
+	Y               int
 	InstructionData json.RawMessage
 }
 
@@ -47,6 +49,8 @@ type Fiber struct {
 type Instruction struct {
 	Package         string
 	FuncName        string
+	X               int
+	Y               int
 	InstructionData interface{}
 }
 

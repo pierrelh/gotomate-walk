@@ -68,6 +68,8 @@ func (aw *Window) SlbItemActivated(currentFiber *fiber.Fiber) {
 		newInstruction := &fiber.Instruction{
 			Package:         packageName,
 			FuncName:        funcName,
+			X:               0,
+			Y:               0,
 			InstructionData: data,
 		}
 		currentFiber.Instructions = append(currentFiber.Instructions, newInstruction)
@@ -94,9 +96,6 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 			pressed = true
 			clientX, clientY = robotgo.GetMousePos()
 		},
-		OnSizeChanged: func() {
-
-		},
 		OnMouseMove: func(x, y int, button walk.MouseButton) {
 			if pressed {
 				mx, my := robotgo.GetMousePos()
@@ -107,17 +106,23 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 				moved = true
 				if fb.Composite.XPixels()-difX < 0 {
 					fb.Composite.SetXPixels(0)
+					instruction.X = 0
 				} else if (fb.Composite.X() - difX) > aw.ScrollView.Layout().Margins().HFar {
 					fb.Composite.SetX(aw.ScrollView.Layout().Margins().HFar)
+					instruction.X = aw.ScrollView.Layout().Margins().HFar
 				} else {
 					fb.Composite.SetXPixels(fb.Composite.XPixels() - difX)
+					instruction.X = fb.Composite.XPixels() - difX
 				}
 				if fb.Composite.YPixels()-difY < 0 {
 					fb.Composite.SetYPixels(0)
+					instruction.Y = 0
 				} else if (fb.Composite.Y() - difY) > aw.ScrollView.Layout().Margins().VFar {
 					fb.Composite.SetY(aw.ScrollView.Layout().Margins().VFar)
+					instruction.Y = aw.ScrollView.Layout().Margins().VFar
 				} else {
 					fb.Composite.SetYPixels(fb.Composite.YPixels() - difY)
+					instruction.Y = fb.Composite.YPixels() - difY
 				}
 			}
 		},
@@ -150,11 +155,23 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 	}).Create(declarative.NewBuilder(aw.ScrollView)); err != nil {
 		return err
 	}
+	fb.Composite.SetXPixels(instruction.X)
+	fb.Composite.SetYPixels(instruction.Y)
 	fb.Composite.SetCursor(walk.CursorHand())
 	fb.Composite.SetMinMaxSizePixels(walk.Size{Width: 300, Height: 150}, walk.Size{Width: 300, Height: 150})
 	fb.LinkLabel.SetMinMaxSizePixels(walk.Size{Width: 300, Height: 20}, walk.Size{Width: 300, Height: 20})
 	fb.Composite.Children().At(0).SetMinMaxSizePixels(walk.Size{Width: 300, Height: 100}, walk.Size{Width: 300, Height: 100})
 	fb.Composite.Children().At(2).SetMinMaxSizePixels(walk.Size{Width: 300, Height: 30}, walk.Size{Width: 300, Height: 30})
+
+	// Disabling element position reset on other elements resizing
+	fb.Composite.BoundsChanged().Attach(func() {
+		// Checking if the position is reset
+		if fb.Composite.X() == 0 && fb.Composite.Y() == 0 {
+			fb.Composite.SetXPixels(instruction.X)
+			fb.Composite.SetYPixels(instruction.Y)
+		}
+	})
+
 	return nil
 }
 
@@ -338,6 +355,8 @@ func (aw *Window) OpenFiber(path string) {
 		newInstruction := &fiber.Instruction{
 			Package:         instruction.Package,
 			FuncName:        instruction.FuncName,
+			X:               instruction.X,
+			Y:               instruction.Y,
 			InstructionData: structure,
 		}
 		_, dialog := packages.CreateNewDialog(instruction.Package, instruction.FuncName, structure)
