@@ -18,7 +18,8 @@ type Buttons struct {
 // Button Setting fiber's buttons structure
 type Button struct {
 	Composite *walk.Composite
-	LinkLabel *walk.LinkLabel
+	IDLabel   *walk.LinkLabel
+	FuncLabel *walk.LinkLabel
 	Dialog    *packages.Dialog
 }
 
@@ -26,7 +27,8 @@ type Button struct {
 func (btns *Buttons) CleanButtons() {
 	for i := 0; i < len(btns.Buttons); i++ {
 		btns.Buttons[i].Composite.Dispose()
-		btns.Buttons[i].LinkLabel.Dispose()
+		btns.Buttons[i].IDLabel.Dispose()
+		btns.Buttons[i].FuncLabel.Dispose()
 	}
 	p := reflect.ValueOf(btns).Elem()
 	p.Set(reflect.Zero(p.Type()))

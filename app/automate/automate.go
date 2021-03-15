@@ -13,6 +13,7 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strconv"
 
 	"github.com/go-vgo/robotgo"
 	"github.com/lxn/walk"
@@ -63,9 +64,16 @@ func (aw *Window) SlbItemActivated(currentFiber *fiber.Fiber) {
 		item := &aw.SecondaryListBox.Model.Items[i]
 		funcName := item.Name
 
+		instructionId := 0
+		if len(currentFiber.Instructions) != 0 {
+			instructionId = currentFiber.Instructions[len(currentFiber.Instructions)-1].ID + 1
+		}
+		fmt.Println(instructionId)
+
 		data, dialog := packages.CreateNewDialog(packageName, funcName)
 
 		newInstruction := &fiber.Instruction{
+			ID:              instructionId,
 			Package:         packageName,
 			FuncName:        funcName,
 			X:               0,
@@ -89,7 +97,7 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 
 	if err := (declarative.Composite{
 		AssignTo:   &fb.Composite,
-		Layout:     declarative.VBox{},
+		Layout:     declarative.VBox{SpacingZero: true},
 		Background: declarative.BitmapBrush{Image: bmp},
 		Alignment:  declarative.Alignment2D(walk.AlignHCenterVCenter),
 		OnMouseDown: func(x, y int, button walk.MouseButton) {
@@ -143,9 +151,15 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 			moved = false
 		},
 		Children: []declarative.Widget{
+			declarative.LinkLabel{
+				AssignTo:  &fb.IDLabel,
+				Font:      declarative.Font{Family: "Roboto", PointSize: 7},
+				Text:      strconv.Itoa(instruction.ID),
+				Alignment: declarative.Alignment2D(walk.AlignHNearVNear),
+			},
 			declarative.HSpacer{},
 			declarative.LinkLabel{
-				AssignTo:  &fb.LinkLabel,
+				AssignTo:  &fb.FuncLabel,
 				Font:      declarative.Font{Family: "Roboto", PointSize: 9, Bold: true},
 				Text:      instruction.FuncName,
 				Alignment: declarative.Alignment2D(walk.AlignHCenterVCenter),
@@ -159,9 +173,9 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 	fb.Composite.SetYPixels(instruction.Y)
 	fb.Composite.SetCursor(walk.CursorHand())
 	fb.Composite.SetMinMaxSizePixels(walk.Size{Width: 300, Height: 150}, walk.Size{Width: 300, Height: 150})
-	fb.LinkLabel.SetMinMaxSizePixels(walk.Size{Width: 300, Height: 20}, walk.Size{Width: 300, Height: 20})
-	fb.Composite.Children().At(0).SetMinMaxSizePixels(walk.Size{Width: 300, Height: 100}, walk.Size{Width: 300, Height: 100})
-	fb.Composite.Children().At(2).SetMinMaxSizePixels(walk.Size{Width: 300, Height: 30}, walk.Size{Width: 300, Height: 30})
+	fb.FuncLabel.SetMinMaxSizePixels(walk.Size{Width: 300, Height: 20}, walk.Size{Width: 300, Height: 20})
+	fb.Composite.Children().At(1).SetMinMaxSizePixels(walk.Size{Width: 300, Height: 100}, walk.Size{Width: 300, Height: 100})
+	fb.Composite.Children().At(3).SetMinMaxSizePixels(walk.Size{Width: 300, Height: 30}, walk.Size{Width: 300, Height: 30})
 
 	// Disabling element position reset on other elements resizing
 	fb.Composite.BoundsChanged().Attach(func() {
@@ -184,7 +198,7 @@ func (aw *Window) DeleteFiberButton(btn *button.Button) {
 				NewButtons.Buttons = append(NewButtons.Buttons[:i], NewButtons.Buttons[i+1:]...)
 				currentFiber.Instructions = append(currentFiber.Instructions[:i], currentFiber.Instructions[i+1:]...)
 				btn.Composite.Dispose()
-				btn.LinkLabel.Dispose()
+				btn.FuncLabel.Dispose()
 				return
 			}
 		}
@@ -353,6 +367,7 @@ func (aw *Window) OpenFiber(path string) {
 		}
 
 		newInstruction := &fiber.Instruction{
+			ID:              instruction.ID,
 			Package:         instruction.Package,
 			FuncName:        instruction.FuncName,
 			X:               instruction.X,

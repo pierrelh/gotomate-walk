@@ -32,6 +32,7 @@ type LoadingFiber struct {
 
 // LoadingInstruction Initialize a loading fiber's instruction
 type LoadingInstruction struct {
+	ID              int
 	Package         string
 	FuncName        string
 	X               int
@@ -47,6 +48,7 @@ type Fiber struct {
 
 // Instruction Initialize a fiber's instruction
 type Instruction struct {
+	ID              int
 	Package         string
 	FuncName        string
 	X               int
