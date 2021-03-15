@@ -5,6 +5,7 @@ import (
 	"fmt"
 	battery "gotomate/fiber/packages/Battery"
 	clipboard "gotomate/fiber/packages/Clipboard"
+	flow "gotomate/fiber/packages/Flow"
 	input "gotomate/fiber/packages/Input"
 	keyboard "gotomate/fiber/packages/Keyboard"
 	log "gotomate/fiber/packages/Log"
@@ -88,6 +89,8 @@ func (fiber *Fiber) RunFiber() {
 				funcName := instruction.FuncName
 				instructionData := reflect.ValueOf(instruction.InstructionData).Elem()
 				switch instruction.Package {
+				case "Flow":
+					flow.Processing(funcName, instructionData, finished)
 				case "Sleep":
 					sleep.Processing(funcName, instructionData, finished)
 				case "Mouse":

@@ -5,6 +5,7 @@ import (
 	"gotomate/fiber"
 	battery "gotomate/fiber/packages/Battery"
 	clipboard "gotomate/fiber/packages/Clipboard"
+	flow "gotomate/fiber/packages/Flow"
 	input "gotomate/fiber/packages/Input"
 	keyboard "gotomate/fiber/packages/Keyboard"
 	log "gotomate/fiber/packages/Log"
@@ -23,6 +24,8 @@ func PackageDecode(instruction *fiber.LoadingInstruction) interface{} {
 		return battery.Decode(instruction.FuncName)
 	case "Clipboard":
 		return clipboard.Decode(instruction.FuncName)
+	case "Flow":
+		return flow.Decode(instruction.FuncName)
 	case "Input":
 		return input.Decode(instruction.FuncName)
 	case "Keyboard":

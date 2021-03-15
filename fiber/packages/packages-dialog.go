@@ -4,6 +4,7 @@ import (
 	"fmt"
 	battery "gotomate/fiber/packages/Battery"
 	clipboard "gotomate/fiber/packages/Clipboard"
+	flow "gotomate/fiber/packages/Flow"
 	input "gotomate/fiber/packages/Input"
 	keyboard "gotomate/fiber/packages/Keyboard"
 	log "gotomate/fiber/packages/Log"
@@ -97,6 +98,8 @@ func FillDialog(packageName string, funcName string) (interface{}, []declarative
 		return battery.Build(funcName)
 	case "Clipboard":
 		return clipboard.Build(funcName)
+	case "Flow":
+		return flow.Build(funcName)
 	case "Input":
 		return input.Build(funcName)
 	case "Keyboard":
