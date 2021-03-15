@@ -27,6 +27,7 @@ var pressed = false
 var moved = false
 var clientX = 0
 var clientY = 0
+var row = 0
 
 //Window Setting the automate window structure
 type Window struct {
@@ -68,7 +69,6 @@ func (aw *Window) SlbItemActivated(currentFiber *fiber.Fiber) {
 		if len(currentFiber.Instructions) != 0 {
 			instructionId = currentFiber.Instructions[len(currentFiber.Instructions)-1].ID + 1
 		}
-		fmt.Println(instructionId)
 
 		data, dialog := packages.CreateNewDialog(packageName, funcName)
 
@@ -98,6 +98,7 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 	if err := (declarative.Composite{
 		AssignTo:   &fb.Composite,
 		Layout:     declarative.VBox{SpacingZero: true},
+		Row:        row,
 		Background: declarative.BitmapBrush{Image: bmp},
 		Alignment:  declarative.Alignment2D(walk.AlignHCenterVCenter),
 		OnMouseDown: func(x, y int, button walk.MouseButton) {
@@ -174,18 +175,20 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 	fb.Composite.SetCursor(walk.CursorHand())
 	fb.Composite.SetMinMaxSizePixels(walk.Size{Width: 300, Height: 150}, walk.Size{Width: 300, Height: 150})
 	fb.FuncLabel.SetMinMaxSizePixels(walk.Size{Width: 300, Height: 20}, walk.Size{Width: 300, Height: 20})
-	fb.Composite.Children().At(1).SetMinMaxSizePixels(walk.Size{Width: 300, Height: 100}, walk.Size{Width: 300, Height: 100})
-	fb.Composite.Children().At(3).SetMinMaxSizePixels(walk.Size{Width: 300, Height: 30}, walk.Size{Width: 300, Height: 30})
+	fb.Composite.Children().At(1).SetMinMaxSizePixels(walk.Size{Width: 300, Height: 80}, walk.Size{Width: 300, Height: 80})
+	fb.Composite.Children().At(3).SetMinMaxSizePixels(walk.Size{Width: 300, Height: 50}, walk.Size{Width: 300, Height: 50})
 
 	// Disabling element position reset on other elements resizing
 	fb.Composite.BoundsChanged().Attach(func() {
 		// Checking if the position is reset
-		if fb.Composite.X() == 0 && fb.Composite.Y() == 0 {
+		if fb.Composite.X() == 0 {
 			fb.Composite.SetXPixels(instruction.X)
+		}
+		if fb.Composite.Y() == 0 {
 			fb.Composite.SetYPixels(instruction.Y)
 		}
 	})
-
+	row++
 	return nil
 }
 
@@ -197,8 +200,9 @@ func (aw *Window) DeleteFiberButton(btn *button.Button) {
 			if btn == NewButtons.Buttons[i] {
 				NewButtons.Buttons = append(NewButtons.Buttons[:i], NewButtons.Buttons[i+1:]...)
 				currentFiber.Instructions = append(currentFiber.Instructions[:i], currentFiber.Instructions[i+1:]...)
-				btn.Composite.Dispose()
 				btn.FuncLabel.Dispose()
+				btn.IDLabel.Dispose()
+				btn.Composite.Dispose()
 				return
 			}
 		}

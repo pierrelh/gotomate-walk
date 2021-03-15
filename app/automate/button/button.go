@@ -26,9 +26,9 @@ type Button struct {
 //CleanButtons Delete all the automate's buttons & delete all the button
 func (btns *Buttons) CleanButtons() {
 	for i := 0; i < len(btns.Buttons); i++ {
-		btns.Buttons[i].Composite.Dispose()
 		btns.Buttons[i].IDLabel.Dispose()
 		btns.Buttons[i].FuncLabel.Dispose()
+		btns.Buttons[i].Composite.Dispose()
 	}
 	p := reflect.ValueOf(btns).Elem()
 	p.Set(reflect.Zero(p.Type()))

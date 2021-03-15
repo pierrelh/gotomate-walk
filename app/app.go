@@ -11,6 +11,7 @@ import (
 	"github.com/gonutz/w32"
 	"github.com/lxn/walk"
 	declarative "github.com/lxn/walk/declarative"
+	"github.com/lxn/win"
 )
 
 var aw = &automate.Window{
@@ -223,7 +224,7 @@ func CreateApp() {
 			},
 			declarative.ScrollView{
 				AssignTo:        &aw.ScrollView,
-				Layout:          declarative.Grid{Margins: declarative.Margins{Bottom: 2000, Right: 2000}},
+				Layout:          declarative.Grid{Columns: 1, Margins: declarative.Margins{Bottom: 2000, Right: 2000}},
 				Background:      declarative.SolidColorBrush{Color: walk.RGB(11, 11, 11)},
 				HorizontalFixed: false,
 				VerticalFixed:   false,
@@ -232,6 +233,12 @@ func CreateApp() {
 	}.Create()); err != nil {
 		log.Fatal(err)
 	}
+
+	flag := win.GetWindowLong(aw.MainWindow.Handle(), win.GWL_STYLE)
+	flag &= ^win.WS_BORDER     // no border(min/max/close)
+	flag &= ^win.WS_THICKFRAME // fixed size
+	win.SetWindowLong(aw.MainWindow.Handle(), win.GWL_STYLE, flag)
+	aw.MainWindow.SetFullscreen(true)
 
 	aw.AddSavedFibersActions()
 	aw.MainWindow.Run()
