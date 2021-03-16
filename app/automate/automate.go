@@ -27,7 +27,7 @@ var pressed = false
 var moved = false
 var clientX = 0
 var clientY = 0
-var row = 0
+var row = 1
 
 //Window Setting the automate window structure
 type Window struct {
@@ -65,8 +65,8 @@ func (aw *Window) SlbItemActivated(currentFiber *fiber.Fiber) {
 		item := &aw.SecondaryListBox.Model.Items[i]
 		funcName := item.Name
 
-		instructionId := 0
-		if len(currentFiber.Instructions) != 0 {
+		instructionId := 1
+		if len(currentFiber.Instructions) > 1 {
 			instructionId = currentFiber.Instructions[len(currentFiber.Instructions)-1].ID + 1
 		}
 		nextId := instructionId + 1
@@ -83,12 +83,12 @@ func (aw *Window) SlbItemActivated(currentFiber *fiber.Fiber) {
 			InstructionData:   data,
 		}
 		currentFiber.Instructions = append(currentFiber.Instructions, newInstruction)
-		aw.CreateFiberButton(newInstruction, dialog)
+		aw.CreateFiberButton(newInstruction, dialog, true)
 	}
 }
 
 // CreateFiberButton Create a new Fiberbutton in the fiber
-func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *packages.Dialog) error {
+func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *packages.Dialog, isDeletable bool) error {
 	fb := new(button.Button)
 	NewButtons.Buttons = append(NewButtons.Buttons, fb)
 	fb.Dialog = dialog
@@ -144,7 +144,9 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 					fb.Dialog.DialogContent.Run(aw.MainWindow)
 					break
 				case 2:
+					// if isDeletable {
 					aw.DeleteFiberButton(fb)
+					// }
 					break
 				default:
 					break
@@ -259,20 +261,42 @@ func (aw *Window) NoFiberNameSet() {
 	aw.FiberNameInput.SetFocus()
 }
 
-// CreateNewFiber Init a new fiber creation
-func (aw *Window) CreateNewFiber() {
+// InitCreateNewFiber Init a new fiber creation
+func (aw *Window) InitCreateNewFiber() {
 	if aw.IsFiberSaved() {
-		aw.FiberNameInput.SetText("")
-		NewButtons.CleanButtons()
-		currentFiber.CleanFiber()
+		aw.Clear()
+		aw.CreateNewFiber()
 	} else {
 		dialogs.FiberNotSavedDialog.Run(aw.MainWindow)
 		if dialogs.Dlg.Result() == 1 {
-			aw.FiberNameInput.SetText("")
-			NewButtons.CleanButtons()
-			currentFiber.CleanFiber()
+			aw.Clear()
+			aw.CreateNewFiber()
 		}
 	}
+}
+
+// Clear Delete of the elements linked to the fiber
+func (aw *Window) Clear() {
+	aw.FiberNameInput.SetText("")
+	NewButtons.CleanButtons()
+	currentFiber.CleanFiber()
+}
+
+// CreateNewFiber Create a new fiber
+func (aw *Window) CreateNewFiber() {
+	data, dialog := packages.CreateNewDialog("Flow", "Start")
+
+	newInstruction := &fiber.Instruction{
+		ID:                0,
+		Package:           "Flow",
+		FuncName:          "Start",
+		X:                 0,
+		Y:                 0,
+		NextInstructionID: 1,
+		InstructionData:   data,
+	}
+	currentFiber.Instructions = append(currentFiber.Instructions, newInstruction)
+	aw.CreateFiberButton(newInstruction, dialog, false)
 }
 
 //InitSaveFiber Check if the fiber can be saved & save it if possible
@@ -405,7 +429,7 @@ func (aw *Window) OpenFiber(path string) {
 		_, dialog := packages.CreateNewDialog(instruction.Package, instruction.FuncName, structure)
 
 		currentFiber.Instructions = append(currentFiber.Instructions, newInstruction)
-		aw.CreateFiberButton(newInstruction, dialog)
+		aw.CreateFiberButton(newInstruction, dialog, true)
 	}
 }
 

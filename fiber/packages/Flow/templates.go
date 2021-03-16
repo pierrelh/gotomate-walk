@@ -11,11 +11,4 @@ var StartTemplate = []declarative.Widget{
 		Text:          declarative.Bind("FlowName"),
 		CompactHeight: true,
 	},
-	declarative.Label{
-		Text: "Next Instruction ID:",
-	},
-	declarative.NumberEdit{
-		Value:    declarative.Bind("NextInstructionID"),
-		Decimals: 0,
-	},
 }

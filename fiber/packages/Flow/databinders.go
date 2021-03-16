@@ -2,8 +2,7 @@ package flow
 
 // StartDatabinder Define the ClipboardWrite parameters
 type StartDatabinder struct {
-	FlowName          string
-	NextInstructionID int
+	FlowName string
 }
 
 // EndDatabinder Define the ClipboardWrite parameters

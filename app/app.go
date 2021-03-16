@@ -20,6 +20,7 @@ var aw = &automate.Window{
 }
 
 var newFiber = fiber.NewFiber
+var isInit = false
 
 // CreateApp Initiate the app
 func CreateApp() {
@@ -43,7 +44,7 @@ func CreateApp() {
 						Image:    "/img/menu-icons/new.png",
 						Shortcut: declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyN},
 						OnTriggered: func() {
-							aw.CreateNewFiber()
+							aw.InitCreateNewFiber()
 						},
 					},
 					declarative.Action{
@@ -227,6 +228,12 @@ func CreateApp() {
 				Background:      declarative.SolidColorBrush{Color: walk.RGB(11, 11, 11)},
 				HorizontalFixed: false,
 				VerticalFixed:   false,
+				OnSizeChanged: func() {
+					if !isInit {
+						aw.CreateNewFiber()
+						isInit = true
+					}
+				},
 			},
 		},
 	}.Create()); err != nil {
