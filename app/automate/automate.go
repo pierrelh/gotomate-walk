@@ -180,11 +180,9 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 
 	// Disabling element position reset on other elements resizing
 	fb.Composite.BoundsChanged().Attach(func() {
-		// Checking if the position is reset
-		if fb.Composite.X() == 0 {
+		// Checking if the position is automatically reseted
+		if !pressed {
 			fb.Composite.SetXPixels(instruction.X)
-		}
-		if fb.Composite.Y() == 0 {
 			fb.Composite.SetYPixels(instruction.Y)
 		}
 	})
