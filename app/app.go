@@ -11,7 +11,6 @@ import (
 	"github.com/gonutz/w32"
 	"github.com/lxn/walk"
 	declarative "github.com/lxn/walk/declarative"
-	"github.com/lxn/win"
 )
 
 var aw = &automate.Window{
@@ -233,12 +232,6 @@ func CreateApp() {
 	}.Create()); err != nil {
 		log.Fatal(err)
 	}
-
-	flag := win.GetWindowLong(aw.MainWindow.Handle(), win.GWL_STYLE)
-	flag &= ^win.WS_BORDER     // no border(min/max/close)
-	flag &= ^win.WS_THICKFRAME // fixed size
-	win.SetWindowLong(aw.MainWindow.Handle(), win.GWL_STYLE, flag)
-	aw.MainWindow.SetFullscreen(true)
 
 	aw.AddSavedFibersActions()
 	aw.MainWindow.Run()
