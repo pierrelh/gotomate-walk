@@ -205,10 +205,6 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 	fb.Composite.SetXPixels(instruction.X)
 	fb.Composite.SetYPixels(instruction.Y)
 	fb.Composite.SetCursor(walk.CursorHand())
-	// fb.Composite.SetMinMaxSizePixels(walk.Size{Width: 300, Height: 150}, walk.Size{Width: 300, Height: 150})
-	// fb.FuncLabel.SetMinMaxSizePixels(walk.Size{Width: 300, Height: 20}, walk.Size{Width: 300, Height: 20})
-	// fb.Composite.Children().At(1).SetMinMaxSizePixels(walk.Size{Width: 300, Height: 80}, walk.Size{Width: 300, Height: 80})
-	// fb.Composite.Children().At(3).SetMinMaxSizePixels(walk.Size{Width: 300, Height: 50}, walk.Size{Width: 300, Height: 50})
 
 	// Disabling element position reset on other elements resizing
 	fb.Composite.BoundsChanged().Attach(func() {
@@ -291,19 +287,17 @@ func (aw *Window) Clear() {
 
 // CleanScrollView Dispose & recreate the MainWindow's ScrollView & empty the NewButtons slice
 func (aw *Window) CleanScrollView() error {
-	if dialogs.Dlg.Result() == 1 {
-		aw.ScrollView.Dispose()
-		if err := (declarative.ScrollView{
-			AssignTo:        &aw.ScrollView,
-			Layout:          declarative.Grid{Columns: 1, Margins: declarative.Margins{Bottom: 2000, Right: 2000}},
-			Background:      declarative.SolidColorBrush{Color: walk.RGB(11, 11, 11)},
-			HorizontalFixed: false,
-			VerticalFixed:   false,
-		}).Create(declarative.NewBuilder(aw.MainWindow)); err != nil {
-			return err
-		}
-		NewButtons.CleanButtons()
+	aw.ScrollView.Dispose()
+	if err := (declarative.ScrollView{
+		AssignTo:        &aw.ScrollView,
+		Layout:          declarative.Grid{Columns: 1, Margins: declarative.Margins{Bottom: 2000, Right: 2000}},
+		Background:      declarative.SolidColorBrush{Color: walk.RGB(11, 11, 11)},
+		HorizontalFixed: false,
+		VerticalFixed:   false,
+	}).Create(declarative.NewBuilder(aw.MainWindow)); err != nil {
+		return err
 	}
+	NewButtons.CleanButtons()
 	return nil
 }
 
@@ -424,10 +418,10 @@ func (aw *Window) OpenFiber(path string) {
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 	var loadingFiber fiber.LoadingFiber
 	err = json.Unmarshal(byteValue, &loadingFiber)
-	aw.FiberNameInput.SetText(loadingFiber.Name)
 
-	NewButtons.CleanButtons()
-	currentFiber.CleanFiber()
+	aw.Clear()
+
+	aw.FiberNameInput.SetText(loadingFiber.Name)
 
 	currentFiber.Name = loadingFiber.Name
 	if err != nil {
