@@ -69,16 +69,18 @@ func (aw *Window) SlbItemActivated(currentFiber *fiber.Fiber) {
 		if len(currentFiber.Instructions) != 0 {
 			instructionId = currentFiber.Instructions[len(currentFiber.Instructions)-1].ID + 1
 		}
+		nextId := instructionId + 1
 
 		data, dialog := packages.CreateNewDialog(packageName, funcName)
 
 		newInstruction := &fiber.Instruction{
-			ID:              instructionId,
-			Package:         packageName,
-			FuncName:        funcName,
-			X:               0,
-			Y:               0,
-			InstructionData: data,
+			ID:                instructionId,
+			Package:           packageName,
+			FuncName:          funcName,
+			X:                 0,
+			Y:                 0,
+			NextInstructionID: nextId,
+			InstructionData:   data,
 		}
 		currentFiber.Instructions = append(currentFiber.Instructions, newInstruction)
 		aw.CreateFiberButton(newInstruction, dialog)
@@ -166,6 +168,29 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 				Alignment: declarative.Alignment2D(walk.AlignHCenterVCenter),
 			},
 			declarative.HSpacer{},
+			declarative.Composite{
+				MaxSize:   declarative.Size{Width: 25},
+				Alignment: declarative.Alignment2D(walk.AlignHCenterVCenter),
+				Layout:    declarative.HBox{MarginsZero: true, SpacingZero: true},
+				Children: []declarative.Widget{
+					declarative.Label{
+						Text:      "Next:",
+						Font:      declarative.Font{Family: "Roboto", PointSize: 7},
+						Alignment: declarative.Alignment2D(walk.AlignHFarVCenter),
+					},
+					declarative.NumberEdit{
+						AssignTo:  &fb.NextID,
+						MaxSize:   declarative.Size{Width: 25},
+						Font:      declarative.Font{Family: "Roboto", PointSize: 7},
+						Value:     float64(instruction.NextInstructionID),
+						Decimals:  0,
+						Alignment: declarative.Alignment2D(walk.AlignHNearVCenter),
+						OnValueChanged: func() {
+							instruction.NextInstructionID = int(fb.NextID.Value())
+						},
+					},
+				},
+			},
 		},
 	}).Create(declarative.NewBuilder(aw.ScrollView)); err != nil {
 		return err
@@ -369,12 +394,13 @@ func (aw *Window) OpenFiber(path string) {
 		}
 
 		newInstruction := &fiber.Instruction{
-			ID:              instruction.ID,
-			Package:         instruction.Package,
-			FuncName:        instruction.FuncName,
-			X:               instruction.X,
-			Y:               instruction.Y,
-			InstructionData: structure,
+			ID:                instruction.ID,
+			Package:           instruction.Package,
+			FuncName:          instruction.FuncName,
+			X:                 instruction.X,
+			Y:                 instruction.Y,
+			NextInstructionID: instruction.NextInstructionID,
+			InstructionData:   structure,
 		}
 		_, dialog := packages.CreateNewDialog(instruction.Package, instruction.FuncName, structure)
 

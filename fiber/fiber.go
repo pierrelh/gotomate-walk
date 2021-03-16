@@ -33,12 +33,13 @@ type LoadingFiber struct {
 
 // LoadingInstruction Initialize a loading fiber's instruction
 type LoadingInstruction struct {
-	ID              int
-	Package         string
-	FuncName        string
-	X               int
-	Y               int
-	InstructionData json.RawMessage
+	ID                int
+	Package           string
+	FuncName          string
+	X                 int
+	Y                 int
+	NextInstructionID int
+	InstructionData   json.RawMessage
 }
 
 // Fiber Initialize the fiber structure
@@ -49,12 +50,13 @@ type Fiber struct {
 
 // Instruction Initialize a fiber's instruction
 type Instruction struct {
-	ID              int
-	Package         string
-	FuncName        string
-	X               int
-	Y               int
-	InstructionData interface{}
+	ID                int
+	Package           string
+	FuncName          string
+	X                 int
+	Y                 int
+	NextInstructionID int
+	InstructionData   interface{}
 }
 
 //CleanFiber Delete all the instructions of the current fiber
@@ -86,6 +88,7 @@ func (fiber *Fiber) RunFiber() {
 				return
 			default:
 				instruction := fiber.Instructions[i]
+				fmt.Println(instruction)
 				funcName := instruction.FuncName
 				instructionData := reflect.ValueOf(instruction.InstructionData).Elem()
 				switch instruction.Package {

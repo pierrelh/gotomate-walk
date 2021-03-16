@@ -20,6 +20,7 @@ type Button struct {
 	Composite *walk.Composite
 	IDLabel   *walk.LinkLabel
 	FuncLabel *walk.LinkLabel
+	NextID    *walk.NumberEdit
 	Dialog    *packages.Dialog
 }
 
