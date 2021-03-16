@@ -99,10 +99,11 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 
 	if err := (declarative.Composite{
 		AssignTo:   &fb.Composite,
-		Layout:     declarative.VBox{SpacingZero: true},
+		Layout:     declarative.Grid{Columns: 1, Margins: declarative.Margins{Left: 10, Top: 10, Right: 10, Bottom: 5}, SpacingZero: true},
+		MinSize:    declarative.Size{Width: 300, Height: 150},
+		MaxSize:    declarative.Size{Width: 300, Height: 150},
 		Row:        row,
 		Background: declarative.BitmapBrush{Image: bmp},
-		Alignment:  declarative.Alignment2D(walk.AlignHCenterVCenter),
 		OnMouseDown: func(x, y int, button walk.MouseButton) {
 			pressed = true
 			clientX, clientY = robotgo.GetMousePos()
@@ -144,9 +145,9 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 					fb.Dialog.DialogContent.Run(aw.MainWindow)
 					break
 				case 2:
-					// if isDeletable {
-					aw.DeleteFiberButton(fb)
-					// }
+					if isDeletable {
+						aw.DeleteFiberButton(fb)
+					}
 					break
 				default:
 					break
@@ -158,24 +159,28 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 		Children: []declarative.Widget{
 			declarative.LinkLabel{
 				AssignTo:  &fb.IDLabel,
+				MinSize:   declarative.Size{Height: 50},
+				MaxSize:   declarative.Size{Height: 50},
 				Font:      declarative.Font{Family: "Roboto", PointSize: 7},
 				Text:      strconv.Itoa(instruction.ID),
 				Alignment: declarative.Alignment2D(walk.AlignHNearVNear),
 			},
-			declarative.HSpacer{},
 			declarative.LinkLabel{
 				AssignTo:  &fb.FuncLabel,
+				MinSize:   declarative.Size{Height: 50},
+				MaxSize:   declarative.Size{Height: 50},
 				Font:      declarative.Font{Family: "Roboto", PointSize: 9, Bold: true},
 				Text:      instruction.FuncName,
 				Alignment: declarative.Alignment2D(walk.AlignHCenterVCenter),
 			},
-			declarative.HSpacer{},
 			declarative.Composite{
-				MaxSize:   declarative.Size{Width: 25},
 				Alignment: declarative.Alignment2D(walk.AlignHCenterVCenter),
+				MinSize:   declarative.Size{Height: 50},
+				MaxSize:   declarative.Size{Height: 50},
 				Layout:    declarative.HBox{MarginsZero: true, SpacingZero: true},
 				Children: []declarative.Widget{
 					declarative.Label{
+						AssignTo:  &fb.NextIDLabel,
 						Text:      "Next:",
 						Font:      declarative.Font{Family: "Roboto", PointSize: 7},
 						Alignment: declarative.Alignment2D(walk.AlignHFarVCenter),
@@ -200,10 +205,10 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 	fb.Composite.SetXPixels(instruction.X)
 	fb.Composite.SetYPixels(instruction.Y)
 	fb.Composite.SetCursor(walk.CursorHand())
-	fb.Composite.SetMinMaxSizePixels(walk.Size{Width: 300, Height: 150}, walk.Size{Width: 300, Height: 150})
-	fb.FuncLabel.SetMinMaxSizePixels(walk.Size{Width: 300, Height: 20}, walk.Size{Width: 300, Height: 20})
-	fb.Composite.Children().At(1).SetMinMaxSizePixels(walk.Size{Width: 300, Height: 80}, walk.Size{Width: 300, Height: 80})
-	fb.Composite.Children().At(3).SetMinMaxSizePixels(walk.Size{Width: 300, Height: 50}, walk.Size{Width: 300, Height: 50})
+	// fb.Composite.SetMinMaxSizePixels(walk.Size{Width: 300, Height: 150}, walk.Size{Width: 300, Height: 150})
+	// fb.FuncLabel.SetMinMaxSizePixels(walk.Size{Width: 300, Height: 20}, walk.Size{Width: 300, Height: 20})
+	// fb.Composite.Children().At(1).SetMinMaxSizePixels(walk.Size{Width: 300, Height: 80}, walk.Size{Width: 300, Height: 80})
+	// fb.Composite.Children().At(3).SetMinMaxSizePixels(walk.Size{Width: 300, Height: 50}, walk.Size{Width: 300, Height: 50})
 
 	// Disabling element position reset on other elements resizing
 	fb.Composite.BoundsChanged().Attach(func() {
@@ -225,6 +230,8 @@ func (aw *Window) DeleteFiberButton(btn *button.Button) {
 			if btn == NewButtons.Buttons[i] {
 				NewButtons.Buttons = append(NewButtons.Buttons[:i], NewButtons.Buttons[i+1:]...)
 				currentFiber.Instructions = append(currentFiber.Instructions[:i], currentFiber.Instructions[i+1:]...)
+				btn.NextID.Dispose()
+				btn.NextIDLabel.Dispose()
 				btn.FuncLabel.Dispose()
 				btn.IDLabel.Dispose()
 				btn.Composite.Dispose()
@@ -278,8 +285,26 @@ func (aw *Window) InitCreateNewFiber() {
 // Clear Delete of the elements linked to the fiber
 func (aw *Window) Clear() {
 	aw.FiberNameInput.SetText("")
-	NewButtons.CleanButtons()
+	aw.CleanScrollView()
 	currentFiber.CleanFiber()
+}
+
+// CleanScrollView Dispose & recreate the MainWindow's ScrollView & empty the NewButtons slice
+func (aw *Window) CleanScrollView() error {
+	if dialogs.Dlg.Result() == 1 {
+		aw.ScrollView.Dispose()
+		if err := (declarative.ScrollView{
+			AssignTo:        &aw.ScrollView,
+			Layout:          declarative.Grid{Columns: 1, Margins: declarative.Margins{Bottom: 2000, Right: 2000}},
+			Background:      declarative.SolidColorBrush{Color: walk.RGB(11, 11, 11)},
+			HorizontalFixed: false,
+			VerticalFixed:   false,
+		}).Create(declarative.NewBuilder(aw.MainWindow)); err != nil {
+			return err
+		}
+		NewButtons.CleanButtons()
+	}
+	return nil
 }
 
 // CreateNewFiber Create a new fiber

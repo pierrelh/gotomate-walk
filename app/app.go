@@ -29,7 +29,7 @@ func CreateApp() {
 		AssignTo:   &aw.MainWindow,
 		Icon:       "/img/icon.ico",
 		Title:      "Gotomate",
-		Background: declarative.SolidColorBrush{Color: walk.RGB(106, 215, 229)},
+		Background: declarative.SolidColorBrush{Color: walk.RGB(11, 11, 11)},
 		MinSize:    declarative.Size{Width: 320, Height: 240},
 		Size:       declarative.Size{Width: 800, Height: 600},
 		Layout:     declarative.VBox{MarginsZero: true, SpacingZero: true},
@@ -154,8 +154,9 @@ func CreateApp() {
 		},
 		Children: []declarative.Widget{
 			declarative.Composite{
-				Layout:  declarative.HBox{MarginsZero: true, SpacingZero: true},
-				MaxSize: declarative.Size{Height: 120},
+				Layout:     declarative.HBox{MarginsZero: true, SpacingZero: true},
+				Background: declarative.SolidColorBrush{Color: walk.RGB(106, 215, 229)},
+				MaxSize:    declarative.Size{Height: 120},
 				Children: []declarative.Widget{
 					declarative.ListBox{
 						AssignTo:        &aw.PrimaryListBox.ListBox,
@@ -230,7 +231,6 @@ func CreateApp() {
 				VerticalFixed:   false,
 				OnSizeChanged: func() {
 					if !isInit {
-						aw.CreateNewFiber()
 						isInit = true
 					}
 				},
@@ -241,5 +241,6 @@ func CreateApp() {
 	}
 
 	aw.AddSavedFibersActions()
+	aw.CreateNewFiber()
 	aw.MainWindow.Run()
 }
