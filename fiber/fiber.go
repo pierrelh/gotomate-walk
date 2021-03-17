@@ -17,6 +17,7 @@ import (
 	systime "gotomate/fiber/packages/Systime"
 	"gotomate/fiber/value"
 	"reflect"
+	"sort"
 )
 
 //NewFiber Define the new automate's fiber
@@ -77,23 +78,25 @@ func (fiber *Fiber) RunFiber() {
 	if running > 1 {
 		fmt.Println("FIBER: A fiber is already running")
 	} else {
+		instruction := fiber.Instructions[0]
 		value.FiberValues = nil
-		fmt.Println("| Fiber Start |")
 
-		for i := 0; i < len(fiber.Instructions); i++ {
+		for {
 			select {
 			case <-stop:
 				fmt.Println("| Fiber Stopped |")
 				running = 0
 				return
 			default:
-				instruction := fiber.Instructions[i]
-				fmt.Println(instruction)
 				funcName := instruction.FuncName
 				instructionData := reflect.ValueOf(instruction.InstructionData).Elem()
 				switch instruction.Package {
 				case "Flow":
-					flow.Processing(funcName, instructionData, finished)
+					ended := flow.Processing(funcName, instructionData, finished)
+					if ended {
+						running = 0
+						return
+					}
 				case "Sleep":
 					sleep.Processing(funcName, instructionData, finished)
 				case "Mouse":
@@ -120,9 +123,19 @@ func (fiber *Fiber) RunFiber() {
 					fmt.Println("FIBER: This package is not integrated yet: " + instruction.Package)
 					continue
 				}
+
+				idx := sort.Search(len(fiber.Instructions), func(i int) bool {
+					return fiber.Instructions[i].ID >= instruction.NextInstructionID
+				})
+				if idx == len(fiber.Instructions) {
+					fmt.Println("FATAL ERROR: The instruction with the id", instruction.NextInstructionID, "has no been founded")
+					fmt.Println("| Fiber Finished at Fatal Error |")
+					running = 0
+					return
+				} else {
+					instruction = fiber.Instructions[idx]
+				}
 			}
 		}
-		fmt.Println("| Fiber Finished |")
-		running = 0
 	}
 }
