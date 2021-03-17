@@ -4,6 +4,7 @@ import (
 	"fmt"
 	battery "gotomate/fiber/packages/Battery"
 	clipboard "gotomate/fiber/packages/Clipboard"
+	flow "gotomate/fiber/packages/Flow"
 	input "gotomate/fiber/packages/Input"
 	keyboard "gotomate/fiber/packages/Keyboard"
 	log "gotomate/fiber/packages/Log"
@@ -69,7 +70,7 @@ func CreateNewDialog(packageName string, funcName string, databinder ...interfac
 						Font:     declarative.Font{Family: "Roboto", PointSize: 9},
 						OnClicked: func() {
 							if err := dialog.DataBinder.Submit(); err != nil {
-								fmt.Println(err)
+								fmt.Println("GOTOMATE ERROR: Unable to send the dialog's datas")
 								return
 							}
 
@@ -97,6 +98,8 @@ func FillDialog(packageName string, funcName string) (interface{}, []declarative
 		return battery.Build(funcName)
 	case "Clipboard":
 		return clipboard.Build(funcName)
+	case "Flow":
+		return flow.Build(funcName)
 	case "Input":
 		return input.Build(funcName)
 	case "Keyboard":
@@ -116,7 +119,7 @@ func FillDialog(packageName string, funcName string) (interface{}, []declarative
 	case "Systime":
 		return systime.Build(funcName)
 	default:
-		fmt.Println("ERROR: Unable to find the package")
+		fmt.Println("GOTOMATE ERROR: Unable to find the dialog's package")
 		return nil, nil
 	}
 }

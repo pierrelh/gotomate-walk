@@ -17,17 +17,17 @@ type Buttons struct {
 
 // Button Setting fiber's buttons structure
 type Button struct {
-	Composite *walk.Composite
-	LinkLabel *walk.LinkLabel
-	Dialog    *packages.Dialog
+	Composite       *walk.Composite
+	IDLabel         *walk.LinkLabel
+	FuncLabel       *walk.LinkLabel
+	NextIDComposite *walk.Composite
+	NextID          *walk.NumberEdit
+	NextIDLabel     *walk.Label
+	Dialog          *packages.Dialog
 }
 
 //CleanButtons Delete all the automate's buttons & delete all the button
 func (btns *Buttons) CleanButtons() {
-	for i := 0; i < len(btns.Buttons); i++ {
-		btns.Buttons[i].Composite.Dispose()
-		btns.Buttons[i].LinkLabel.Dispose()
-	}
 	p := reflect.ValueOf(btns).Elem()
 	p.Set(reflect.Zero(p.Type()))
 }

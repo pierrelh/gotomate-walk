@@ -13,7 +13,9 @@ import (
 	"io/ioutil"
 	"os"
 	"path/filepath"
+	"strconv"
 
+	"github.com/go-vgo/robotgo"
 	"github.com/lxn/walk"
 	declarative "github.com/lxn/walk/declarative"
 )
@@ -22,6 +24,10 @@ import (
 var NewButtons = button.NewButtons
 var currentFiber = fiber.NewFiber
 var pressed = false
+var moved = false
+var clientX = 0
+var clientY = 0
+var row = 1
 
 //Window Setting the automate window structure
 type Window struct {
@@ -59,20 +65,30 @@ func (aw *Window) SlbItemActivated(currentFiber *fiber.Fiber) {
 		item := &aw.SecondaryListBox.Model.Items[i]
 		funcName := item.Name
 
+		instructionId := 1
+		if len(currentFiber.Instructions) > 1 {
+			instructionId = currentFiber.Instructions[len(currentFiber.Instructions)-1].ID + 1
+		}
+		nextId := instructionId + 1
+
 		data, dialog := packages.CreateNewDialog(packageName, funcName)
 
 		newInstruction := &fiber.Instruction{
-			Package:         packageName,
-			FuncName:        funcName,
-			InstructionData: data,
+			ID:                instructionId,
+			Package:           packageName,
+			FuncName:          funcName,
+			X:                 0,
+			Y:                 0,
+			NextInstructionID: nextId,
+			InstructionData:   data,
 		}
 		currentFiber.Instructions = append(currentFiber.Instructions, newInstruction)
-		aw.CreateFiberButton(newInstruction, dialog)
+		aw.CreateFiberButton(newInstruction, dialog, true)
 	}
 }
 
 // CreateFiberButton Create a new Fiberbutton in the fiber
-func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *packages.Dialog) error {
+func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *packages.Dialog, isDeletable bool) error {
 	fb := new(button.Button)
 	NewButtons.Buttons = append(NewButtons.Buttons, fb)
 	fb.Dialog = dialog
@@ -83,47 +99,130 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 
 	if err := (declarative.Composite{
 		AssignTo:   &fb.Composite,
-		Layout:     declarative.VBox{MarginsZero: true, SpacingZero: true},
+		Layout:     declarative.Grid{Columns: 1, Margins: declarative.Margins{Left: 10, Top: 10, Right: 10, Bottom: 5}, SpacingZero: true},
+		MinSize:    declarative.Size{Width: 300, Height: 150},
+		MaxSize:    declarative.Size{Width: 300, Height: 150},
+		Row:        row,
 		Background: declarative.BitmapBrush{Image: bmp},
-		Alignment:  declarative.Alignment2D(walk.AlignHCenterVCenter),
 		OnMouseDown: func(x, y int, button walk.MouseButton) {
 			pressed = true
+			clientX, clientY = robotgo.GetMousePos()
 		},
 		OnMouseMove: func(x, y int, button walk.MouseButton) {
-			pressed = false
+			if pressed {
+				mx, my := robotgo.GetMousePos()
+				difX := clientX - mx
+				difY := clientY - my
+				clientX = mx
+				clientY = my
+				moved = true
+				if fb.Composite.XPixels()-difX < 0 {
+					fb.Composite.SetXPixels(0)
+					instruction.X = 0
+				} else if (fb.Composite.X() - difX) > aw.ScrollView.Layout().Margins().HFar {
+					fb.Composite.SetX(aw.ScrollView.Layout().Margins().HFar)
+					instruction.X = aw.ScrollView.Layout().Margins().HFar
+				} else {
+					fb.Composite.SetXPixels(fb.Composite.XPixels() - difX)
+					instruction.X = fb.Composite.XPixels() - difX
+				}
+				if fb.Composite.YPixels()-difY < 0 {
+					fb.Composite.SetYPixels(0)
+					instruction.Y = 0
+				} else if (fb.Composite.Y() - difY) > aw.ScrollView.Layout().Margins().VFar {
+					fb.Composite.SetY(aw.ScrollView.Layout().Margins().VFar)
+					instruction.Y = aw.ScrollView.Layout().Margins().VFar
+				} else {
+					fb.Composite.SetYPixels(fb.Composite.YPixels() - difY)
+					instruction.Y = fb.Composite.YPixels() - difY
+				}
+			}
 		},
 		OnMouseUp: func(x, y int, button walk.MouseButton) {
-			if pressed {
+			if pressed && !moved {
 				switch button {
 				case 1:
-					fb.Dialog.DialogContent.Run(aw.MainWindow)
+					if instruction.Package != "Flow" && instruction.FuncName != "End" {
+						fb.Dialog.DialogContent.Run(aw.MainWindow)
+					}
 					break
 				case 2:
-					aw.DeleteFiberButton(fb)
+					if isDeletable {
+						aw.DeleteFiberButton(fb)
+					}
 					break
 				default:
 					break
 				}
 			}
+			pressed = false
+			moved = false
 		},
 		Children: []declarative.Widget{
-			declarative.HSpacer{},
 			declarative.LinkLabel{
-				AssignTo:  &fb.LinkLabel,
+				AssignTo:  &fb.IDLabel,
+				MinSize:   declarative.Size{Width: 280, Height: 50},
+				MaxSize:   declarative.Size{Width: 280, Height: 50},
+				Font:      declarative.Font{Family: "Roboto", PointSize: 7},
+				Text:      strconv.Itoa(instruction.ID),
+				Alignment: declarative.Alignment2D(walk.AlignHNearVNear),
+			},
+			declarative.LinkLabel{
+				AssignTo:  &fb.FuncLabel,
+				MinSize:   declarative.Size{Width: 280, Height: 50},
+				MaxSize:   declarative.Size{Width: 280, Height: 50},
 				Font:      declarative.Font{Family: "Roboto", PointSize: 9, Bold: true},
 				Text:      instruction.FuncName,
 				Alignment: declarative.Alignment2D(walk.AlignHCenterVCenter),
 			},
-			declarative.HSpacer{},
+			declarative.Composite{
+				AssignTo:           &fb.NextIDComposite,
+				AlwaysConsumeSpace: true,
+				Alignment:          declarative.Alignment2D(walk.AlignHCenterVCenter),
+				MinSize:            declarative.Size{Width: 280, Height: 50},
+				MaxSize:            declarative.Size{Width: 280, Height: 50},
+				Layout:             declarative.HBox{MarginsZero: true, SpacingZero: true},
+				Children: []declarative.Widget{
+					declarative.Label{
+						AssignTo:  &fb.NextIDLabel,
+						Text:      "Next:",
+						Font:      declarative.Font{Family: "Roboto", PointSize: 7},
+						Alignment: declarative.Alignment2D(walk.AlignHFarVCenter),
+					},
+					declarative.NumberEdit{
+						AssignTo:  &fb.NextID,
+						MaxSize:   declarative.Size{Width: 25},
+						Font:      declarative.Font{Family: "Roboto", PointSize: 7},
+						Value:     float64(instruction.NextInstructionID),
+						Decimals:  0,
+						Alignment: declarative.Alignment2D(walk.AlignHNearVCenter),
+						OnValueChanged: func() {
+							instruction.NextInstructionID = int(fb.NextID.Value())
+						},
+					},
+				},
+			},
 		},
 	}).Create(declarative.NewBuilder(aw.ScrollView)); err != nil {
 		return err
 	}
+	fb.Composite.SetXPixels(instruction.X)
+	fb.Composite.SetYPixels(instruction.Y)
 	fb.Composite.SetCursor(walk.CursorHand())
-	fb.Composite.SetMinMaxSizePixels(walk.Size{Width: 300, Height: 150}, walk.Size{Width: 300, Height: 150})
-	fb.LinkLabel.SetMinMaxSizePixels(walk.Size{Width: 300, Height: 20}, walk.Size{Width: 300, Height: 20})
-	fb.Composite.Children().At(0).SetMinMaxSizePixels(walk.Size{Width: 300, Height: 100}, walk.Size{Width: 300, Height: 100})
-	fb.Composite.Children().At(2).SetMinMaxSizePixels(walk.Size{Width: 300, Height: 30}, walk.Size{Width: 300, Height: 30})
+
+	if instruction.Package == "Flow" && instruction.FuncName == "End" {
+		fb.NextIDComposite.SetVisible(false)
+	}
+
+	// Disabling element position reset on other elements resizing
+	fb.Composite.BoundsChanged().Attach(func() {
+		// Checking if the position is automatically reseted
+		if !pressed {
+			fb.Composite.SetXPixels(instruction.X)
+			fb.Composite.SetYPixels(instruction.Y)
+		}
+	})
+	row++
 	return nil
 }
 
@@ -136,11 +235,10 @@ func (aw *Window) DeleteFiberButton(btn *button.Button) {
 				NewButtons.Buttons = append(NewButtons.Buttons[:i], NewButtons.Buttons[i+1:]...)
 				currentFiber.Instructions = append(currentFiber.Instructions[:i], currentFiber.Instructions[i+1:]...)
 				btn.Composite.Dispose()
-				btn.LinkLabel.Dispose()
 				return
 			}
 		}
-		fmt.Println("ERROR: Unable to delete the fiber's instruction")
+		fmt.Println("GOTOMATE ERROR: Unable to delete the fiber's instruction")
 	}
 }
 
@@ -170,20 +268,58 @@ func (aw *Window) NoFiberNameSet() {
 	aw.FiberNameInput.SetFocus()
 }
 
-// CreateNewFiber Init a new fiber creation
-func (aw *Window) CreateNewFiber() {
+// InitCreateNewFiber Init a new fiber creation
+func (aw *Window) InitCreateNewFiber() {
 	if aw.IsFiberSaved() {
-		aw.FiberNameInput.SetText("")
-		NewButtons.CleanButtons()
-		currentFiber.CleanFiber()
+		aw.Clear()
+		aw.CreateNewFiber()
 	} else {
 		dialogs.FiberNotSavedDialog.Run(aw.MainWindow)
 		if dialogs.Dlg.Result() == 1 {
-			aw.FiberNameInput.SetText("")
-			NewButtons.CleanButtons()
-			currentFiber.CleanFiber()
+			aw.Clear()
+			aw.CreateNewFiber()
 		}
 	}
+}
+
+// Clear Delete of the elements linked to the fiber
+func (aw *Window) Clear() {
+	aw.FiberNameInput.SetText("")
+	aw.CleanScrollView()
+	currentFiber.CleanFiber()
+}
+
+// CleanScrollView Dispose & recreate the MainWindow's ScrollView & empty the NewButtons slice
+func (aw *Window) CleanScrollView() error {
+	aw.ScrollView.Dispose()
+	if err := (declarative.ScrollView{
+		AssignTo:        &aw.ScrollView,
+		Layout:          declarative.Grid{Columns: 1, Margins: declarative.Margins{Bottom: 2000, Right: 2000}},
+		Background:      declarative.SolidColorBrush{Color: walk.RGB(11, 11, 11)},
+		HorizontalFixed: false,
+		VerticalFixed:   false,
+	}).Create(declarative.NewBuilder(aw.MainWindow)); err != nil {
+		return err
+	}
+	NewButtons.CleanButtons()
+	return nil
+}
+
+// CreateNewFiber Create a new fiber
+func (aw *Window) CreateNewFiber() {
+	data, dialog := packages.CreateNewDialog("Flow", "Start")
+
+	newInstruction := &fiber.Instruction{
+		ID:                0,
+		Package:           "Flow",
+		FuncName:          "Start",
+		X:                 250,
+		Y:                 5,
+		NextInstructionID: 1,
+		InstructionData:   data,
+	}
+	currentFiber.Instructions = append(currentFiber.Instructions, newInstruction)
+	aw.CreateFiberButton(newInstruction, dialog, false)
 }
 
 //InitSaveFiber Check if the fiber can be saved & save it if possible
@@ -280,39 +416,43 @@ func (aw *Window) OpenFiber(path string) {
 	jsonFile, err := os.Open(path)
 
 	if err != nil {
-		fmt.Println("ERROR: Unable to open the saved fiber")
+		fmt.Println("GOTOMATE ERROR: Unable to open the saved fiber")
 		return
 	}
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 	var loadingFiber fiber.LoadingFiber
 	err = json.Unmarshal(byteValue, &loadingFiber)
+	if err != nil {
+		fmt.Println("GOTOMATE ERROR: Unable to extract the saved fiber")
+	}
+
+	aw.Clear()
+
 	aw.FiberNameInput.SetText(loadingFiber.Name)
 
-	NewButtons.CleanButtons()
-	currentFiber.CleanFiber()
-
 	currentFiber.Name = loadingFiber.Name
-	if err != nil {
-		fmt.Println("ERROR: ", err)
-	}
 
 	for _, instruction := range loadingFiber.Instructions {
 		structure := packages.PackageDecode(instruction)
 
 		err := json.Unmarshal(instruction.InstructionData, structure)
 		if err != nil {
-			fmt.Println("ERROR: ", err)
+			fmt.Println("GOTOMATE ERROR: Unable to convert the saved instruction")
 		}
 
 		newInstruction := &fiber.Instruction{
-			Package:         instruction.Package,
-			FuncName:        instruction.FuncName,
-			InstructionData: structure,
+			ID:                instruction.ID,
+			Package:           instruction.Package,
+			FuncName:          instruction.FuncName,
+			X:                 instruction.X,
+			Y:                 instruction.Y,
+			NextInstructionID: instruction.NextInstructionID,
+			InstructionData:   structure,
 		}
 		_, dialog := packages.CreateNewDialog(instruction.Package, instruction.FuncName, structure)
 
 		currentFiber.Instructions = append(currentFiber.Instructions, newInstruction)
-		aw.CreateFiberButton(newInstruction, dialog)
+		aw.CreateFiberButton(newInstruction, dialog, true)
 	}
 }
 

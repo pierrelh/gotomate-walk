@@ -14,6 +14,6 @@ func Build(function string) (interface{}, []declarative.Widget) {
 	case "Read":
 		return new(ReadDatabinder), ReadTemplate
 	}
-	fmt.Println("ERROR: Unable to find the function")
+	fmt.Println("GOTOMATE ERROR: Unable to find the function for instruction building")
 	return nil, nil
 }

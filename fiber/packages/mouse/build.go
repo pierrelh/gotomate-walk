@@ -16,6 +16,6 @@ func Build(function string) (interface{}, []declarative.Widget) {
 	case "Move":
 		return new(MoveDatabinder), MoveTemplate
 	}
-	fmt.Println("ERROR: Unable to find the function")
+	fmt.Println("GOTOMATE ERROR: Unable to find the function for instruction building")
 	return nil, nil
 }

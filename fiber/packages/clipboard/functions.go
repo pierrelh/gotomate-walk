@@ -1,9 +1,3 @@
-// Copyright 2013 @atotto. All rights reserved.
-// Use of this source code is governed by a BSD-style
-// license that can be found in the LICENSE file.
-
-// +build windows
-
 package clipboard
 
 import (
@@ -14,7 +8,7 @@ import (
 
 // Read read string from clipboard
 func Read(finished chan bool) (string, error) {
-	fmt.Println("FIBER: Clipboard Reading ...")
+	fmt.Println("FIBER INFO: Clipboard Reading ...")
 	content, err := robotgo.ReadAll()
 	finished <- true
 	return content, err
@@ -22,7 +16,7 @@ func Read(finished chan bool) (string, error) {
 
 // Write write string to clipboard
 func Write(text string, finished chan bool) error {
-	fmt.Println("FIBER: Clipboard Writing ...")
+	fmt.Println("FIBER INFO: Clipboard Writing ...")
 	err := robotgo.WriteAll(text)
 	finished <- true
 	return err

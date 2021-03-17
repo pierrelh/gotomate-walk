@@ -1,6 +1,7 @@
 package listbox
 
 import (
+	"fmt"
 	"gotomate/app/automate/listbox/listboxitem"
 	"gotomate/app/automate/listbox/listboxmodel"
 	"gotomate/fiber/packages"
@@ -19,17 +20,11 @@ type ListBox struct {
 // NewPrimaryListModel Getting the automates packages
 func NewPrimaryListModel() *listboxmodel.Model {
 	env := packages.Packages
-	var allPackages []string
 	m := &listboxmodel.Model{Items: make([]listboxitem.Item, len(env))}
 
-	for name := range env {
-		allPackages = append(allPackages, name)
-	}
-	sort.Strings(allPackages)
-
-	for i, name := range allPackages {
+	for i := 0; i < len(env); i++ {
 		value := strconv.Itoa(i)
-		m.Items[i] = listboxitem.Item{Name: name, Value: value}
+		m.Items[i] = listboxitem.Item{Name: env[i].Name, Value: value}
 	}
 	return m
 }
@@ -37,15 +32,19 @@ func NewPrimaryListModel() *listboxmodel.Model {
 //NewSecondaryListModel Fill the SecondaryListModel with the adapted datas
 func (list *ListBox) NewSecondaryListModel(key string) *listboxmodel.Model {
 	env := packages.Packages
+	idx := sort.Search(len(env), func(i int) bool {
+		return env[i].Name >= key
+	})
+	if idx == len(env) {
+		fmt.Println("GOTOMATE ERROR: Unable to find", key, "package")
+		return nil
+	} else {
+		m := &listboxmodel.Model{Items: make([]listboxitem.Item, len(env[idx].Functions))}
 
-	m := &listboxmodel.Model{Items: make([]listboxitem.Item, len(env[key]))}
-
-	for i, e := range env[key] {
-		value := strconv.Itoa(i)
-		name := e
-
-		m.Items[i] = listboxitem.Item{Name: name, Value: value}
+		for i := 0; i < len(env[idx].Functions); i++ {
+			value := strconv.Itoa(i)
+			m.Items[i] = listboxitem.Item{Name: env[idx].Functions[i], Value: value}
+		}
+		return m
 	}
-
-	return m
 }

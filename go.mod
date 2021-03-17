@@ -10,7 +10,7 @@ require (
 	github.com/gonutz/w32 v1.0.0
 	github.com/kr/text v0.2.0 // indirect
 	github.com/lxn/walk v0.0.0-20210112085537-c389da54e794
-	github.com/lxn/win v0.0.0-20210218163916-a377121e959e // indirect
+	github.com/lxn/win v0.0.0-20210218163916-a377121e959e
 	github.com/otiai10/mint v1.3.2 // indirect
 	github.com/shirou/gopsutil v3.21.2+incompatible // indirect
 	github.com/stretchr/testify v1.7.0 // indirect

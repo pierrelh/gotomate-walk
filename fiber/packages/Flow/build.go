@@ -1,4 +1,4 @@
-package notification
+package flow
 
 import (
 	"fmt"
@@ -6,11 +6,13 @@ import (
 	"github.com/lxn/walk/declarative"
 )
 
-// Build Return the right databinder & the right template for a notification instruction
+// Build Return the right databinder & the right template for a flow instruction
 func Build(function string) (interface{}, []declarative.Widget) {
 	switch function {
-	case "Create":
-		return new(CreateDatabinder), CreateTemplate
+	case "Start":
+		return new(StartDatabinder), StartTemplate
+	case "End":
+		return new(EndDatabinder), nil
 	}
 	fmt.Println("GOTOMATE ERROR: Unable to find the function for instruction building")
 	return nil, nil

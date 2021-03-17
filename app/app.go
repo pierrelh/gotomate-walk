@@ -20,6 +20,7 @@ var aw = &automate.Window{
 }
 
 var newFiber = fiber.NewFiber
+var isInit = false
 
 // CreateApp Initiate the app
 func CreateApp() {
@@ -28,7 +29,7 @@ func CreateApp() {
 		AssignTo:   &aw.MainWindow,
 		Icon:       "/img/icon.ico",
 		Title:      "Gotomate",
-		Background: declarative.SolidColorBrush{Color: walk.RGB(106, 215, 229)},
+		Background: declarative.SolidColorBrush{Color: walk.RGB(11, 11, 11)},
 		MinSize:    declarative.Size{Width: 320, Height: 240},
 		Size:       declarative.Size{Width: 800, Height: 600},
 		Layout:     declarative.VBox{MarginsZero: true, SpacingZero: true},
@@ -43,7 +44,7 @@ func CreateApp() {
 						Image:    "/img/menu-icons/new.png",
 						Shortcut: declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyN},
 						OnTriggered: func() {
-							aw.CreateNewFiber()
+							aw.InitCreateNewFiber()
 						},
 					},
 					declarative.Action{
@@ -153,8 +154,9 @@ func CreateApp() {
 		},
 		Children: []declarative.Widget{
 			declarative.Composite{
-				Layout:  declarative.HBox{MarginsZero: true, SpacingZero: true},
-				MaxSize: declarative.Size{Height: 120},
+				Layout:     declarative.HBox{MarginsZero: true, SpacingZero: true},
+				Background: declarative.SolidColorBrush{Color: walk.RGB(106, 215, 229)},
+				MaxSize:    declarative.Size{Height: 120},
 				Children: []declarative.Widget{
 					declarative.ListBox{
 						AssignTo:        &aw.PrimaryListBox.ListBox,
@@ -223,10 +225,15 @@ func CreateApp() {
 			},
 			declarative.ScrollView{
 				AssignTo:        &aw.ScrollView,
-				Layout:          declarative.Flow{Margins: declarative.Margins{Left: 5, Top: 5, Right: 5, Bottom: 5}},
+				Layout:          declarative.Grid{Columns: 1, Margins: declarative.Margins{Bottom: 2000, Right: 2000}},
 				Background:      declarative.SolidColorBrush{Color: walk.RGB(11, 11, 11)},
 				HorizontalFixed: false,
 				VerticalFixed:   false,
+				OnSizeChanged: func() {
+					if !isInit {
+						isInit = true
+					}
+				},
 			},
 		},
 	}.Create()); err != nil {
@@ -234,5 +241,6 @@ func CreateApp() {
 	}
 
 	aw.AddSavedFibersActions()
+	aw.CreateNewFiber()
 	aw.MainWindow.Run()
 }
