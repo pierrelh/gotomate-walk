@@ -76,7 +76,7 @@ func (fiber *Fiber) StopFiber() {
 func (fiber *Fiber) RunFiber() {
 	running++
 	if running > 1 {
-		fmt.Println("FIBER: A fiber is already running")
+		fmt.Println("FIBER WARNING: A fiber is already running")
 	} else {
 		instruction := fiber.Instructions[0]
 		value.FiberValues = nil
@@ -120,7 +120,7 @@ func (fiber *Fiber) RunFiber() {
 				case "Input":
 					input.Processing(funcName, instructionData, finished)
 				default:
-					fmt.Println("FIBER: This package is not integrated yet: " + instruction.Package)
+					fmt.Println("FIBER WARNING: This package is not integrated yet: " + instruction.Package)
 					continue
 				}
 
@@ -128,7 +128,7 @@ func (fiber *Fiber) RunFiber() {
 					return fiber.Instructions[i].ID >= instruction.NextInstructionID
 				})
 				if idx == len(fiber.Instructions) {
-					fmt.Println("FATAL ERROR: The instruction with the id", instruction.NextInstructionID, "has no been founded")
+					fmt.Println("FIBER FATAL ERROR: The instruction with the id", instruction.NextInstructionID, "has no been founded")
 					fmt.Println("| Fiber Finished at Fatal Error |")
 					running = 0
 					return

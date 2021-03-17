@@ -26,7 +26,7 @@ func getAutomatePackages() map[string][]string {
 				set := token.NewFileSet()
 				pack, err := parser.ParseFile(set, path, nil, 0)
 				if err != nil {
-					fmt.Println("Failed to parse file:", err)
+					fmt.Println("GOTOMATE FATAL ERROR: Unable to parse the file", err)
 					os.Exit(1)
 				}
 

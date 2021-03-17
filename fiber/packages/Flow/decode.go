@@ -10,6 +10,6 @@ func Decode(function string) interface{} {
 	case "End":
 		return new(EndDatabinder)
 	}
-	fmt.Println("ERROR: Unable to find the function")
+	fmt.Println("GOTOMATE ERROR: Unable to find the function for instruction decode")
 	return nil
 }

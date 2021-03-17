@@ -23,7 +23,7 @@ func Processing(funcName string, instructionData reflect.Value, finished chan bo
 					if varInstruction != nil {
 						msg = reflect.ValueOf(varInstruction.Value)
 					} else {
-						fmt.Println("ERROR: Unable to find the fiber's var: ", regexp.QuoteMeta(varSlice[i]))
+						fmt.Println("FIBER ERROR: Unable to find the fiber's var: ", regexp.QuoteMeta(varSlice[i]))
 						msg = ""
 					}
 				}
@@ -32,6 +32,6 @@ func Processing(funcName string, instructionData reflect.Value, finished chan bo
 		go Print(msg, finished)
 		<-finished
 	default:
-		fmt.Println("FIBER: This function is not integrated yet: " + funcName)
+		fmt.Println("FIBER ERROR: This function is not integrated yet: " + funcName)
 	}
 }

@@ -234,7 +234,7 @@ func (aw *Window) DeleteFiberButton(btn *button.Button) {
 				return
 			}
 		}
-		fmt.Println("ERROR: Unable to delete the fiber's instruction")
+		fmt.Println("GOTOMATE ERROR: Unable to delete the fiber's instruction")
 	}
 }
 
@@ -412,28 +412,28 @@ func (aw *Window) OpenFiber(path string) {
 	jsonFile, err := os.Open(path)
 
 	if err != nil {
-		fmt.Println("ERROR: Unable to open the saved fiber")
+		fmt.Println("GOTOMATE ERROR: Unable to open the saved fiber")
 		return
 	}
 	byteValue, _ := ioutil.ReadAll(jsonFile)
 	var loadingFiber fiber.LoadingFiber
 	err = json.Unmarshal(byteValue, &loadingFiber)
+	if err != nil {
+		fmt.Println("GOTOMATE ERROR: Unable to extract the saved fiber")
+	}
 
 	aw.Clear()
 
 	aw.FiberNameInput.SetText(loadingFiber.Name)
 
 	currentFiber.Name = loadingFiber.Name
-	if err != nil {
-		fmt.Println("ERROR: ", err)
-	}
 
 	for _, instruction := range loadingFiber.Instructions {
 		structure := packages.PackageDecode(instruction)
 
 		err := json.Unmarshal(instruction.InstructionData, structure)
 		if err != nil {
-			fmt.Println("ERROR: ", err)
+			fmt.Println("GOTOMATE ERROR: Unable to convert the saved instruction")
 		}
 
 		newInstruction := &fiber.Instruction{

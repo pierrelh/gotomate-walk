@@ -10,7 +10,7 @@ import (
 
 // GetBattery get the first system battery if exist
 func GetBattery(finished chan bool) *battery.Battery {
-	fmt.Println("FIBER: Getting battery ...")
+	fmt.Println("FIBER INFO: Getting battery ...")
 	batteries, err := battery.GetAll()
 	if _, isFatal := err.(battery.ErrFatal); isFatal {
 		finished <- true
@@ -23,7 +23,7 @@ func GetBattery(finished chan bool) *battery.Battery {
 	errs, partialErrs := err.(battery.Errors)
 	for i, bat := range batteries {
 		if partialErrs && errs[i] != nil {
-			fmt.Fprintf(os.Stderr, "FIBER: Error getting info for BAT%d: %s\n", i, errs[i])
+			fmt.Fprintf(os.Stderr, "FIBER ERROR: Error getting info for BAT%d: %s\n", i, errs[i])
 			continue
 		}
 		finished <- true
@@ -35,21 +35,21 @@ func GetBattery(finished chan bool) *battery.Battery {
 
 // GetBatteryState : Return the battery state of a battery
 func GetBatteryState(bat *battery.Battery, finished chan bool) battery.State {
-	fmt.Println("FIBER: Getting battery state ...")
+	fmt.Println("FIBER INFO: Getting battery state ...")
 	finished <- true
 	return bat.State
 }
 
 // GetBatteryPercentage : Return the left percentage of a battery
 func GetBatteryPercentage(bat *battery.Battery, finished chan bool) float64 {
-	fmt.Println("FIBER: Getting battery percentage ...")
+	fmt.Println("FIBER INFO: Getting battery percentage ...")
 	finished <- true
 	return bat.Current / bat.Full * 100
 }
 
 // GetBatteryRemainingTime : Return the remaining time of battery or for battery charging
 func GetBatteryRemainingTime(bat *battery.Battery, finished chan bool) time.Duration {
-	fmt.Println("FIBER: Getting battery remaining time ...")
+	fmt.Println("FIBER INFO: Getting battery remaining time ...")
 	var timeNum float64
 	switch bat.State {
 	case battery.Discharging:
@@ -66,42 +66,42 @@ func GetBatteryRemainingTime(bat *battery.Battery, finished chan bool) time.Dura
 
 // GetBatteryChargeRate : Return a battery charge rate mW
 func GetBatteryChargeRate(bat *battery.Battery, finished chan bool) time.Duration {
-	fmt.Println("FIBER: Getting battery charge rate ...")
+	fmt.Println("FIBER INFO: Getting battery charge rate ...")
 	finished <- true
 	return time.Duration(bat.ChargeRate)
 }
 
 // GetBatteryCurrentCapacity : Return a battery current capacity
 func GetBatteryCurrentCapacity(bat *battery.Battery, finished chan bool) float64 {
-	fmt.Println("FIBER: Getting battery current capacity ...")
+	fmt.Println("FIBER INFO: Getting battery current capacity ...")
 	finished <- true
 	return bat.Current
 }
 
 // GetBatteryLastFullCapacity : Return a battery last full capacity
 func GetBatteryLastFullCapacity(bat *battery.Battery, finished chan bool) float64 {
-	fmt.Println("FIBER: Getting battery last full capacity ...")
+	fmt.Println("FIBER INFO: Getting battery last full capacity ...")
 	finished <- true
 	return bat.Full
 }
 
 // GetBatteryDesignCapacity : Return a battery design capacity
 func GetBatteryDesignCapacity(bat *battery.Battery, finished chan bool) float64 {
-	fmt.Println("FIBER: Getting battery design capacity ...")
+	fmt.Println("FIBER INFO: Getting battery design capacity ...")
 	finished <- true
 	return bat.Design
 }
 
 // GetBatteryVoltage : Return a battery voltage
 func GetBatteryVoltage(bat *battery.Battery, finished chan bool) float64 {
-	fmt.Println("FIBER: Getting battery voltage ...")
+	fmt.Println("FIBER INFO: Getting battery voltage ...")
 	finished <- true
 	return bat.Voltage
 }
 
 // GetBatteryDesignVoltage : Return a battery design voltage
 func GetBatteryDesignVoltage(bat *battery.Battery, finished chan bool) float64 {
-	fmt.Println("FIBER: Getting battery design voltage ...")
+	fmt.Println("FIBER INFO: Getting battery design voltage ...")
 	finished <- true
 	return bat.DesignVoltage
 }

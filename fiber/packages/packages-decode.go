@@ -45,7 +45,7 @@ func PackageDecode(instruction *fiber.LoadingInstruction) interface{} {
 	case "Systime":
 		return systime.Decode(instruction.FuncName)
 	default:
-		fmt.Println("ERROR: Unable to find the package")
+		fmt.Println("GOTOMATE ERROR: Unable to find the package to decode the instruction")
 		return nil
 	}
 }

@@ -70,7 +70,7 @@ func CreateNewDialog(packageName string, funcName string, databinder ...interfac
 						Font:     declarative.Font{Family: "Roboto", PointSize: 9},
 						OnClicked: func() {
 							if err := dialog.DataBinder.Submit(); err != nil {
-								fmt.Println(err)
+								fmt.Println("GOTOMATE ERROR: Unable to send the dialog's datas")
 								return
 							}
 
@@ -119,7 +119,7 @@ func FillDialog(packageName string, funcName string) (interface{}, []declarative
 	case "Systime":
 		return systime.Build(funcName)
 	default:
-		fmt.Println("ERROR: Unable to find the package")
+		fmt.Println("GOTOMATE ERROR: Unable to find the dialog's package")
 		return nil, nil
 	}
 }

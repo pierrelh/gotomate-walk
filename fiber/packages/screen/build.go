@@ -18,6 +18,6 @@ func Build(function string) (interface{}, []declarative.Widget) {
 	case "SaveCapture":
 		return new(SaveCaptureDatabinder), SaveCaptureTemplate
 	}
-	fmt.Println("ERROR: Unable to find the function")
+	fmt.Println("GOTOMATE ERROR: Unable to find the function for instruction building")
 	return nil, nil
 }

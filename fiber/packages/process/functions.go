@@ -8,7 +8,7 @@ import (
 
 // StartProcess Create a process with a given path & return the process's pid
 func StartProcess(finished chan bool, path string) int {
-	fmt.Println("FIBER: Starting new process ...")
+	fmt.Println("FIBER INFO: Starting new process ...")
 	cmd := exec.Command(path)
 	cmd.Env = os.Environ()
 	cmd.Start()
