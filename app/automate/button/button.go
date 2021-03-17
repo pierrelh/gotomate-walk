@@ -17,12 +17,13 @@ type Buttons struct {
 
 // Button Setting fiber's buttons structure
 type Button struct {
-	Composite   *walk.Composite
-	IDLabel     *walk.LinkLabel
-	FuncLabel   *walk.LinkLabel
-	NextID      *walk.NumberEdit
-	NextIDLabel *walk.Label
-	Dialog      *packages.Dialog
+	Composite       *walk.Composite
+	IDLabel         *walk.LinkLabel
+	FuncLabel       *walk.LinkLabel
+	NextIDComposite *walk.Composite
+	NextID          *walk.NumberEdit
+	NextIDLabel     *walk.Label
+	Dialog          *packages.Dialog
 }
 
 //CleanButtons Delete all the automate's buttons & delete all the button

@@ -142,7 +142,9 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 			if pressed && !moved {
 				switch button {
 				case 1:
-					fb.Dialog.DialogContent.Run(aw.MainWindow)
+					if instruction.Package != "Flow" && instruction.FuncName != "End" {
+						fb.Dialog.DialogContent.Run(aw.MainWindow)
+					}
 					break
 				case 2:
 					if isDeletable {
@@ -159,25 +161,27 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 		Children: []declarative.Widget{
 			declarative.LinkLabel{
 				AssignTo:  &fb.IDLabel,
-				MinSize:   declarative.Size{Height: 50},
-				MaxSize:   declarative.Size{Height: 50},
+				MinSize:   declarative.Size{Width: 280, Height: 50},
+				MaxSize:   declarative.Size{Width: 280, Height: 50},
 				Font:      declarative.Font{Family: "Roboto", PointSize: 7},
 				Text:      strconv.Itoa(instruction.ID),
 				Alignment: declarative.Alignment2D(walk.AlignHNearVNear),
 			},
 			declarative.LinkLabel{
 				AssignTo:  &fb.FuncLabel,
-				MinSize:   declarative.Size{Height: 50},
-				MaxSize:   declarative.Size{Height: 50},
+				MinSize:   declarative.Size{Width: 280, Height: 50},
+				MaxSize:   declarative.Size{Width: 280, Height: 50},
 				Font:      declarative.Font{Family: "Roboto", PointSize: 9, Bold: true},
 				Text:      instruction.FuncName,
 				Alignment: declarative.Alignment2D(walk.AlignHCenterVCenter),
 			},
 			declarative.Composite{
-				Alignment: declarative.Alignment2D(walk.AlignHCenterVCenter),
-				MinSize:   declarative.Size{Height: 50},
-				MaxSize:   declarative.Size{Height: 50},
-				Layout:    declarative.HBox{MarginsZero: true, SpacingZero: true},
+				AssignTo:           &fb.NextIDComposite,
+				AlwaysConsumeSpace: true,
+				Alignment:          declarative.Alignment2D(walk.AlignHCenterVCenter),
+				MinSize:            declarative.Size{Width: 280, Height: 50},
+				MaxSize:            declarative.Size{Width: 280, Height: 50},
+				Layout:             declarative.HBox{MarginsZero: true, SpacingZero: true},
 				Children: []declarative.Widget{
 					declarative.Label{
 						AssignTo:  &fb.NextIDLabel,
@@ -206,6 +210,10 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 	fb.Composite.SetYPixels(instruction.Y)
 	fb.Composite.SetCursor(walk.CursorHand())
 
+	if instruction.Package == "Flow" && instruction.FuncName == "End" {
+		fb.NextIDComposite.SetVisible(false)
+	}
+
 	// Disabling element position reset on other elements resizing
 	fb.Composite.BoundsChanged().Attach(func() {
 		// Checking if the position is automatically reseted
@@ -226,10 +234,6 @@ func (aw *Window) DeleteFiberButton(btn *button.Button) {
 			if btn == NewButtons.Buttons[i] {
 				NewButtons.Buttons = append(NewButtons.Buttons[:i], NewButtons.Buttons[i+1:]...)
 				currentFiber.Instructions = append(currentFiber.Instructions[:i], currentFiber.Instructions[i+1:]...)
-				btn.NextID.Dispose()
-				btn.NextIDLabel.Dispose()
-				btn.FuncLabel.Dispose()
-				btn.IDLabel.Dispose()
 				btn.Composite.Dispose()
 				return
 			}
@@ -309,8 +313,8 @@ func (aw *Window) CreateNewFiber() {
 		ID:                0,
 		Package:           "Flow",
 		FuncName:          "Start",
-		X:                 0,
-		Y:                 0,
+		X:                 250,
+		Y:                 5,
 		NextInstructionID: 1,
 		InstructionData:   data,
 	}
