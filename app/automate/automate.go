@@ -142,7 +142,7 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 			if pressed && !moved {
 				switch button {
 				case 1:
-					if instruction.Package != "Flow" && instruction.FuncName != "End" {
+					if instruction.Package != "Flow" || instruction.FuncName != "End" {
 						fb.Dialog.DialogContent.Run(aw.MainWindow)
 					}
 					break
