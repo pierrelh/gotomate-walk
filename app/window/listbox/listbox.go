@@ -2,8 +2,8 @@ package listbox
 
 import (
 	"fmt"
-	"gotomate/app/automate/listbox/listboxitem"
-	"gotomate/app/automate/listbox/listboxmodel"
+	"gotomate/app/window/listbox/listboxitem"
+	"gotomate/app/window/listbox/listboxmodel"
 	"gotomate/fiber/packages"
 	"sort"
 	"strconv"

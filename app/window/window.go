@@ -1,13 +1,13 @@
-package automate
+package window
 
 import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"gotomate/app/automate/button"
-	"gotomate/app/automate/dialogs"
-	"gotomate/app/automate/listbox"
-	"gotomate/app/automate/menu"
+	"gotomate/app/window/button"
+	"gotomate/app/window/dialogs"
+	"gotomate/app/window/listbox"
+	"gotomate/app/window/menu"
 	"gotomate/fiber"
 	"gotomate/fiber/packages"
 	"io/ioutil"
@@ -40,6 +40,13 @@ type Window struct {
 	RunButton        *walk.PushButton
 	StopButton       *walk.PushButton
 	ScrollView       *walk.ScrollView
+}
+
+func (aw *Window) DrawStuff(canvas *walk.Canvas, updateBounds walk.Rectangle) error {
+	linesBrush, _ := walk.NewSolidColorBrush(walk.RGB(255, 0, 0))
+	linesPen, _ := walk.NewGeometricPen(walk.PenCapFlat, 3, linesBrush)
+	canvas.DrawLine(linesPen, walk.Point{X: 50, Y: 50}, walk.Point{X: 150, Y: 150})
+	return nil
 }
 
 //PlbItemActivated Fill the Secondary list when an element of the Primary is activated
@@ -209,6 +216,7 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 	fb.Composite.SetXPixels(instruction.X)
 	fb.Composite.SetYPixels(instruction.Y)
 	fb.Composite.SetCursor(walk.CursorHand())
+	fb.Composite.BringToTop()
 
 	if instruction.Package == "Flow" && instruction.FuncName == "End" {
 		fb.NextIDComposite.SetVisible(false)
@@ -433,7 +441,7 @@ func (aw *Window) OpenFiber(path string) {
 	currentFiber.Name = loadingFiber.Name
 
 	for _, instruction := range loadingFiber.Instructions {
-		structure := packages.PackageDecode(instruction)
+		structure, _ := packages.PackageDecode(instruction.Package, instruction.FuncName)
 
 		err := json.Unmarshal(instruction.InstructionData, structure)
 		if err != nil {

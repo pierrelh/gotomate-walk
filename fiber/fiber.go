@@ -3,6 +3,7 @@ package fiber
 import (
 	"encoding/json"
 	"fmt"
+	algorithmic "gotomate/fiber/packages/Algorithmic"
 	battery "gotomate/fiber/packages/Battery"
 	clipboard "gotomate/fiber/packages/Clipboard"
 	flow "gotomate/fiber/packages/Flow"
@@ -99,6 +100,8 @@ func (fiber *Fiber) RunFiber() {
 					}
 				case "Sleep":
 					sleep.Processing(funcName, instructionData, finished)
+				case "Algorithmic":
+					algorithmic.Processing(funcName, instructionData, finished)
 				case "Mouse":
 					mouse.Processing(funcName, instructionData, finished)
 				case "Keyboard":
