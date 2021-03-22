@@ -1,9 +1,9 @@
 package app
 
 import (
-	"gotomate/app/automate"
-	"gotomate/app/automate/listbox"
-	"gotomate/app/automate/menu"
+	"gotomate/app/window"
+	"gotomate/app/window/listbox"
+	"gotomate/app/window/menu"
 	"gotomate/fiber"
 	"log"
 	"os/exec"
@@ -13,14 +13,13 @@ import (
 	declarative "github.com/lxn/walk/declarative"
 )
 
-var aw = &automate.Window{
+var aw = &window.Window{
 	Menu:             new(menu.Menu),
 	PrimaryListBox:   &listbox.ListBox{Model: listbox.NewPrimaryListModel()},
 	SecondaryListBox: new(listbox.ListBox),
 }
 
 var newFiber = fiber.NewFiber
-var isInit = false
 
 // CreateApp Initiate the app
 func CreateApp() {
@@ -229,11 +228,6 @@ func CreateApp() {
 				Background:      declarative.SolidColorBrush{Color: walk.RGB(11, 11, 11)},
 				HorizontalFixed: false,
 				VerticalFixed:   false,
-				OnSizeChanged: func() {
-					if !isInit {
-						isInit = true
-					}
-				},
 			},
 		},
 	}.Create()); err != nil {

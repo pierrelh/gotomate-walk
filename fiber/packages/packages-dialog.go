@@ -2,6 +2,7 @@ package packages
 
 import (
 	"fmt"
+	algorithmic "gotomate/fiber/packages/Algorithmic"
 	battery "gotomate/fiber/packages/Battery"
 	clipboard "gotomate/fiber/packages/Clipboard"
 	flow "gotomate/fiber/packages/Flow"
@@ -31,7 +32,7 @@ type Dialog struct {
 // CreateNewDialog Create the dialog for the function & add the needed template
 func CreateNewDialog(packageName string, funcName string, databinder ...interface{}) (interface{}, *Dialog) {
 	dialog := new(Dialog)
-	source, children := FillDialog(packageName, funcName)
+	source, children := PackageDecode(packageName, funcName)
 
 	if len(databinder) != 0 {
 		source = databinder[0]
@@ -91,8 +92,8 @@ func CreateNewDialog(packageName string, funcName string, databinder ...interfac
 	return source, dialog
 }
 
-// FillDialog Getting the right databinder & the right template needed
-func FillDialog(packageName string, funcName string) (interface{}, []declarative.Widget) {
+// PackageDecode Getting the right databinder & the right template needed
+func PackageDecode(packageName string, funcName string) (interface{}, []declarative.Widget) {
 	switch packageName {
 	case "Battery":
 		return battery.Build(funcName)
@@ -100,6 +101,8 @@ func FillDialog(packageName string, funcName string) (interface{}, []declarative
 		return clipboard.Build(funcName)
 	case "Flow":
 		return flow.Build(funcName)
+	case "Algorithmic":
+		return algorithmic.Build(funcName)
 	case "Input":
 		return input.Build(funcName)
 	case "Keyboard":

@@ -1,7 +1,7 @@
 package listboxmodel
 
 import (
-	"gotomate/app/automate/listbox/listboxitem"
+	"gotomate/app/window/listbox/listboxitem"
 
 	"github.com/lxn/walk"
 )
