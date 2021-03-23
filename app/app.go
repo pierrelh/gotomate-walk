@@ -141,13 +141,13 @@ func CreateApp() {
 							exec.Command("cmd", "/c", "start", "https://production-gotomate.herokuapp.com/documentation").Start()
 						},
 					},
-					// declarative.Action{
-					// 	AssignTo: &aw.Menu.Packages,
-					// 	Text:     "Packages",
-					// 	OnTriggered: func() {
-					// 		exec.Command("cmd", "/c", "start", "https://production-gotomate.herokuapp.com/packages").Start()
-					// 	},
-					// },
+					declarative.Action{
+						AssignTo: &aw.Menu.Packages,
+						Text:     "Packages",
+						OnTriggered: func() {
+							exec.Command("cmd", "/c", "start", "https://production-gotomate.herokuapp.com/packages").Start()
+						},
+					},
 				},
 			},
 		},
