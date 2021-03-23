@@ -68,7 +68,6 @@ func CreateNewDialog(packageName string, funcName string, databinder ...interfac
 					declarative.PushButton{
 						AssignTo: &dialog.AcceptButton,
 						Text:     "OK",
-						Font:     declarative.Font{Family: "Roboto", PointSize: 9},
 						OnClicked: func() {
 							if err := dialog.DataBinder.Submit(); err != nil {
 								fmt.Println("GOTOMATE ERROR: Unable to send the dialog's datas")
@@ -81,7 +80,6 @@ func CreateNewDialog(packageName string, funcName string, databinder ...interfac
 					declarative.PushButton{
 						AssignTo:  &dialog.CancelButton,
 						Text:      "Cancel",
-						Font:      declarative.Font{Family: "Roboto", PointSize: 9},
 						OnClicked: func() { dialog.Dialog.Cancel() },
 					},
 				},

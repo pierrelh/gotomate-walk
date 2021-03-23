@@ -1,8 +1,6 @@
 package main
 
-import (
-	"gotomate/app"
-)
+import "gotomate/app"
 
 func main() {
 	app.CreateApp()

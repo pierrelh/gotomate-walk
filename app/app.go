@@ -156,11 +156,11 @@ func CreateApp() {
 				Layout:     declarative.HBox{MarginsZero: true, SpacingZero: true},
 				Background: declarative.SolidColorBrush{Color: walk.RGB(106, 215, 229)},
 				MaxSize:    declarative.Size{Height: 120},
+				Font:       declarative.Font{Family: "Roboto", PointSize: 9},
 				Children: []declarative.Widget{
 					declarative.ListBox{
 						AssignTo:        &aw.PrimaryListBox.ListBox,
 						Name:            "PrimaryList",
-						Font:            declarative.Font{Family: "Roboto", PointSize: 9},
 						MultiSelection:  false,
 						Model:           aw.PrimaryListBox.Model,
 						OnItemActivated: aw.PlbItemActivated,
@@ -168,7 +168,6 @@ func CreateApp() {
 					declarative.ListBox{
 						AssignTo:       &aw.SecondaryListBox.ListBox,
 						Name:           "SecondaryList",
-						Font:           declarative.Font{Family: "Roboto", PointSize: 9},
 						MultiSelection: false,
 						OnItemActivated: func() {
 							aw.SlbItemActivated(newFiber)
@@ -197,11 +196,11 @@ func CreateApp() {
 							},
 							declarative.Composite{
 								Layout: declarative.HBox{},
+								Font:   declarative.Font{Family: "Roboto", PointSize: 9, Bold: true},
 								Children: []declarative.Widget{
 									declarative.PushButton{
 										AssignTo: &aw.RunButton,
 										MaxSize:  declarative.Size{Width: 100},
-										Font:     declarative.Font{Family: "Roboto", PointSize: 9, Bold: true},
 										Text:     "RUN",
 										OnClicked: func() {
 											go newFiber.RunFiber()
@@ -210,7 +209,6 @@ func CreateApp() {
 									declarative.PushButton{
 										AssignTo: &aw.StopButton,
 										MaxSize:  declarative.Size{Width: 100},
-										Font:     declarative.Font{Family: "Roboto", PointSize: 9, Bold: true},
 										Text:     "STOP",
 										OnClicked: func() {
 											go newFiber.StopFiber()
