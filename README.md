@@ -36,7 +36,7 @@ https://production-gotomate.herokuapp.com/documentation
 
 Download the fiber example at this link:
 
-https://develop-gotomate.herokuapp.com/resources/GetBatStateExemple.json
+https://production-gotomate.herokuapp.com/resources/GetBatStateExemple.json
 
 & import it in a gotomate's process then run it to get an exemple of a gotomate running fiber.
 
