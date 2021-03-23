@@ -69,8 +69,14 @@ func (fiber *Fiber) CleanFiber() {
 
 //StopFiber stop the current fiber
 func (fiber *Fiber) StopFiber() {
-	finished <- true
-	stop <- true
+	if running == 1 {
+		fmt.Println("| Fiber Stopped |")
+		finished <- true
+		running = 0
+		stop <- true
+	} else {
+		fmt.Println("FIBER WARNING: No running fiber")
+	}
 }
 
 //RunFiber run the current fiber
@@ -85,8 +91,6 @@ func (fiber *Fiber) RunFiber() {
 		for {
 			select {
 			case <-stop:
-				fmt.Println("| Fiber Stopped |")
-				running = 0
 				return
 			default:
 				funcName := instruction.FuncName
