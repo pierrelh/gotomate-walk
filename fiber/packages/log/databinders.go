@@ -2,5 +2,6 @@ package log
 
 // PrintDatabinder Define the LogPrint parameters
 type PrintDatabinder struct {
-	Log string
+	Log      string
+	LogIsVar bool
 }

@@ -1,6 +1,9 @@
 package value
 
-import "reflect"
+import (
+	"fmt"
+	"sort"
+)
 
 // FiberValues define the fiber's key / values
 var FiberValues []*InstructionValue
@@ -13,17 +16,17 @@ type InstructionValue struct {
 
 // KeySearch Search a key in fiber's keys / values array
 func KeySearch(name string) *InstructionValue {
-	for i := 0; i < len(FiberValues); i++ {
-		value := FiberValues[i]
-		key := reflect.ValueOf(value).Elem().FieldByName("Key").Interface().(string)
-		if key != "" {
-			if key == name {
-				return value
-			}
-			continue
+	idx := sort.Search(len(FiberValues), func(i int) bool {
+		return FiberValues[i].Key == name
+	})
+	if idx == len(FiberValues) {
+		fmt.Println("FIBER ERROR: Unable to find the fiber's var: ", name)
+		return &InstructionValue{
+			Value: nil,
 		}
+	} else {
+		return FiberValues[idx]
 	}
-	return nil
 }
 
 // SetValue create or update a key / value in fiber's values

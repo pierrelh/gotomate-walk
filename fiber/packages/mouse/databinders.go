@@ -21,12 +21,16 @@ func Buttons() []*ButtonDatabinder {
 
 // ScrollDatabinder Define the MouseScroll parameters
 type ScrollDatabinder struct {
-	X int
-	Y int
+	X      int
+	XIsVar bool
+	Y      int
+	YIsVar bool
 }
 
 // MoveDatabinder Define the MouseMove parameters
 type MoveDatabinder struct {
-	X int
-	Y int
+	X      int
+	XIsVar bool
+	Y      int
+	YIsVar bool
 }

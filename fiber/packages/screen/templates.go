@@ -4,21 +4,35 @@ import "github.com/lxn/walk/declarative"
 
 // PixelColorTemplate Dialog's PixelColor Template
 var PixelColorTemplate = []declarative.Widget{
-	declarative.Label{
-		Text: "X:",
+	declarative.GroupBox{
+		Title:  "X",
+		Layout: declarative.HBox{},
+		Children: []declarative.Widget{
+			declarative.NumberEdit{
+				Value:    declarative.Bind("X"),
+				Suffix:   " px",
+				Decimals: 0,
+			},
+			declarative.CheckBox{
+				Text:    "Is a Var",
+				Checked: declarative.Bind("XIsVar"),
+			},
+		},
 	},
-	declarative.NumberEdit{
-		Value:    declarative.Bind("X"),
-		Suffix:   " px",
-		Decimals: 0,
-	},
-	declarative.Label{
-		Text: "Y:",
-	},
-	declarative.NumberEdit{
-		Value:    declarative.Bind("Y"),
-		Suffix:   " px",
-		Decimals: 0,
+	declarative.GroupBox{
+		Title:  "Y",
+		Layout: declarative.HBox{},
+		Children: []declarative.Widget{
+			declarative.NumberEdit{
+				Value:    declarative.Bind("Y"),
+				Suffix:   " px",
+				Decimals: 0,
+			},
+			declarative.CheckBox{
+				Text:    "Is a Var",
+				Checked: declarative.Bind("YIsVar"),
+			},
+		},
 	},
 	declarative.Label{
 		Text: "Output:",
@@ -60,11 +74,18 @@ var ScreenSizeTemplate = []declarative.Widget{
 
 // SaveCaptureTemplate Dialog's SaveCapture Template
 var SaveCaptureTemplate = []declarative.Widget{
-	declarative.Label{
-		Text: "Path:",
-	},
-	declarative.TextEdit{
-		Text:          declarative.Bind("Path"),
-		CompactHeight: true,
+	declarative.GroupBox{
+		Title:  "Path",
+		Layout: declarative.HBox{},
+		Children: []declarative.Widget{
+			declarative.TextEdit{
+				Text:          declarative.Bind("Path"),
+				CompactHeight: true,
+			},
+			declarative.CheckBox{
+				Text:    "Is a Var",
+				Checked: declarative.Bind("PathIsVar"),
+			},
+		},
 	},
 }

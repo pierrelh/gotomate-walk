@@ -3,7 +3,9 @@ package screen
 // PixelColorDatabinder Define the GetPixelColor databinder
 type PixelColorDatabinder struct {
 	X      int
+	XIsVar bool
 	Y      int
+	YIsVar bool
 	Output string
 }
 
@@ -20,5 +22,6 @@ type SizeDatabinder struct {
 
 // SaveCaptureDatabinder Define theSaveCapture databinder
 type SaveCaptureDatabinder struct {
-	Path string
+	Path      string
+	PathIsVar bool
 }

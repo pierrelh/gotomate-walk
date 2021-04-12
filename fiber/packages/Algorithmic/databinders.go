@@ -18,10 +18,22 @@ package algorithmic
 // 	Name string
 // }
 
-// DefineDatabinder Define the Define parameters
-type DefineDatabinder struct {
+// DefineIntDatabinder Define the DefineInt parameters
+type DefineIntDatabinder struct {
+	Name  string
+	Value int
+}
+
+// DefineStringDatabinder Define the DefineString parameters
+type DefineStringDatabinder struct {
 	Name  string
 	Value string
+}
+
+// DefineBoolDatabinder Define the DefineBool parameters
+type DefineBoolDatabinder struct {
+	Name  string
+	Value bool
 }
 
 // IfDatabinder Define the If parameters

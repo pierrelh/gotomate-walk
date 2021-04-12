@@ -11,6 +11,8 @@ func Build(function string) (interface{}, []declarative.Widget) {
 	switch function {
 	case "StartProcess":
 		return new(StartProcessDatabinder), StartProcessTemplate
+	case "KillProcess":
+		return new(KillProcessDatabinder), KillProcessTemplate
 	}
 	fmt.Println("GOTOMATE ERROR: Unable to find the function for instruction building")
 	return nil, nil

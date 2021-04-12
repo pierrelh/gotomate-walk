@@ -17,38 +17,66 @@ var ClickTemplate = []declarative.Widget{
 
 // ScrollTemplate Dialog's MouseScroll Template
 var ScrollTemplate = []declarative.Widget{
-	declarative.Label{
-		Text: "Horizontal:",
+	declarative.GroupBox{
+		Title:  "Horizontal",
+		Layout: declarative.HBox{},
+		Children: []declarative.Widget{
+			declarative.NumberEdit{
+				Value:    declarative.Bind("X"),
+				Decimals: 2,
+			},
+			declarative.CheckBox{
+				Text:    "Is a Var",
+				Checked: declarative.Bind("XIsVar"),
+			},
+		},
 	},
-	declarative.NumberEdit{
-		Value:    declarative.Bind("X"),
-		Decimals: 2,
-	},
-	declarative.Label{
-		Text: "Vertical:",
-	},
-	declarative.NumberEdit{
-		Value:    declarative.Bind("Y"),
-		Decimals: 2,
+	declarative.GroupBox{
+		Title:  "Vertical",
+		Layout: declarative.HBox{},
+		Children: []declarative.Widget{
+			declarative.NumberEdit{
+				Value:    declarative.Bind("Y"),
+				Decimals: 2,
+			},
+			declarative.CheckBox{
+				Text:    "Is a Var",
+				Checked: declarative.Bind("YIsVar"),
+			},
+		},
 	},
 }
 
 // MoveTemplate Dialog's MouseMove Template
 var MoveTemplate = []declarative.Widget{
-	declarative.Label{
-		Text: "Horizontal:",
+	declarative.GroupBox{
+		Title:  "Horizontal",
+		Layout: declarative.HBox{},
+		Children: []declarative.Widget{
+			declarative.NumberEdit{
+				Value:    declarative.Bind("X"),
+				Suffix:   " px",
+				Decimals: 0,
+			},
+			declarative.CheckBox{
+				Text:    "Is a Var",
+				Checked: declarative.Bind("XIsVar"),
+			},
+		},
 	},
-	declarative.NumberEdit{
-		Value:    declarative.Bind("X"),
-		Suffix:   " px",
-		Decimals: 0,
-	},
-	declarative.Label{
-		Text: "Vertical:",
-	},
-	declarative.NumberEdit{
-		Value:    declarative.Bind("Y"),
-		Suffix:   " px",
-		Decimals: 0,
+	declarative.GroupBox{
+		Title:  "Vertical",
+		Layout: declarative.HBox{},
+		Children: []declarative.Widget{
+			declarative.NumberEdit{
+				Value:    declarative.Bind("Y"),
+				Suffix:   " px",
+				Decimals: 0,
+			},
+			declarative.CheckBox{
+				Text:    "Is a Var",
+				Checked: declarative.Bind("YIsVar"),
+			},
+		},
 	},
 }
