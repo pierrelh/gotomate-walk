@@ -4,11 +4,18 @@ import "github.com/lxn/walk/declarative"
 
 // WriteTemplate Dialog's ClipboardWrite Template
 var WriteTemplate = []declarative.Widget{
-	declarative.Label{
-		Text: "Clipboard:",
-	},
-	declarative.TextEdit{
-		Text: declarative.Bind("Content"),
+	declarative.GroupBox{
+		Title:  "Clipboard",
+		Layout: declarative.HBox{},
+		Children: []declarative.Widget{
+			declarative.TextEdit{
+				Text: declarative.Bind("Content"),
+			},
+			declarative.CheckBox{
+				Text:    "Is a Var",
+				Checked: declarative.Bind("ContentIsVar"),
+			},
+		},
 	},
 }
 

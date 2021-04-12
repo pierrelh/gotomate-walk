@@ -2,6 +2,8 @@ package notification
 
 // CreateDatabinder Define the NotificationCreate parameters
 type CreateDatabinder struct {
-	Title   string
-	Message string
+	Title        string
+	TitleIsVar   bool
+	Message      string
+	MessageIsVar bool
 }

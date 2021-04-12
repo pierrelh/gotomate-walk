@@ -15,12 +15,20 @@ var UserBatteryTemplate = []declarative.Widget{
 
 // ParametersTemplate Dialog's BatteryParameters Template
 var ParametersTemplate = []declarative.Widget{
-	declarative.Label{
-		Text: "Battery Name:",
-	},
-	declarative.TextEdit{
-		Text:          declarative.Bind("BatteryName"),
-		CompactHeight: true,
+	declarative.GroupBox{
+		Title:  "Battery Name",
+		Layout: declarative.HBox{},
+		Children: []declarative.Widget{
+			declarative.TextEdit{
+				Text:          declarative.Bind("BatteryName"),
+				CompactHeight: true,
+			},
+			declarative.CheckBox{
+				Text:    "Is a Var",
+				Checked: true,
+				Enabled: false,
+			},
+		},
 	},
 	declarative.Label{
 		Text: "Output var:",
