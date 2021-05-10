@@ -11,45 +11,63 @@ var DefineTemplate = []declarative.Widget{
 		Text:          declarative.Bind("Name"),
 		CompactHeight: true,
 	},
-	declarative.Label{
-		Text: "Value:",
-	},
-	declarative.TextEdit{
-		Text:          declarative.Bind("Value"),
-		CompactHeight: true,
+	declarative.GroupBox{
+		Title:  "Value:",
+		Layout: declarative.HBox{},
+		Children: []declarative.Widget{
+			declarative.TextEdit{
+				Text:          declarative.Bind("Value"),
+				CompactHeight: true,
+			},
+			declarative.CheckBox{
+				Text: "Is a Var",
+			},
+		},
 	},
 }
 
 // IfTemplate Dialog's If Template
-// var IfTemplate = []declarative.Widget{
-// 	declarative.Label{
-// 		Text: "Value 1:",
-// 	},
-// 	declarative.TextEdit{
-// 		Text:          declarative.Bind("ValueOne"),
-// 		CompactHeight: true,
-// 	},
-// 	declarative.Label{
-// 		Text: "Comparator:",
-// 	},
-// 	declarative.ComboBox{
-// 		Value:         declarative.Bind("Comparator", declarative.SelRequired{}),
-// 		BindingMember: "Name",
-// 		DisplayMember: "Name",
-// 		Model:         Comparators(),
-// 	},
-// 	declarative.Label{
-// 		Text: "Value 2:",
-// 	},
-// 	declarative.TextEdit{
-// 		Text:          declarative.Bind("ValueTwo"),
-// 		CompactHeight: true,
-// 	},
-// 	declarative.Label{
-// 		Text: "If false instruction ID:",
-// 	},
-// 	declarative.TextEdit{
-// 		Text:          declarative.Bind("FalseInstruction"),
-// 		CompactHeight: true,
-// 	},
-// }
+var IfTemplate = []declarative.Widget{
+	declarative.GroupBox{
+		Title:  "Value 1:",
+		Layout: declarative.HBox{},
+		Children: []declarative.Widget{
+			declarative.TextEdit{
+				Text:          declarative.Bind("ValueOne"),
+				CompactHeight: true,
+			},
+			declarative.CheckBox{
+				Text: "Is a Var",
+			},
+		},
+	},
+	declarative.Label{
+		Text: "Comparator:",
+	},
+	declarative.ComboBox{
+		Value:         declarative.Bind("Comparator", declarative.SelRequired{}),
+		BindingMember: "Name",
+		DisplayMember: "Name",
+		Model:         Comparators(),
+	},
+	declarative.GroupBox{
+		Title:  "Value 2:",
+		Layout: declarative.HBox{},
+		Children: []declarative.Widget{
+			declarative.TextEdit{
+				Text:          declarative.Bind("ValueTwo"),
+				CompactHeight: true,
+			},
+			declarative.CheckBox{
+				Text: "Is a Var",
+			},
+		},
+	},
+	declarative.Label{
+		Text: "If false instruction ID::",
+	},
+	declarative.NumberEdit{
+		Value:    declarative.Bind("FalseInstruction"),
+		Decimals: 0,
+	},
+}

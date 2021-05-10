@@ -93,6 +93,7 @@ func (fiber *Fiber) RunFiber() {
 			case <-stop:
 				return
 			default:
+				nextID := -1
 				funcName := instruction.FuncName
 				instructionData := reflect.ValueOf(instruction.InstructionData).Elem()
 				switch instruction.Package {
@@ -102,10 +103,10 @@ func (fiber *Fiber) RunFiber() {
 						running = 0
 						return
 					}
+				case "Algorithmic":
+					nextID = algorithmic.Processing(funcName, instructionData, finished)
 				case "Sleep":
 					sleep.Processing(funcName, instructionData, finished)
-				case "Algorithmic":
-					algorithmic.Processing(funcName, instructionData, finished)
 				case "Mouse":
 					mouse.Processing(funcName, instructionData, finished)
 				case "Keyboard":
@@ -131,16 +132,20 @@ func (fiber *Fiber) RunFiber() {
 					continue
 				}
 
-				idx := sort.Search(len(fiber.Instructions), func(i int) bool {
-					return fiber.Instructions[i].ID >= instruction.NextInstructionID
-				})
-				if idx == len(fiber.Instructions) {
-					fmt.Println("FIBER FATAL ERROR: The instruction with the id", instruction.NextInstructionID, "has no been founded")
-					fmt.Println("| Fiber Finished at Fatal Error |")
-					running = 0
-					return
+				if nextID == -1 {
+					idx := sort.Search(len(fiber.Instructions), func(i int) bool {
+						return fiber.Instructions[i].ID >= instruction.NextInstructionID
+					})
+					if idx == len(fiber.Instructions) {
+						fmt.Println("FIBER FATAL ERROR: The instruction with the id", instruction.NextInstructionID, "has no been founded")
+						fmt.Println("| Fiber Finished at Fatal Error |")
+						running = 0
+						return
+					} else {
+						instruction = fiber.Instructions[idx]
+					}
 				} else {
-					instruction = fiber.Instructions[idx]
+					instruction = fiber.Instructions[nextID]
 				}
 			}
 		}

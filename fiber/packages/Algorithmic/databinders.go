@@ -1,22 +1,22 @@
 package algorithmic
 
 // Inputs Define the possibles values of KeyboardInput
-// func Comparators() []*ComparatorDatabinder {
-// 	return []*ComparatorDatabinder{
-// 		{""},
-// 		{"=="},
-// 		{"!="},
-// 		{">"},
-// 		{">="},
-// 		{"<"},
-// 		{"<="},
-// 	}
-// }
+func Comparators() []*ComparatorDatabinder {
+	return []*ComparatorDatabinder{
+		{""},
+		{"=="},
+		{"!="},
+		{">"},
+		{">="},
+		{"<"},
+		{"<="},
+	}
+}
 
-// ComparatorDatabinder Define the KeyboardInput parameters
-// type ComparatorDatabinder struct {
-// 	Name string
-// }
+// ComparatorDatabinder Define the Comparators parameters
+type ComparatorDatabinder struct {
+	Name string
+}
 
 // DefineIntDatabinder Define the DefineInt parameters
 type DefineIntDatabinder struct {
@@ -37,9 +37,9 @@ type DefineBoolDatabinder struct {
 }
 
 // IfDatabinder Define the If parameters
-// type IfDatabinder struct {
-// 	ValueOne         string
-// 	Comparator       string
-// 	ValueTwo         string
-// 	FalseInstruction int
-// }
+type IfDatabinder struct {
+	ValueOne         interface{}
+	Comparator       string
+	ValueTwo         interface{}
+	FalseInstruction int
+}

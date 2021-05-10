@@ -15,8 +15,8 @@ func Build(function string) (interface{}, []declarative.Widget) {
 		return new(DefineStringDatabinder), DefineTemplate
 	case "DefineBool":
 		return new(DefineBoolDatabinder), DefineTemplate
-		// case "If":
-		// 	return new(IfDatabinder), IfTemplate
+	case "If":
+		return new(IfDatabinder), IfTemplate
 	}
 	fmt.Println("GOTOMATE ERROR: Unable to find the function for instruction building")
 	return nil, nil

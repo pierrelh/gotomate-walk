@@ -27,40 +27,35 @@ func DefineBool(name string, val bool, finished chan bool) {
 }
 
 // If Compare if a statement is true
-// func If(valueOne, valueTwo interface{}, comparator string, finished chan bool) bool {
-// 	switch comparator {
-// 	case "==":
-// 		if valueOne == valueTwo {
-// 			return true
-// 		}
-// 		return false
-// 	case "!=":
-// 		if valueOne != valueTwo {
-// 			return true
-// 		}
-// 		return false
-// 	case ">":
-// 		if valueOne.(int) > valueTwo.(int) {
-// 			return true
-// 		}
-// 		return false
-// 	case ">=":
-// 		if valueOne.(int) >= valueTwo.(int) {
-// 			return true
-// 		}
-// 		return false
-// 	case "<":
-// 		if valueOne.(int) < valueTwo.(int) {
-// 			return true
-// 		}
-// 		return false
-// 	case "<=":
-// 		if valueOne.(int) <= valueTwo.(int) {
-// 			return true
-// 		}
-// 		return false
-// 	}
-// 	fmt.Println("| Fiber Finished |")
-// 	finished <- true
-// 	return false
-// }
+func If(valueOne, valueTwo interface{}, comparator string, finished chan bool) bool {
+	fmt.Println("FIBER INFO: If Statement ...")
+	statement := false
+	switch comparator {
+	case "==":
+		if valueOne == valueTwo {
+			statement = true
+		}
+	case "!=":
+		if valueOne != valueTwo {
+			statement = true
+		}
+	case ">":
+		if valueOne.(int) > valueTwo.(int) {
+			statement = true
+		}
+	case ">=":
+		if valueOne.(int) >= valueTwo.(int) {
+			statement = true
+		}
+	case "<":
+		if valueOne.(int) < valueTwo.(int) {
+			statement = true
+		}
+	case "<=":
+		if valueOne.(int) <= valueTwo.(int) {
+			statement = true
+		}
+	}
+	finished <- true
+	return statement
+}
