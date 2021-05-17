@@ -42,13 +42,6 @@ type Window struct {
 	ScrollView       *walk.ScrollView
 }
 
-func (aw *Window) DrawStuff(canvas *walk.Canvas, updateBounds walk.Rectangle) error {
-	linesBrush, _ := walk.NewSolidColorBrush(walk.RGB(255, 0, 0))
-	linesPen, _ := walk.NewGeometricPen(walk.PenCapFlat, 3, linesBrush)
-	canvas.DrawLine(linesPen, walk.Point{X: 50, Y: 50}, walk.Point{X: 150, Y: 150})
-	return nil
-}
-
 //PlbItemActivated Fill the Secondary list when an element of the Primary is activated
 func (aw *Window) PlbItemActivated() {
 	i := aw.PrimaryListBox.ListBox.CurrentIndex()
@@ -99,9 +92,9 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 	fb := new(button.Button)
 	NewButtons.Buttons = append(NewButtons.Buttons, fb)
 	fb.Dialog = dialog
-	bmp, err := walk.NewBitmapFromFile(walk.Resources.RootDirPath() + "/fiber/packages/" + instruction.Package + "/icon.png")
+	bmp, err := walk.NewBitmapFromFileForDPI(walk.Resources.RootDirPath()+"/fiber/packages/"+instruction.Package+"/icon.png", 96)
 	if err != nil {
-		bmp, _ = walk.NewBitmapFromFile(walk.Resources.RootDirPath() + "/img/default.png")
+		bmp, _ = walk.NewBitmapFromFileForDPI(walk.Resources.RootDirPath()+"/img/default.png", 96)
 	}
 
 	if err := (declarative.Composite{
@@ -120,28 +113,41 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 				mx, my := robotgo.GetMousePos()
 				difX := clientX - mx
 				difY := clientY - my
-				clientX = mx
-				clientY = my
 				moved = true
-				if fb.Composite.XPixels()-difX < 0 {
-					fb.Composite.SetXPixels(0)
-					instruction.X = 0
-				} else if (fb.Composite.X() - difX) > aw.ScrollView.Layout().Margins().HFar {
-					fb.Composite.SetX(aw.ScrollView.Layout().Margins().HFar)
-					instruction.X = aw.ScrollView.Layout().Margins().HFar
-				} else {
-					fb.Composite.SetXPixels(fb.Composite.XPixels() - difX)
-					instruction.X = fb.Composite.XPixels() - difX
+				if difX < -50 || difX > 50 {
+					if fb.Composite.XPixels()-difX < 0 {
+						fb.Composite.SetXPixels(0)
+						instruction.X = 0
+					} else if (fb.Composite.X() - difX) > aw.ScrollView.Layout().Margins().HFar {
+						fb.Composite.SetX(aw.ScrollView.Layout().Margins().HFar)
+						instruction.X = aw.ScrollView.Layout().Margins().HFar
+					} else {
+						if difX > 50 {
+							fb.Composite.SetXPixels(fb.Composite.XPixels() - 55)
+						} else {
+							fb.Composite.SetXPixels(fb.Composite.XPixels() + 55)
+						}
+						instruction.X = fb.Composite.XPixels()
+						clientX, _ = robotgo.GetMousePos()
+					}
 				}
-				if fb.Composite.YPixels()-difY < 0 {
-					fb.Composite.SetYPixels(0)
-					instruction.Y = 0
-				} else if (fb.Composite.Y() - difY) > aw.ScrollView.Layout().Margins().VFar {
-					fb.Composite.SetY(aw.ScrollView.Layout().Margins().VFar)
-					instruction.Y = aw.ScrollView.Layout().Margins().VFar
-				} else {
-					fb.Composite.SetYPixels(fb.Composite.YPixels() - difY)
-					instruction.Y = fb.Composite.YPixels() - difY
+				if difY < -50 || difY > 50 {
+					if fb.Composite.YPixels()-difY < 0 {
+						fb.Composite.SetYPixels(0)
+						instruction.Y = 0
+					} else if (fb.Composite.Y() - difY) > aw.ScrollView.Layout().Margins().VFar {
+						fb.Composite.SetY(aw.ScrollView.Layout().Margins().VFar)
+						instruction.Y = aw.ScrollView.Layout().Margins().VFar
+					} else {
+						if difY > 50 {
+							fb.Composite.SetYPixels(fb.Composite.YPixels() - 55)
+						} else {
+							fb.Composite.SetYPixels(fb.Composite.YPixels() + 55)
+						}
+						instruction.Y = fb.Composite.YPixels()
+						_, clientY = robotgo.GetMousePos()
+					}
+
 				}
 			}
 		},
@@ -152,12 +158,10 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 					if instruction.Package != "Flow" || instruction.FuncName != "End" {
 						fb.Dialog.DialogContent.Run(aw.MainWindow)
 					}
-					break
 				case 2:
 					if isDeletable {
 						aw.DeleteFiberButton(fb)
 					}
-					break
 				default:
 					break
 				}
@@ -321,8 +325,8 @@ func (aw *Window) CreateNewFiber() {
 		ID:                0,
 		Package:           "Flow",
 		FuncName:          "Start",
-		X:                 250,
-		Y:                 5,
+		X:                 0,
+		Y:                 0,
 		NextInstructionID: 1,
 		InstructionData:   data,
 	}
@@ -478,7 +482,7 @@ func (aw *Window) IsFiberSaved() bool {
 			fullPath, _ := filepath.Abs(path)
 			jsonFile, _ := os.Open(fullPath)
 			byteValue, _ := ioutil.ReadAll(jsonFile)
-			if bytes.Compare(file, byteValue) == 0 {
+			if bytes.Equal(file, byteValue) {
 				exist = true
 			}
 		}
