@@ -3,6 +3,7 @@ package packages
 import (
 	"fmt"
 	algorithmic "gotomate/fiber/packages/Algorithmic"
+	arithmetic "gotomate/fiber/packages/Arithmetic"
 	battery "gotomate/fiber/packages/Battery"
 	clipboard "gotomate/fiber/packages/Clipboard"
 	flow "gotomate/fiber/packages/Flow"
@@ -101,6 +102,8 @@ func PackageDecode(packageName string, funcName string) (interface{}, []declarat
 		return flow.Build(funcName)
 	case "Algorithmic":
 		return algorithmic.Build(funcName)
+	case "Arithmetic":
+		return arithmetic.Build(funcName)
 	case "Input":
 		return input.Build(funcName)
 	case "Keyboard":

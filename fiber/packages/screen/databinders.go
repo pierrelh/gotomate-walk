@@ -1,16 +1,16 @@
 package screen
 
+// MouseColorDatabinder Define the GetMouseColor databinder
+type MouseColorDatabinder struct {
+	Output string
+}
+
 // PixelColorDatabinder Define the GetPixelColor databinder
 type PixelColorDatabinder struct {
 	X      int
 	XIsVar bool
 	Y      int
 	YIsVar bool
-	Output string
-}
-
-// MouseColorDatabinder Define the GetMouseColor databinder
-type MouseColorDatabinder struct {
 	Output string
 }
 

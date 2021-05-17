@@ -2,22 +2,36 @@ package clipboard
 
 import (
 	"fmt"
+	"gotomate/fiber/value"
+	"reflect"
 
 	"github.com/go-vgo/robotgo"
 )
 
 // Read read string from clipboard
-func Read(finished chan bool) (string, error) {
+func Read(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Clipboard Reading ...")
-	content, err := robotgo.ReadAll()
+	content, _ := robotgo.ReadAll()
+	value.SetValue(instructionData.FieldByName("Output").Interface().(string), content)
 	finished <- true
-	return content, err
+	return -1
 }
 
 // Write write string to clipboard
-func Write(text string, finished chan bool) error {
+func Write(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Clipboard Writing ...")
-	err := robotgo.WriteAll(text)
+	content := instructionData.FieldByName("Content").Interface().(string)
+
+	if isVar := instructionData.FieldByName("ContentIsVar").Interface().(bool); isVar {
+		if val := value.KeySearch(content).Value; val != nil {
+			content = val.(string)
+		} else {
+			fmt.Println("FIBER WARNING: Unable to find var ...", content)
+			finished <- true
+			return -1
+		}
+	}
+	robotgo.WriteAll(content)
 	finished <- true
-	return err
+	return -1
 }
