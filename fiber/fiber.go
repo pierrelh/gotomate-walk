@@ -17,7 +17,7 @@ import (
 	screen "gotomate/fiber/packages/Screen"
 	sleep "gotomate/fiber/packages/Sleep"
 	systime "gotomate/fiber/packages/Systime"
-	"gotomate/fiber/value"
+	"gotomate/fiber/variable"
 	"reflect"
 	"sort"
 )
@@ -87,7 +87,7 @@ func (fiber *Fiber) RunFiber() {
 		fmt.Println("FIBER WARNING: A fiber is already running")
 	} else {
 		instruction := fiber.Instructions[0]
-		value.FiberValues = nil
+		variable.FiberVariable = nil
 
 		for {
 			select {

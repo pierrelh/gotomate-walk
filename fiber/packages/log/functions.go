@@ -2,7 +2,7 @@ package log
 
 import (
 	"fmt"
-	"gotomate/fiber/value"
+	"gotomate/fiber/variable"
 	"reflect"
 )
 
@@ -12,7 +12,7 @@ func Print(instructionData reflect.Value, finished chan bool) int {
 	log := instructionData.FieldByName("Log").Interface()
 
 	if isVar := instructionData.FieldByName("LogIsVar").Interface().(bool); isVar {
-		if val := value.KeySearch(log.(string)).Value; val != nil {
+		if val := variable.SearchVariable(log.(string)).Value; val != nil {
 			log = val
 		} else {
 			fmt.Println("FIBER WARNING: Unable to find var ...", log)

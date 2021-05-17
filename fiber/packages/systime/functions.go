@@ -2,7 +2,7 @@ package systime
 
 import (
 	"fmt"
-	"gotomate/fiber/value"
+	"gotomate/fiber/variable"
 	"reflect"
 	"time"
 )
@@ -11,9 +11,9 @@ import (
 func GetCurrentSysClock(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Getting sys clock...")
 	h, m, s := time.Now().Clock()
-	value.SetValue(instructionData.FieldByName("HoursOutput").Interface().(string), h)
-	value.SetValue(instructionData.FieldByName("MinutesOutput").Interface().(string), m)
-	value.SetValue(instructionData.FieldByName("SecondsOutput").Interface().(string), s)
+	variable.SetVariable(instructionData.FieldByName("HoursOutput").Interface().(string), h)
+	variable.SetVariable(instructionData.FieldByName("MinutesOutput").Interface().(string), m)
+	variable.SetVariable(instructionData.FieldByName("SecondsOutput").Interface().(string), s)
 	finished <- true
 	return -1
 }
@@ -22,7 +22,7 @@ func GetCurrentSysClock(instructionData reflect.Value, finished chan bool) int {
 func GetCurrentSysTime(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Getting sys time...")
 	t := time.Now()
-	value.SetValue(instructionData.FieldByName("Output").Interface().(string), t)
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), t)
 	finished <- true
 	return -1
 }
