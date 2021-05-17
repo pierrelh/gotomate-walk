@@ -2,7 +2,7 @@ package mouse
 
 import (
 	"fmt"
-	"gotomate/fiber/value"
+	"gotomate/fiber/variable"
 	"reflect"
 	"strconv"
 
@@ -24,7 +24,7 @@ func Move(instructionData reflect.Value, finished chan bool) int {
 	xs := instructionData.FieldByName("X").Interface().(string)
 	x, _ := strconv.Atoi(xs)
 	if xIsVar := instructionData.FieldByName("XIsVar").Interface().(bool); xIsVar {
-		if val := value.KeySearch(xs).Value; val != nil {
+		if val := variable.SearchVariable(xs).Value; val != nil {
 			x = val.(int)
 		} else {
 			fmt.Println("FIBER WARNING: Unable to find var ...", xs)
@@ -36,7 +36,7 @@ func Move(instructionData reflect.Value, finished chan bool) int {
 	ys := instructionData.FieldByName("Y").Interface().(string)
 	y, _ := strconv.Atoi(ys)
 	if yIsVar := instructionData.FieldByName("YIsVar").Interface().(bool); yIsVar {
-		if val := value.KeySearch(ys).Value; val != nil {
+		if val := variable.SearchVariable(ys).Value; val != nil {
 			y = val.(int)
 		} else {
 			fmt.Println("FIBER WARNING: Unable to find var ...", ys)
@@ -56,7 +56,7 @@ func Scroll(instructionData reflect.Value, finished chan bool) int {
 	xs := instructionData.FieldByName("X").Interface().(string)
 	x, _ := strconv.Atoi(xs)
 	if xIsVar := instructionData.FieldByName("XIsVar").Interface().(bool); xIsVar {
-		if val := value.KeySearch(xs).Value; val != nil {
+		if val := variable.SearchVariable(xs).Value; val != nil {
 			x = val.(int)
 		} else {
 			fmt.Println("FIBER WARNING: Unable to find var ...", xs)
@@ -68,7 +68,7 @@ func Scroll(instructionData reflect.Value, finished chan bool) int {
 	ys := instructionData.FieldByName("Y").Interface().(string)
 	y, _ := strconv.Atoi(ys)
 	if yIsVar := instructionData.FieldByName("YIsVar").Interface().(bool); yIsVar {
-		if val := value.KeySearch(ys).Value; val != nil {
+		if val := variable.SearchVariable(ys).Value; val != nil {
 			y = val.(int)
 		} else {
 			fmt.Println("FIBER WARNING: Unable to find var ...", ys)

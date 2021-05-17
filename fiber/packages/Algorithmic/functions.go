@@ -2,7 +2,7 @@ package algorithmic
 
 import (
 	"fmt"
-	"gotomate/fiber/value"
+	variable "gotomate/fiber/variable"
 	"reflect"
 	"strconv"
 )
@@ -15,7 +15,7 @@ func DefineBool(instructionData reflect.Value, finished chan bool) int {
 	boolVal, _ := strconv.ParseBool(setVal)
 
 	if isVar := instructionData.FieldByName("IsVar").Interface().(bool); isVar {
-		if val := value.KeySearch(setVal).Value; val != nil {
+		if val := variable.SearchVariable(setVal).Value; val != nil {
 			boolVal = val.(bool)
 		} else {
 			fmt.Println("FIBER WARNING: Unable to find var ...", setVal)
@@ -23,7 +23,7 @@ func DefineBool(instructionData reflect.Value, finished chan bool) int {
 			return -1
 		}
 	}
-	value.SetValue(name, boolVal)
+	variable.SetVariable(name, boolVal)
 	finished <- true
 	return -1
 }
@@ -36,7 +36,7 @@ func DefineInt(instructionData reflect.Value, finished chan bool) int {
 	intVal, _ := strconv.Atoi(setVal)
 
 	if isVar := instructionData.FieldByName("IsVar").Interface().(bool); isVar {
-		if val := value.KeySearch(setVal).Value; val != nil {
+		if val := variable.SearchVariable(setVal).Value; val != nil {
 			intVal = val.(int)
 		} else {
 			fmt.Println("FIBER WARNING: Unable to find var ...", setVal)
@@ -44,7 +44,7 @@ func DefineInt(instructionData reflect.Value, finished chan bool) int {
 			return -1
 		}
 	}
-	value.SetValue(name, intVal)
+	variable.SetVariable(name, intVal)
 	finished <- true
 	return -1
 }
@@ -56,7 +56,7 @@ func DefineString(instructionData reflect.Value, finished chan bool) int {
 	setVal := instructionData.FieldByName("Value").Interface().(string)
 
 	if isVar := instructionData.FieldByName("IsVar").Interface().(bool); isVar {
-		if val := value.KeySearch(setVal).Value; val != nil {
+		if val := variable.SearchVariable(setVal).Value; val != nil {
 			setVal = val.(string)
 		} else {
 			fmt.Println("FIBER WARNING: Unable to find var ...", setVal)
@@ -64,7 +64,7 @@ func DefineString(instructionData reflect.Value, finished chan bool) int {
 			return -1
 		}
 	}
-	value.SetValue(name, setVal)
+	variable.SetVariable(name, setVal)
 	finished <- true
 	return -1
 }
@@ -75,7 +75,7 @@ func If(instructionData reflect.Value, finished chan bool) int {
 	valueOne := instructionData.FieldByName("ValueOne").Interface()
 
 	if oneIsVar := instructionData.FieldByName("OneIsVar").Interface().(bool); oneIsVar {
-		if val := value.KeySearch(valueOne.(string)).Value; val != nil {
+		if val := variable.SearchVariable(valueOne.(string)).Value; val != nil {
 			valueOne = val
 		} else {
 			fmt.Println("FIBER WARNING: Unable to find var ...", valueOne)
@@ -86,7 +86,7 @@ func If(instructionData reflect.Value, finished chan bool) int {
 	valueTwo := instructionData.FieldByName("ValueTwo").Interface()
 
 	if twoIsVar := instructionData.FieldByName("TwoIsVar").Interface().(bool); twoIsVar {
-		if val := value.KeySearch(valueTwo.(string)).Value; val != nil {
+		if val := variable.SearchVariable(valueTwo.(string)).Value; val != nil {
 			valueTwo = val
 		} else {
 			fmt.Println("FIBER WARNING: Unable to find var ...", valueTwo)

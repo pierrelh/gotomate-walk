@@ -2,7 +2,7 @@ package input
 
 import (
 	"fmt"
-	"gotomate/fiber/value"
+	"gotomate/fiber/variable"
 	"reflect"
 )
 
@@ -13,7 +13,7 @@ func Bool(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println(msg)
 	var input bool
 	fmt.Scanln(&input)
-	value.SetValue(instructionData.FieldByName("Output").Interface().(string), input)
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), input)
 	finished <- true
 	return -1
 }
@@ -25,7 +25,7 @@ func Int(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println(msg)
 	var input int
 	fmt.Scanln(&input)
-	value.SetValue(instructionData.FieldByName("Output").Interface().(string), input)
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), input)
 	finished <- true
 	return -1
 }
@@ -37,7 +37,7 @@ func String(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println(msg)
 	var input string
 	fmt.Scanln(&input)
-	value.SetValue(instructionData.FieldByName("Output").Interface().(string), input)
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), input)
 	finished <- true
 	return -1
 }

@@ -19,6 +19,16 @@ func Processing(funcName string, instructionData reflect.Value, finished chan bo
 			nextID = Multiply(instructionData, finished)
 		}()
 		<-finished
+	case "Pow":
+		go func() {
+			nextID = Pow(instructionData, finished)
+		}()
+		<-finished
+	case "Sqrt":
+		go func() {
+			nextID = Sqrt(instructionData, finished)
+		}()
+		<-finished
 	case "Substract":
 		go func() {
 			nextID = Substract(instructionData, finished)

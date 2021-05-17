@@ -2,7 +2,7 @@ package process
 
 import (
 	"fmt"
-	"gotomate/fiber/value"
+	"gotomate/fiber/variable"
 	"os"
 	"os/exec"
 	"reflect"
@@ -14,7 +14,7 @@ func KillProcess(instructionData reflect.Value, finished chan bool) int {
 	Spid := instructionData.FieldByName("PID").Interface().(string)
 	pid, _ := strconv.Atoi(Spid)
 	if pidIsVar := instructionData.FieldByName("PIDIsVar").Interface().(bool); pidIsVar {
-		if val := value.KeySearch(Spid).Value; val != nil {
+		if val := variable.SearchVariable(Spid).Value; val != nil {
 			pid = val.(int)
 		} else {
 			fmt.Println("FIBER WARNING: Unable to find var ...", Spid)
@@ -39,7 +39,7 @@ func StartProcess(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Starting new process ...")
 	path := instructionData.FieldByName("Path").Interface().(string)
 	if pathIsVar := instructionData.FieldByName("PathIsVar").Interface().(bool); pathIsVar {
-		if val := value.KeySearch(path).Value; val != nil {
+		if val := variable.SearchVariable(path).Value; val != nil {
 			path = val.(string)
 		} else {
 			fmt.Println("FIBER WARNING: Unable to find var ...", path)
@@ -51,7 +51,7 @@ func StartProcess(instructionData reflect.Value, finished chan bool) int {
 	cmd := exec.Command(path)
 	cmd.Env = os.Environ()
 	cmd.Start()
-	value.SetValue(instructionData.FieldByName("Output").Interface().(string), cmd.Process.Pid)
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), cmd.Process.Pid)
 	finished <- true
 	return -1
 }

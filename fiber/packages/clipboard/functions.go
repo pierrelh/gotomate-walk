@@ -2,7 +2,7 @@ package clipboard
 
 import (
 	"fmt"
-	"gotomate/fiber/value"
+	"gotomate/fiber/variable"
 	"reflect"
 
 	"github.com/go-vgo/robotgo"
@@ -12,7 +12,7 @@ import (
 func Read(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Clipboard Reading ...")
 	content, _ := robotgo.ReadAll()
-	value.SetValue(instructionData.FieldByName("Output").Interface().(string), content)
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), content)
 	finished <- true
 	return -1
 }
@@ -23,7 +23,7 @@ func Write(instructionData reflect.Value, finished chan bool) int {
 	content := instructionData.FieldByName("Content").Interface().(string)
 
 	if isVar := instructionData.FieldByName("ContentIsVar").Interface().(bool); isVar {
-		if val := value.KeySearch(content).Value; val != nil {
+		if val := variable.SearchVariable(content).Value; val != nil {
 			content = val.(string)
 		} else {
 			fmt.Println("FIBER WARNING: Unable to find var ...", content)

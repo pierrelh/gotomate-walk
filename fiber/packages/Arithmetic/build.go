@@ -13,6 +13,10 @@ func Build(function string) (interface{}, []declarative.Widget) {
 		return new(ArithmeticDatabinder), DivideTemplate
 	case "Multiply":
 		return new(ArithmeticDatabinder), MultiplyTemplate
+	case "Pow":
+		return new(ArithmeticDatabinder), PowTemplate
+	case "Sqrt":
+		return new(SqrtDatabinder), SqrtTemplate
 	case "Substract":
 		return new(ArithmeticDatabinder), SubstractTemplate
 	case "Sum":

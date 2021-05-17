@@ -4,7 +4,7 @@ package notification
 
 import (
 	"fmt"
-	"gotomate/fiber/value"
+	"gotomate/fiber/variable"
 	"reflect"
 
 	"github.com/lxn/walk"
@@ -15,7 +15,7 @@ func Create(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Creating notification ...")
 	title := instructionData.FieldByName("Title").Interface().(string)
 	if titleIsVar := instructionData.FieldByName("TitleIsVar").Interface().(bool); titleIsVar {
-		if val := value.KeySearch(title).Value; val != nil {
+		if val := variable.SearchVariable(title).Value; val != nil {
 			title = val.(string)
 		} else {
 			fmt.Println("FIBER WARNING: Unable to find var ...", title)
@@ -26,7 +26,7 @@ func Create(instructionData reflect.Value, finished chan bool) int {
 
 	msg := instructionData.FieldByName("Message").Interface().(string)	
 	if msgIsVar := instructionData.FieldByName("MessageIsVar").Interface().(bool); msgIsVar {
-		if val := value.KeySearch(msg).Value; val != nil {
+		if val := variable.SearchVariable(msg).Value; val != nil {
 			msg = val.(string)
 		} else {
 			fmt.Println("FIBER WARNING: Unable to find var ...", msg)
