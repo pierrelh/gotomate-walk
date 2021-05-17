@@ -1,33 +1,43 @@
 package input
 
-import "fmt"
-
-// String Wait for user to set a string
-func String(finished chan bool, msg string) string {
-	fmt.Println("FIBER INFO: Waiting for user input ...")
-	fmt.Println(msg)
-	var input string
-	fmt.Scanln(&input)
-	finished <- true
-	return input
-}
-
-// Int Wait for user to set a int
-func Int(finished chan bool, msg string) int {
-	fmt.Println("FIBER INFO: Waiting for user input ...")
-	fmt.Println(msg)
-	var input int
-	fmt.Scanln(&input)
-	finished <- true
-	return input
-}
+import (
+	"fmt"
+	"gotomate/fiber/value"
+	"reflect"
+)
 
 // Bool Wait for user to set a bool
-func Bool(finished chan bool, msg string) bool {
+func Bool(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Waiting for user input ...")
+	msg := instructionData.FieldByName("Message").Interface().(string)
 	fmt.Println(msg)
 	var input bool
 	fmt.Scanln(&input)
+	value.SetValue(instructionData.FieldByName("Output").Interface().(string), input)
 	finished <- true
-	return input
+	return -1
+}
+
+// Int Wait for user to set a int
+func Int(instructionData reflect.Value, finished chan bool) int {
+	fmt.Println("FIBER INFO: Waiting for user input ...")
+	msg := instructionData.FieldByName("Message").Interface().(string)
+	fmt.Println(msg)
+	var input int
+	fmt.Scanln(&input)
+	value.SetValue(instructionData.FieldByName("Output").Interface().(string), input)
+	finished <- true
+	return -1
+}
+
+// String Wait for user to set a string
+func String(instructionData reflect.Value, finished chan bool) int {
+	fmt.Println("FIBER INFO: Waiting for user input ...")
+	msg := instructionData.FieldByName("Message").Interface().(string)
+	fmt.Println(msg)
+	var input string
+	fmt.Scanln(&input)
+	value.SetValue(instructionData.FieldByName("Output").Interface().(string), input)
+	finished <- true
+	return -1
 }

@@ -20,7 +20,8 @@ var DefineTemplate = []declarative.Widget{
 				CompactHeight: true,
 			},
 			declarative.CheckBox{
-				Text: "Is a Var",
+				Text:    "Is a Var",
+				Checked: declarative.Bind("IsVar"),
 			},
 		},
 	},
@@ -37,7 +38,8 @@ var IfTemplate = []declarative.Widget{
 				CompactHeight: true,
 			},
 			declarative.CheckBox{
-				Text: "Is a Var",
+				Text:    "Is a Var",
+				Checked: declarative.Bind("OneIsVar"),
 			},
 		},
 	},
@@ -59,12 +61,13 @@ var IfTemplate = []declarative.Widget{
 				CompactHeight: true,
 			},
 			declarative.CheckBox{
-				Text: "Is a Var",
+				Text:    "Is a Var",
+				Checked: declarative.Bind("TwoIsVar"),
 			},
 		},
 	},
 	declarative.Label{
-		Text: "If false instruction ID::",
+		Text: "If false instruction ID:",
 	},
 	declarative.NumberEdit{
 		Value:    declarative.Bind("FalseInstruction"),

@@ -2,7 +2,6 @@ package value
 
 import (
 	"fmt"
-	"sort"
 )
 
 // FiberValues define the fiber's key / values
@@ -16,16 +15,20 @@ type InstructionValue struct {
 
 // KeySearch Search a key in fiber's keys / values array
 func KeySearch(name string) *InstructionValue {
-	idx := sort.Search(len(FiberValues), func(i int) bool {
-		return FiberValues[i].Key == name
-	})
-	if idx == len(FiberValues) {
+	idx := -1
+	for i := 0; i < len(FiberValues); i++ {
+		if FiberValues[i].Key == name {
+			idx = i
+			break
+		}
+	}
+	if idx != -1 {
+		return FiberValues[idx]
+	} else {
 		fmt.Println("FIBER ERROR: Unable to find the fiber's var: ", name)
 		return &InstructionValue{
 			Value: nil,
 		}
-	} else {
-		return FiberValues[idx]
 	}
 }
 

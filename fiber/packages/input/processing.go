@@ -2,32 +2,30 @@ package input
 
 import (
 	"fmt"
-	"gotomate/fiber/value"
 	"reflect"
 )
 
 // Processing process the functions from input's package
-func Processing(funcName string, instructionData reflect.Value, finished chan bool) {
+func Processing(funcName string, instructionData reflect.Value, finished chan bool) int {
+	nextID := -1
 	switch funcName {
-	case "String":
+	case "Bool":
 		go func() {
-			msg := instructionData.FieldByName("Message").Interface().(string)
-			value.SetValue(instructionData.FieldByName("Output").Interface().(string), String(finished, msg))
+			nextID = Bool(instructionData, finished)
 		}()
 		<-finished
 	case "Int":
 		go func() {
-			msg := instructionData.FieldByName("Message").Interface().(string)
-			value.SetValue(instructionData.FieldByName("Output").Interface().(string), Int(finished, msg))
+			nextID = Int(instructionData, finished)
 		}()
 		<-finished
-	case "Bool":
+	case "String":
 		go func() {
-			msg := instructionData.FieldByName("Message").Interface().(string)
-			value.SetValue(instructionData.FieldByName("Output").Interface().(string), Bool(finished, msg))
+			nextID = String(instructionData, finished)
 		}()
 		<-finished
 	default:
 		fmt.Println("FIBER ERROR: This function is not integrated yet: " + funcName)
 	}
+	return nextID
 }

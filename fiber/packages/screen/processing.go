@@ -2,37 +2,35 @@ package screen
 
 import (
 	"fmt"
-	"gotomate/fiber/value"
 	"reflect"
 )
 
 // Processing process the functions from screen's package
-func Processing(funcName string, instructionData reflect.Value, finished chan bool) {
+func Processing(funcName string, instructionData reflect.Value, finished chan bool) int {
+	nextID := -1
 	switch funcName {
 	case "GetMouseColor":
 		go func() {
-			value.SetValue(instructionData.FieldByName("Output").Interface().(string), GetMouseColor(finished))
+			nextID = GetMouseColor(instructionData, finished)
 		}()
 		<-finished
 	case "GetPixelColor":
 		go func() {
-			x := instructionData.FieldByName("X").Interface().(int)
-			y := instructionData.FieldByName("Y").Interface().(int)
-			value.SetValue(instructionData.FieldByName("Output").Interface().(string), GetPixelColor(x, y, finished))
+			nextID = GetPixelColor(instructionData, finished)
 		}()
 		<-finished
 	case "GetScreenSize":
 		go func() {
-			w, h := GetScreenSize(finished)
-			value.SetValue(instructionData.FieldByName("HeightOutput").Interface().(string), h)
-			value.SetValue(instructionData.FieldByName("WidthOutput").Interface().(string), w)
+			nextID = GetScreenSize(instructionData, finished)
 		}()
 		<-finished
 	case "SaveCapture":
-		path := instructionData.FieldByName("Path").Interface().(string)
-		go SaveCapture(finished, path)
+		go func() {
+			nextID = SaveCapture(instructionData, finished)
+		}()
 		<-finished
 	default:
 		fmt.Println("FIBER ERROR: This function is not integrated yet: " + funcName)
 	}
+	return nextID
 }

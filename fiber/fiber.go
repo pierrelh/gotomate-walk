@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	algorithmic "gotomate/fiber/packages/Algorithmic"
+	arithmetic "gotomate/fiber/packages/Arithmetic"
 	battery "gotomate/fiber/packages/Battery"
 	clipboard "gotomate/fiber/packages/Clipboard"
 	flow "gotomate/fiber/packages/Flow"
@@ -105,28 +106,30 @@ func (fiber *Fiber) RunFiber() {
 					}
 				case "Algorithmic":
 					nextID = algorithmic.Processing(funcName, instructionData, finished)
+				case "Arithmetic":
+					nextID = arithmetic.Processing(funcName, instructionData, finished)
 				case "Sleep":
-					sleep.Processing(funcName, instructionData, finished)
+					nextID = sleep.Processing(funcName, instructionData, finished)
 				case "Mouse":
-					mouse.Processing(funcName, instructionData, finished)
+					nextID = mouse.Processing(funcName, instructionData, finished)
 				case "Keyboard":
-					keyboard.Processing(funcName, instructionData, finished)
+					nextID = keyboard.Processing(funcName, instructionData, finished)
 				case "Clipboard":
-					clipboard.Processing(funcName, instructionData, finished)
+					nextID = clipboard.Processing(funcName, instructionData, finished)
 				case "Log":
-					log.Processing(funcName, instructionData, finished)
+					nextID = log.Processing(funcName, instructionData, finished)
 				case "Notification":
-					notification.Processing(funcName, instructionData, finished)
+					nextID = notification.Processing(funcName, instructionData, finished)
 				case "Battery":
-					battery.Processing(funcName, instructionData, finished)
+					nextID = battery.Processing(funcName, instructionData, finished)
 				case "Systime":
-					systime.Processing(funcName, instructionData, finished)
+					nextID = systime.Processing(funcName, instructionData, finished)
 				case "Screen":
-					screen.Processing(funcName, instructionData, finished)
+					nextID = screen.Processing(funcName, instructionData, finished)
 				case "Process":
-					process.Processing(funcName, instructionData, finished)
+					nextID = process.Processing(funcName, instructionData, finished)
 				case "Input":
-					input.Processing(funcName, instructionData, finished)
+					nextID = input.Processing(funcName, instructionData, finished)
 				default:
 					fmt.Println("FIBER WARNING: This package is not integrated yet: " + instruction.Package)
 					continue

@@ -1,4 +1,4 @@
-package clipboard
+package arithmetic
 
 import (
 	"fmt"
@@ -9,14 +9,24 @@ import (
 func Processing(funcName string, instructionData reflect.Value, finished chan bool) int {
 	nextID := -1
 	switch funcName {
-	case "Read":
+	case "Divide":
 		go func() {
-			nextID = Read(instructionData, finished)
+			nextID = Divide(instructionData, finished)
 		}()
 		<-finished
-	case "Write":
+	case "Multiply":
 		go func() {
-			nextID = Write(instructionData, finished)
+			nextID = Multiply(instructionData, finished)
+		}()
+		<-finished
+	case "Substract":
+		go func() {
+			nextID = Substract(instructionData, finished)
+		}()
+		<-finished
+	case "Sum":
+		go func() {
+			nextID = Sum(instructionData, finished)
 		}()
 		<-finished
 	default:
