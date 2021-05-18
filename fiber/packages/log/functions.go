@@ -9,16 +9,19 @@ import (
 // Print log a value
 func Print(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Logging ...")
-	log := instructionData.FieldByName("Log").Interface()
 
+	var log interface{}
 	if isVar := instructionData.FieldByName("LogIsVar").Interface().(bool); isVar {
-		if val := variable.SearchVariable(log.(string)).Value; val != nil {
+		varName := instructionData.FieldByName("VarName").Interface().(string)
+		if val := variable.SearchVariable(varName).Value; val != nil {
 			log = val
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", log)
+			fmt.Println("FIBER WARNING: Unable to find var ...", varName)
 			finished <- true
 			return -1
 		}
+	} else {
+		log = instructionData.FieldByName("Log").Interface()
 	}
 	fmt.Println("LOG: ", log)
 	finished <- true

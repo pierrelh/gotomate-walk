@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"gotomate/fiber/variable"
 	"reflect"
-	"strconv"
 
 	"github.com/go-vgo/robotgo"
 )
@@ -21,28 +20,33 @@ func GetMouseColor(instructionData reflect.Value, finished chan bool) int {
 // GetPixelColor Get a pixel color by a position
 func GetPixelColor(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Getting pixel color ...")
-	Sx := instructionData.FieldByName("X").Interface().(string)
-	x, _ := strconv.Atoi(Sx)
+
+	var x int
 	if xIsVar := instructionData.FieldByName("XIsVar").Interface().(bool); xIsVar {
-		if val := variable.SearchVariable(Sx).Value; val != nil {
+		xVarName := instructionData.FieldByName("XVarName").Interface().(string)
+		if val := variable.SearchVariable(xVarName).Value; val != nil {
 			x = val.(int)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", Sx)
+			fmt.Println("FIBER WARNING: Unable to find var ...", xVarName)
 			finished <- true
 			return -1
 		}
+	} else {
+		x = instructionData.FieldByName("X").Interface().(int)
 	}
 
-	Sy := instructionData.FieldByName("Y").Interface().(string)
-	y, _ := strconv.Atoi(Sy)
+	var y int
 	if yIsVar := instructionData.FieldByName("YIsVar").Interface().(bool); yIsVar {
-		if val := variable.SearchVariable(Sy).Value; val != nil {
+		yVarName := instructionData.FieldByName("YVarName").Interface().(string)
+		if val := variable.SearchVariable(yVarName).Value; val != nil {
 			y = val.(int)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", Sy)
+			fmt.Println("FIBER WARNING: Unable to find var ...", yVarName)
 			finished <- true
 			return -1
 		}
+	} else {
+		y = instructionData.FieldByName("Y").Interface().(int)
 	}
 
 	color := robotgo.GetPixelColor(x, y)
@@ -64,15 +68,19 @@ func GetScreenSize(instructionData reflect.Value, finished chan bool) int {
 // SaveCapture Save a screen shot
 func SaveCapture(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Saving screen shot ...")
-	path := instructionData.FieldByName("Path").Interface().(string)
+
+	var path string
 	if pathIsVar := instructionData.FieldByName("PathIsVar").Interface().(bool); pathIsVar {
-		if val := variable.SearchVariable(path).Value; val != nil {
+		pathVarName := instructionData.FieldByName("PathVarName").Interface().(string)
+		if val := variable.SearchVariable(pathVarName).Value; val != nil {
 			path = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", path)
+			fmt.Println("FIBER WARNING: Unable to find var ...", pathVarName)
 			finished <- true
 			return -1
 		}
+	} else {
+		path = instructionData.FieldByName("Path").Interface().(string)
 	}
 
 	robotgo.SaveCapture(path)

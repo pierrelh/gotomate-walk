@@ -14,6 +14,11 @@ func Processing(funcName string, instructionData reflect.Value, finished chan bo
 			nextID = Tap(instructionData, finished)
 		}()
 		<-finished
+	case "Type":
+		go func() {
+			nextID = Type(instructionData, finished)
+		}()
+		<-finished
 	default:
 		fmt.Println("FIBER ERROR: This function is not integrated yet: " + funcName)
 	}

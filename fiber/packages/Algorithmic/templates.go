@@ -2,31 +2,6 @@ package algorithmic
 
 import "github.com/lxn/walk/declarative"
 
-// DefineTemplate Dialog's Define Template
-var DefineTemplate = []declarative.Widget{
-	declarative.Label{
-		Text: "Name:",
-	},
-	declarative.TextEdit{
-		Text:          declarative.Bind("Name"),
-		CompactHeight: true,
-	},
-	declarative.GroupBox{
-		Title:  "Value:",
-		Layout: declarative.HBox{},
-		Children: []declarative.Widget{
-			declarative.TextEdit{
-				Text:          declarative.Bind("Value"),
-				CompactHeight: true,
-			},
-			declarative.CheckBox{
-				Text:    "Is a Var",
-				Checked: declarative.Bind("IsVar"),
-			},
-		},
-	},
-}
-
 // IfTemplate Dialog's If Template
 var IfTemplate = []declarative.Widget{
 	declarative.GroupBox{
@@ -34,10 +9,17 @@ var IfTemplate = []declarative.Widget{
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
+				Text:          declarative.Bind("VarOneName"),
+				Visible:       declarative.Bind("OneIsAVar.Checked"),
+				CompactHeight: true,
+			},
+			declarative.TextEdit{
 				Text:          declarative.Bind("ValueOne"),
+				Visible:       declarative.Bind("!OneIsAVar.Checked"),
 				CompactHeight: true,
 			},
 			declarative.CheckBox{
+				Name:    "OneIsAVar",
 				Text:    "Is a Var",
 				Checked: declarative.Bind("OneIsVar"),
 			},
@@ -57,10 +39,17 @@ var IfTemplate = []declarative.Widget{
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
+				Text:          declarative.Bind("VarTwoName"),
+				Visible:       declarative.Bind("TwoIsAVar.Checked"),
+				CompactHeight: true,
+			},
+			declarative.TextEdit{
 				Text:          declarative.Bind("ValueTwo"),
+				Visible:       declarative.Bind("!TwoIsAVar.Checked"),
 				CompactHeight: true,
 			},
 			declarative.CheckBox{
+				Name:    "TwoIsAVar",
 				Text:    "Is a Var",
 				Checked: declarative.Bind("TwoIsVar"),
 			},

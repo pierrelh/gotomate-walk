@@ -7,11 +7,13 @@ type MouseColorDatabinder struct {
 
 // PixelColorDatabinder Define the GetPixelColor databinder
 type PixelColorDatabinder struct {
-	X      int
-	XIsVar bool
-	Y      int
-	YIsVar bool
-	Output string
+	X        int
+	XVarName string
+	XIsVar   bool
+	Y        int
+	YVarName string
+	YIsVar   bool
+	Output   string
 }
 
 // SizeDatabinder Define the GetScreenSize databinder
@@ -22,6 +24,7 @@ type SizeDatabinder struct {
 
 // SaveCaptureDatabinder Define theSaveCapture databinder
 type SaveCaptureDatabinder struct {
-	Path      string
-	PathIsVar bool
+	Path        string
+	PathVarName string
+	PathIsVar   bool
 }

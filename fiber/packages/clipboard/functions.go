@@ -20,16 +20,19 @@ func Read(instructionData reflect.Value, finished chan bool) int {
 // Write write string to clipboard
 func Write(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Clipboard Writing ...")
-	content := instructionData.FieldByName("Content").Interface().(string)
 
-	if isVar := instructionData.FieldByName("ContentIsVar").Interface().(bool); isVar {
-		if val := variable.SearchVariable(content).Value; val != nil {
+	var content string
+	if isVar := instructionData.FieldByName("IsVar").Interface().(bool); isVar {
+		varName := instructionData.FieldByName("VarName").Interface().(string)
+		if val := variable.SearchVariable(varName).Value; val != nil {
 			content = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", content)
+			fmt.Println("FIBER WARNING: Unable to find var ...", varName)
 			finished <- true
 			return -1
 		}
+	} else {
+		content = instructionData.FieldByName("Content").Interface().(string)
 	}
 	robotgo.WriteAll(content)
 	finished <- true

@@ -8,12 +8,19 @@ var PixelColorTemplate = []declarative.Widget{
 		Title:  "X",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
+			declarative.TextEdit{
+				Text:          declarative.Bind("XVarName"),
+				Visible:       declarative.Bind("XIsAVar.Checked"),
+				CompactHeight: true,
+			},
 			declarative.NumberEdit{
 				Value:    declarative.Bind("X"),
+				Visible:  declarative.Bind("!XIsAVar.Checked"),
 				Suffix:   " px",
 				Decimals: 0,
 			},
 			declarative.CheckBox{
+				Name:    "XIsAVar",
 				Text:    "Is a Var",
 				Checked: declarative.Bind("XIsVar"),
 			},
@@ -23,12 +30,19 @@ var PixelColorTemplate = []declarative.Widget{
 		Title:  "Y",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
+			declarative.TextEdit{
+				Text:          declarative.Bind("YVarName"),
+				Visible:       declarative.Bind("YIsAVar.Checked"),
+				CompactHeight: true,
+			},
 			declarative.NumberEdit{
 				Value:    declarative.Bind("Y"),
+				Visible:  declarative.Bind("!YIsAVar.Checked"),
 				Suffix:   " px",
 				Decimals: 0,
 			},
 			declarative.CheckBox{
+				Name:    "YIsAVar",
 				Text:    "Is a Var",
 				Checked: declarative.Bind("YIsVar"),
 			},
@@ -79,10 +93,17 @@ var SaveCaptureTemplate = []declarative.Widget{
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
+				Text:          declarative.Bind("PathVarName"),
+				Visible:       declarative.Bind("PathIsAVar.Checked"),
+				CompactHeight: true,
+			},
+			declarative.TextEdit{
 				Text:          declarative.Bind("Path"),
+				Visible:       declarative.Bind("!PathIsAVar.Checked"),
 				CompactHeight: true,
 			},
 			declarative.CheckBox{
+				Name:    "PathIsAVar",
 				Text:    "Is a Var",
 				Checked: declarative.Bind("PathIsVar"),
 			},

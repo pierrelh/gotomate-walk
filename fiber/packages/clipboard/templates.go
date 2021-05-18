@@ -9,11 +9,18 @@ var WriteTemplate = []declarative.Widget{
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
-				Text: declarative.Bind("Content"),
+				Text:          declarative.Bind("VarName"),
+				Visible:       declarative.Bind("IsAVar.Checked"),
+				CompactHeight: true,
+			},
+			declarative.TextEdit{
+				Text:    declarative.Bind("Content"),
+				Visible: declarative.Bind("!IsAVar.Checked"),
 			},
 			declarative.CheckBox{
+				Name:    "IsAVar",
 				Text:    "Is a Var",
-				Checked: declarative.Bind("ContentIsVar"),
+				Checked: declarative.Bind("IsVar"),
 			},
 		},
 	},

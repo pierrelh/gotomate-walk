@@ -9,6 +9,7 @@ import (
 	arithmetic "gotomate/fiber/packages/Arithmetic"
 	battery "gotomate/fiber/packages/Battery"
 	clipboard "gotomate/fiber/packages/Clipboard"
+	define "gotomate/fiber/packages/Define"
 	flow "gotomate/fiber/packages/Flow"
 	input "gotomate/fiber/packages/Input"
 	keyboard "gotomate/fiber/packages/Keyboard"
@@ -111,6 +112,8 @@ func (fiber *Fiber) RunFiber() {
 					nextID = algorithmic.Processing(funcName, instructionData, finished)
 				case "Arithmetic":
 					nextID = arithmetic.Processing(funcName, instructionData, finished)
+				case "Define":
+					nextID = define.Processing(funcName, instructionData, finished)
 				case "Sleep":
 					nextID = sleep.Processing(funcName, instructionData, finished)
 				case "Mouse":

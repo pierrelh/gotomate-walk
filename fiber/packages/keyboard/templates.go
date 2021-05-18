@@ -31,3 +31,28 @@ var TapTemplate = []declarative.Widget{
 		Model:         Inputs(),
 	},
 }
+
+// TypeTemplate Dialog's KeyboardType Template
+var TypeTemplate = []declarative.Widget{
+	declarative.GroupBox{
+		Title:  "Input:",
+		Layout: declarative.HBox{},
+		Children: []declarative.Widget{
+			declarative.TextEdit{
+				Text:          declarative.Bind("VarName"),
+				Visible:       declarative.Bind("IsAVar.Checked"),
+				CompactHeight: true,
+			},
+			declarative.TextEdit{
+				Text:          declarative.Bind("Input"),
+				Visible:       declarative.Bind("!IsAVar.Checked"),
+				CompactHeight: true,
+			},
+			declarative.CheckBox{
+				Name:    "IsAVar",
+				Text:    "Is a Var",
+				Checked: declarative.Bind("InputIsVar"),
+			},
+		},
+	},
+}
