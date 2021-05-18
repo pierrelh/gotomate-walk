@@ -6,21 +6,23 @@ import (
 	"os"
 	"os/exec"
 	"reflect"
-	"strconv"
 )
 
 func KillProcess(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Killing process ...")
-	Spid := instructionData.FieldByName("PID").Interface().(string)
-	pid, _ := strconv.Atoi(Spid)
+
+	var pid int
 	if pidIsVar := instructionData.FieldByName("PIDIsVar").Interface().(bool); pidIsVar {
-		if val := variable.SearchVariable(Spid).Value; val != nil {
+		PIDVarName := instructionData.FieldByName("PIDVarName").Interface().(string)
+		if val := variable.SearchVariable(PIDVarName).Value; val != nil {
 			pid = val.(int)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", Spid)
+			fmt.Println("FIBER WARNING: Unable to find var ...", PIDVarName)
 			finished <- true
 			return -1
 		}
+	} else {
+		pid = instructionData.FieldByName("PID").Interface().(int)
 	}
 
 	proc, err := os.FindProcess(pid)
@@ -37,15 +39,19 @@ func KillProcess(instructionData reflect.Value, finished chan bool) int {
 // StartProcess Create a process with a given path & return the process's pid
 func StartProcess(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Starting new process ...")
-	path := instructionData.FieldByName("Path").Interface().(string)
+
+	var path string
 	if pathIsVar := instructionData.FieldByName("PathIsVar").Interface().(bool); pathIsVar {
-		if val := variable.SearchVariable(path).Value; val != nil {
+		pathVarName := instructionData.FieldByName("PathVarName").Interface().(string)
+		if val := variable.SearchVariable(pathVarName).Value; val != nil {
 			path = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", path)
+			fmt.Println("FIBER WARNING: Unable to find var ...", pathVarName)
 			finished <- true
 			return -1
 		}
+	} else {
+		path = instructionData.FieldByName("Path").Interface().(string)
 	}
 
 	cmd := exec.Command(path)

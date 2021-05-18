@@ -9,10 +9,17 @@ var DivideTemplate = []declarative.Widget{
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
-				Text:          declarative.Bind("ValueOne"),
+				Text:          declarative.Bind("VarOneName"),
+				Visible:       declarative.Bind("IsOneAVar.Checked"),
 				CompactHeight: true,
 			},
+			declarative.NumberEdit{
+				Value:    declarative.Bind("ValueOne"),
+				Visible:  declarative.Bind("!IsOneAVar.Checked"),
+				Decimals: 5,
+			},
 			declarative.CheckBox{
+				Name:    "IsOneAVar",
 				Text:    "Is a Var",
 				Checked: declarative.Bind("ValueOneIsVar"),
 			},
@@ -28,10 +35,17 @@ var DivideTemplate = []declarative.Widget{
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
-				Text:          declarative.Bind("ValueTwo"),
+				Text:          declarative.Bind("VarTwoName"),
+				Visible:       declarative.Bind("IsTwoAVar.Checked"),
 				CompactHeight: true,
 			},
+			declarative.NumberEdit{
+				Value:    declarative.Bind("ValueTwo"),
+				Visible:  declarative.Bind("!IsTwoAVar.Checked"),
+				Decimals: 5,
+			},
 			declarative.CheckBox{
+				Name:    "IsTwoAVar",
 				Text:    "Is a Var",
 				Checked: declarative.Bind("ValueTwoIsVar"),
 			},
@@ -53,10 +67,17 @@ var MultiplyTemplate = []declarative.Widget{
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
-				Text:          declarative.Bind("ValueOne"),
+				Text:          declarative.Bind("VarOneName"),
+				Visible:       declarative.Bind("IsOneAVar.Checked"),
 				CompactHeight: true,
 			},
+			declarative.NumberEdit{
+				Value:    declarative.Bind("ValueOne"),
+				Visible:  declarative.Bind("!IsOneAVar.Checked"),
+				Decimals: 5,
+			},
 			declarative.CheckBox{
+				Name:    "IsOneAVar",
 				Text:    "Is a Var",
 				Checked: declarative.Bind("ValueOneIsVar"),
 			},
@@ -72,10 +93,17 @@ var MultiplyTemplate = []declarative.Widget{
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
-				Text:          declarative.Bind("ValueTwo"),
+				Text:          declarative.Bind("VarTwoName"),
+				Visible:       declarative.Bind("IsTwoAVar.Checked"),
 				CompactHeight: true,
 			},
+			declarative.NumberEdit{
+				Value:    declarative.Bind("ValueTwo"),
+				Visible:  declarative.Bind("!IsTwoAVar.Checked"),
+				Decimals: 5,
+			},
 			declarative.CheckBox{
+				Name:    "IsTwoAVar",
 				Text:    "Is a Var",
 				Checked: declarative.Bind("ValueTwoIsVar"),
 			},
@@ -97,10 +125,17 @@ var PowTemplate = []declarative.Widget{
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
-				Text:          declarative.Bind("ValueOne"),
+				Text:          declarative.Bind("VarOneName"),
+				Visible:       declarative.Bind("IsOneAVar.Checked"),
 				CompactHeight: true,
 			},
+			declarative.NumberEdit{
+				Value:    declarative.Bind("ValueOne"),
+				Visible:  declarative.Bind("!IsOneAVar.Checked"),
+				Decimals: 5,
+			},
 			declarative.CheckBox{
+				Name:    "IsOneAVar",
 				Text:    "Is a Var",
 				Checked: declarative.Bind("ValueOneIsVar"),
 			},
@@ -116,10 +151,17 @@ var PowTemplate = []declarative.Widget{
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
-				Text:          declarative.Bind("ValueTwo"),
+				Text:          declarative.Bind("VarTwoName"),
+				Visible:       declarative.Bind("IsTwoAVar.Checked"),
 				CompactHeight: true,
 			},
+			declarative.NumberEdit{
+				Value:    declarative.Bind("ValueTwo"),
+				Visible:  declarative.Bind("!IsTwoAVar.Checked"),
+				Decimals: 5,
+			},
 			declarative.CheckBox{
+				Name:    "IsTwoAVar",
 				Text:    "Is a Var",
 				Checked: declarative.Bind("ValueTwoIsVar"),
 			},
@@ -146,10 +188,17 @@ var SqrtTemplate = []declarative.Widget{
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
-				Text:          declarative.Bind("Value"),
+				Text:          declarative.Bind("VarName"),
+				Visible:       declarative.Bind("IsAVar.Checked"),
 				CompactHeight: true,
 			},
+			declarative.NumberEdit{
+				Value:    declarative.Bind("Value"),
+				Visible:  declarative.Bind("!IsAVar.Checked"),
+				Decimals: 5,
+			},
 			declarative.CheckBox{
+				Name:    "IsAVar",
 				Text:    "Is a Var",
 				Checked: declarative.Bind("ValueIsVar"),
 			},
@@ -171,10 +220,17 @@ var SubstractTemplate = []declarative.Widget{
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
-				Text:          declarative.Bind("ValueOne"),
+				Text:          declarative.Bind("VarOneName"),
+				Visible:       declarative.Bind("IsOneAVar.Checked"),
 				CompactHeight: true,
 			},
+			declarative.NumberEdit{
+				Value:    declarative.Bind("ValueOne"),
+				Visible:  declarative.Bind("!IsOneAVar.Checked"),
+				Decimals: 5,
+			},
 			declarative.CheckBox{
+				Name:    "IsOneAVar",
 				Text:    "Is a Var",
 				Checked: declarative.Bind("ValueOneIsVar"),
 			},
@@ -190,10 +246,17 @@ var SubstractTemplate = []declarative.Widget{
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
-				Text:          declarative.Bind("ValueTwo"),
+				Text:          declarative.Bind("VarTwoName"),
+				Visible:       declarative.Bind("IsTwoAVar.Checked"),
 				CompactHeight: true,
 			},
+			declarative.NumberEdit{
+				Value:    declarative.Bind("ValueTwo"),
+				Visible:  declarative.Bind("!IsTwoAVar.Checked"),
+				Decimals: 5,
+			},
 			declarative.CheckBox{
+				Name:    "IsTwoAVar",
 				Text:    "Is a Var",
 				Checked: declarative.Bind("ValueTwoIsVar"),
 			},
@@ -215,10 +278,17 @@ var SumTemplate = []declarative.Widget{
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
-				Text:          declarative.Bind("ValueOne"),
+				Text:          declarative.Bind("VarOneName"),
+				Visible:       declarative.Bind("IsOneAVar.Checked"),
 				CompactHeight: true,
 			},
+			declarative.NumberEdit{
+				Value:    declarative.Bind("ValueOne"),
+				Visible:  declarative.Bind("!IsOneAVar.Checked"),
+				Decimals: 5,
+			},
 			declarative.CheckBox{
+				Name:    "IsOneAVar",
 				Text:    "Is a Var",
 				Checked: declarative.Bind("ValueOneIsVar"),
 			},
@@ -234,10 +304,17 @@ var SumTemplate = []declarative.Widget{
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
-				Text:          declarative.Bind("ValueTwo"),
+				Text:          declarative.Bind("VarTwoName"),
+				Visible:       declarative.Bind("IsTwoAVar.Checked"),
 				CompactHeight: true,
 			},
+			declarative.NumberEdit{
+				Value:    declarative.Bind("ValueTwo"),
+				Visible:  declarative.Bind("!IsTwoAVar.Checked"),
+				Decimals: 5,
+			},
 			declarative.CheckBox{
+				Name:    "IsTwoAVar",
 				Text:    "Is a Var",
 				Checked: declarative.Bind("ValueTwoIsVar"),
 			},

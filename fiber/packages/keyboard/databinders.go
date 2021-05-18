@@ -23,3 +23,10 @@ type TapDatabinder struct {
 	Special1 string
 	Special2 string
 }
+
+// TypeDatabinder Define the KeyboardType parameters
+type TypeDatabinder struct {
+	Input      string
+	VarName    string
+	InputIsVar bool
+}

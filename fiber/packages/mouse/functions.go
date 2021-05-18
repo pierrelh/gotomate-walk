@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"gotomate/fiber/variable"
 	"reflect"
-	"strconv"
 
 	"github.com/go-vgo/robotgo"
 )
@@ -21,28 +20,33 @@ func Click(instructionData reflect.Value, finished chan bool) int {
 // Move move the mouse
 func Move(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Moving mouse ...")
-	xs := instructionData.FieldByName("X").Interface().(string)
-	x, _ := strconv.Atoi(xs)
+
+	var x int
 	if xIsVar := instructionData.FieldByName("XIsVar").Interface().(bool); xIsVar {
-		if val := variable.SearchVariable(xs).Value; val != nil {
+		xVarName := instructionData.FieldByName("XVarName").Interface().(string)
+		if val := variable.SearchVariable(xVarName).Value; val != nil {
 			x = val.(int)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", xs)
+			fmt.Println("FIBER WARNING: Unable to find var ...", xVarName)
 			finished <- true
 			return -1
 		}
+	} else {
+		x = instructionData.FieldByName("X").Interface().(int)
 	}
 
-	ys := instructionData.FieldByName("Y").Interface().(string)
-	y, _ := strconv.Atoi(ys)
+	var y int
 	if yIsVar := instructionData.FieldByName("YIsVar").Interface().(bool); yIsVar {
-		if val := variable.SearchVariable(ys).Value; val != nil {
+		yVarName := instructionData.FieldByName("YVarName").Interface().(string)
+		if val := variable.SearchVariable(yVarName).Value; val != nil {
 			y = val.(int)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", ys)
+			fmt.Println("FIBER WARNING: Unable to find var ...", yVarName)
 			finished <- true
 			return -1
 		}
+	} else {
+		y = instructionData.FieldByName("Y").Interface().(int)
 	}
 
 	robotgo.MoveMouse(x, y)
@@ -53,28 +57,33 @@ func Move(instructionData reflect.Value, finished chan bool) int {
 // Scroll scroll the mouse
 func Scroll(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Scrolling mouse ...")
-	xs := instructionData.FieldByName("X").Interface().(string)
-	x, _ := strconv.Atoi(xs)
+
+	var x int
 	if xIsVar := instructionData.FieldByName("XIsVar").Interface().(bool); xIsVar {
-		if val := variable.SearchVariable(xs).Value; val != nil {
+		xVarName := instructionData.FieldByName("XVarName").Interface().(string)
+		if val := variable.SearchVariable(xVarName).Value; val != nil {
 			x = val.(int)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", xs)
+			fmt.Println("FIBER WARNING: Unable to find var ...", xVarName)
 			finished <- true
 			return -1
 		}
+	} else {
+		x = instructionData.FieldByName("X").Interface().(int)
 	}
 
-	ys := instructionData.FieldByName("Y").Interface().(string)
-	y, _ := strconv.Atoi(ys)
+	var y int
 	if yIsVar := instructionData.FieldByName("YIsVar").Interface().(bool); yIsVar {
-		if val := variable.SearchVariable(ys).Value; val != nil {
+		yVarName := instructionData.FieldByName("YVarName").Interface().(string)
+		if val := variable.SearchVariable(yVarName).Value; val != nil {
 			y = val.(int)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", ys)
+			fmt.Println("FIBER WARNING: Unable to find var ...", yVarName)
 			finished <- true
 			return -1
 		}
+	} else {
+		y = instructionData.FieldByName("Y").Interface().(int)
 	}
 
 	robotgo.Scroll(x, y)

@@ -9,10 +9,17 @@ var PrintTemplate = []declarative.Widget{
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
+				Text:          declarative.Bind("VarName"),
+				Visible:       declarative.Bind("IsAVar.Checked"),
+				CompactHeight: true,
+			},
+			declarative.TextEdit{
 				Text:          declarative.Bind("Log"),
+				Visible:       declarative.Bind("!IsAVar.Checked"),
 				CompactHeight: true,
 			},
 			declarative.CheckBox{
+				Name:    "IsAVar",
 				Text:    "Is a Var",
 				Checked: declarative.Bind("LogIsVar"),
 			},

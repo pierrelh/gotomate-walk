@@ -2,6 +2,7 @@ package keyboard
 
 import (
 	"fmt"
+	"gotomate/fiber/variable"
 	"reflect"
 
 	"github.com/go-vgo/robotgo"
@@ -23,6 +24,29 @@ func Tap(instructionData reflect.Value, finished chan bool) int {
 	} else {
 		robotgo.KeyTap(input, special)
 	}
+	finished <- true
+	return -1
+}
+
+// Type Simulate a type on the keyboard
+func Type(instructionData reflect.Value, finished chan bool) int {
+	fmt.Println("FIBER INFO: Keyboard type ...")
+
+	var input string
+	if isVar := instructionData.FieldByName("InputIsVar").Interface().(bool); isVar {
+		varName := instructionData.FieldByName("VarName").Interface().(string)
+		if val := variable.SearchVariable(varName).Value; val != nil {
+			input = val.(string)
+		} else {
+			fmt.Println("FIBER WARNING: Unable to find var ...", varName)
+			finished <- true
+			return -1
+		}
+	} else {
+		input = instructionData.FieldByName("Input").Interface().(string)
+	}
+
+	robotgo.TypeStr(input)
 	finished <- true
 	return -1
 }

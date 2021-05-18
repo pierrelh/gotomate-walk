@@ -13,26 +13,33 @@ import (
 // Create create a new notification with presets & push it
 func Create(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Creating notification ...")
-	title := instructionData.FieldByName("Title").Interface().(string)
+
+	var title string
 	if titleIsVar := instructionData.FieldByName("TitleIsVar").Interface().(bool); titleIsVar {
-		if val := variable.SearchVariable(title).Value; val != nil {
+		titleVarName := instructionData.FieldByName("TitleVarName").Interface().(string)
+		if val := variable.SearchVariable(titleVarName).Value; val != nil {
 			title = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", title)
+			fmt.Println("FIBER WARNING: Unable to find var ...", titleVarName)
 			finished <- true
 			return -1
 		}
+	} else {
+		title = instructionData.FieldByName("Title").Interface().(string)
 	}
 
-	msg := instructionData.FieldByName("Message").Interface().(string)	
+	var msg string
 	if msgIsVar := instructionData.FieldByName("MessageIsVar").Interface().(bool); msgIsVar {
-		if val := variable.SearchVariable(msg).Value; val != nil {
+		messageVarName := instructionData.FieldByName("MessageVarName").Interface().(string)
+		if val := variable.SearchVariable(messageVarName).Value; val != nil {
 			msg = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", msg)
+			fmt.Println("FIBER WARNING: Unable to find var ...", messageVarName)
 			finished <- true
 			return -1
 		}
+	} else {
+		msg = instructionData.FieldByName("Message").Interface().(string)
 	}
 
 	notTitle := "Default Title"

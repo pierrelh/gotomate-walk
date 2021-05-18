@@ -2,8 +2,9 @@ package clipboard
 
 // WriteDatabinder Define the ClipboardWrite parameters
 type WriteDatabinder struct {
-	Content      string
-	ContentIsVar bool
+	Content string
+	VarName string
+	IsVar   bool
 }
 
 // ReadDatabinder Define the ClipboardRead parameters

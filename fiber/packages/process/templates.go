@@ -9,9 +9,16 @@ var StartProcessTemplate = []declarative.Widget{
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
-				Text: declarative.Bind("Path"),
+				Text:          declarative.Bind("PathVarName"),
+				Visible:       declarative.Bind("PathIsAVar.Checked"),
+				CompactHeight: true,
+			},
+			declarative.TextEdit{
+				Text:    declarative.Bind("Path"),
+				Visible: declarative.Bind("!PathIsAVar.Checked"),
 			},
 			declarative.CheckBox{
+				Name:      "PathIsAVar",
 				Text:      "Is a Var",
 				Alignment: declarative.AlignHFarVCenter,
 				Checked:   declarative.Bind("PathIsVar"),
@@ -34,10 +41,17 @@ var KillProcessTemplate = []declarative.Widget{
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
-				Text:          declarative.Bind("PID"),
+				Text:          declarative.Bind("PIDVarName"),
+				Visible:       declarative.Bind("PIDIsAVar.Checked"),
 				CompactHeight: true,
 			},
+			declarative.NumberEdit{
+				Value:    declarative.Bind("PID"),
+				Visible:  declarative.Bind("!PIDIsAVar.Checked"),
+				Decimals: 0,
+			},
 			declarative.CheckBox{
+				Name:    "PIDIsAVar",
 				Text:    "Is a Var",
 				Checked: declarative.Bind("PIDIsVar"),
 			},

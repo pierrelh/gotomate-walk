@@ -5,38 +5,42 @@ import (
 	"gotomate/fiber/variable"
 	"math"
 	"reflect"
-	"strconv"
 )
 
 // Divide make the divide of two numbers
 func Divide(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Dividing ...")
-	name := instructionData.FieldByName("Output").Interface().(string)
-	SOne := instructionData.FieldByName("ValueOne").Interface().(string)
-	one, _ := strconv.Atoi(SOne)
+
+	var one float64
 	if oneIsVar := instructionData.FieldByName("ValueOneIsVar").Interface().(bool); oneIsVar {
-		if val := variable.SearchVariable(SOne).Value; val != nil {
-			one = val.(int)
+		varOneName := instructionData.FieldByName("VarOneName").Interface().(string)
+		if val := variable.SearchVariable(varOneName).Value; val != nil {
+			one = val.(float64)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", SOne)
+			fmt.Println("FIBER WARNING: Unable to find var ...", varOneName)
 			finished <- true
 			return -1
 		}
+	} else {
+		one = instructionData.FieldByName("ValueOne").Interface().(float64)
 	}
 
-	STwo := instructionData.FieldByName("ValueTwo").Interface().(string)
-	two, _ := strconv.Atoi(STwo)
+	var two float64
 	if twoIsVar := instructionData.FieldByName("ValueTwoIsVar").Interface().(bool); twoIsVar {
-		if val := variable.SearchVariable(STwo).Value; val != nil {
-			two = val.(int)
+		varTwoName := instructionData.FieldByName("VarTwoName").Interface().(string)
+		if val := variable.SearchVariable(varTwoName).Value; val != nil {
+			two = val.(float64)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", STwo)
+			fmt.Println("FIBER WARNING: Unable to find var ...", varTwoName)
 			finished <- true
 			return -1
 		}
+	} else {
+		two = instructionData.FieldByName("ValueTwo").Interface().(float64)
 	}
 
 	result := one / two
+	name := instructionData.FieldByName("Output").Interface().(string)
 	variable.SetVariable(name, result)
 	finished <- true
 	return -1
@@ -45,32 +49,37 @@ func Divide(instructionData reflect.Value, finished chan bool) int {
 // Multiply make the multiplication of two numbers
 func Multiply(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Multiplying ...")
-	name := instructionData.FieldByName("Output").Interface().(string)
-	SOne := instructionData.FieldByName("ValueOne").Interface().(string)
-	one, _ := strconv.Atoi(SOne)
+	var one float64
+
 	if oneIsVar := instructionData.FieldByName("ValueOneIsVar").Interface().(bool); oneIsVar {
-		if val := variable.SearchVariable(SOne).Value; val != nil {
-			one = val.(int)
+		varOneName := instructionData.FieldByName("VarOneName").Interface().(string)
+		if val := variable.SearchVariable(varOneName).Value; val != nil {
+			one = val.(float64)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", SOne)
+			fmt.Println("FIBER WARNING: Unable to find var ...", varOneName)
 			finished <- true
 			return -1
 		}
+	} else {
+		one = instructionData.FieldByName("ValueOne").Interface().(float64)
 	}
 
-	STwo := instructionData.FieldByName("ValueTwo").Interface().(string)
-	two, _ := strconv.Atoi(STwo)
+	var two float64
 	if twoIsVar := instructionData.FieldByName("ValueTwoIsVar").Interface().(bool); twoIsVar {
-		if val := variable.SearchVariable(STwo).Value; val != nil {
-			two = val.(int)
+		varTwoName := instructionData.FieldByName("VarTwoName").Interface().(string)
+		if val := variable.SearchVariable(varTwoName).Value; val != nil {
+			two = val.(float64)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", STwo)
+			fmt.Println("FIBER WARNING: Unable to find var ...", varTwoName)
 			finished <- true
 			return -1
 		}
+	} else {
+		two = instructionData.FieldByName("ValueTwo").Interface().(float64)
 	}
 
 	result := one * two
+	name := instructionData.FieldByName("Output").Interface().(string)
 	variable.SetVariable(name, result)
 	finished <- true
 	return -1
@@ -79,32 +88,37 @@ func Multiply(instructionData reflect.Value, finished chan bool) int {
 // Pow make the pow of a number
 func Pow(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Pow ...")
-	name := instructionData.FieldByName("Output").Interface().(string)
-	SOne := instructionData.FieldByName("ValueOne").Interface().(string)
-	one, _ := strconv.ParseFloat(SOne, 64)
+
+	var one float64
 	if oneIsVar := instructionData.FieldByName("ValueOneIsVar").Interface().(bool); oneIsVar {
-		if val := variable.SearchVariable(SOne).Value; val != nil {
+		varOneName := instructionData.FieldByName("VarOneName").Interface().(string)
+		if val := variable.SearchVariable(varOneName).Value; val != nil {
 			one = val.(float64)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", SOne)
+			fmt.Println("FIBER WARNING: Unable to find var ...", varOneName)
 			finished <- true
 			return -1
 		}
+	} else {
+		one = instructionData.FieldByName("ValueOne").Interface().(float64)
 	}
 
-	STwo := instructionData.FieldByName("ValueTwo").Interface().(string)
-	two, _ := strconv.ParseFloat(STwo, 64)
+	var two float64
 	if twoIsVar := instructionData.FieldByName("ValueTwoIsVar").Interface().(bool); twoIsVar {
-		if val := variable.SearchVariable(STwo).Value; val != nil {
+		varTwoName := instructionData.FieldByName("VarTwoName").Interface().(string)
+		if val := variable.SearchVariable(varTwoName).Value; val != nil {
 			two = val.(float64)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", STwo)
+			fmt.Println("FIBER WARNING: Unable to find var ...", varTwoName)
 			finished <- true
 			return -1
 		}
+	} else {
+		two = instructionData.FieldByName("ValueTwo").Interface().(float64)
 	}
 
 	result := math.Pow(one, two)
+	name := instructionData.FieldByName("Output").Interface().(string)
 	variable.SetVariable(name, result)
 	finished <- true
 	return -1
@@ -113,20 +127,23 @@ func Pow(instructionData reflect.Value, finished chan bool) int {
 // Sqrt make the Sqrt of a number
 func Sqrt(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Sqrt ...")
-	name := instructionData.FieldByName("Output").Interface().(string)
-	SValue := instructionData.FieldByName("Value").Interface().(string)
-	value, _ := strconv.ParseFloat(SValue, 64)
+
+	var value float64
 	if isVar := instructionData.FieldByName("ValueIsVar").Interface().(bool); isVar {
-		if val := variable.SearchVariable(SValue).Value; val != nil {
+		varName := instructionData.FieldByName("VarName").Interface().(string)
+		if val := variable.SearchVariable(varName).Value; val != nil {
 			value = val.(float64)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", SValue)
+			fmt.Println("FIBER WARNING: Unable to find var ...", varName)
 			finished <- true
 			return -1
 		}
+	} else {
+		value = instructionData.FieldByName("Value").Interface().(float64)
 	}
 
 	result := math.Sqrt(value)
+	name := instructionData.FieldByName("Output").Interface().(string)
 	variable.SetVariable(name, result)
 	finished <- true
 	return -1
@@ -135,32 +152,37 @@ func Sqrt(instructionData reflect.Value, finished chan bool) int {
 // Substract make the substraction of two numbers
 func Substract(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Substracting ...")
-	name := instructionData.FieldByName("Output").Interface().(string)
-	SOne := instructionData.FieldByName("ValueOne").Interface().(string)
-	one, _ := strconv.Atoi(SOne)
+
+	var one float64
 	if oneIsVar := instructionData.FieldByName("ValueOneIsVar").Interface().(bool); oneIsVar {
-		if val := variable.SearchVariable(SOne).Value; val != nil {
-			one = val.(int)
+		varOneName := instructionData.FieldByName("VarOneName").Interface().(string)
+		if val := variable.SearchVariable(varOneName).Value; val != nil {
+			one = val.(float64)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", SOne)
+			fmt.Println("FIBER WARNING: Unable to find var ...", varOneName)
 			finished <- true
 			return -1
 		}
+	} else {
+		one = instructionData.FieldByName("ValueOne").Interface().(float64)
 	}
 
-	STwo := instructionData.FieldByName("ValueTwo").Interface().(string)
-	two, _ := strconv.Atoi(STwo)
+	var two float64
 	if twoIsVar := instructionData.FieldByName("ValueTwoIsVar").Interface().(bool); twoIsVar {
-		if val := variable.SearchVariable(STwo).Value; val != nil {
-			two = val.(int)
+		varTwoName := instructionData.FieldByName("VarTwoName").Interface().(string)
+		if val := variable.SearchVariable(varTwoName).Value; val != nil {
+			two = val.(float64)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", STwo)
+			fmt.Println("FIBER WARNING: Unable to find var ...", varTwoName)
 			finished <- true
 			return -1
 		}
+	} else {
+		two = instructionData.FieldByName("ValueTwo").Interface().(float64)
 	}
 
 	result := one - two
+	name := instructionData.FieldByName("Output").Interface().(string)
 	variable.SetVariable(name, result)
 	finished <- true
 	return -1
@@ -169,32 +191,37 @@ func Substract(instructionData reflect.Value, finished chan bool) int {
 // Sum make the sum of two numbers
 func Sum(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Additioning ...")
-	name := instructionData.FieldByName("Output").Interface().(string)
-	SOne := instructionData.FieldByName("ValueOne").Interface().(string)
-	one, _ := strconv.Atoi(SOne)
+
+	var one float64
 	if oneIsVar := instructionData.FieldByName("ValueOneIsVar").Interface().(bool); oneIsVar {
-		if val := variable.SearchVariable(SOne).Value; val != nil {
-			one = val.(int)
+		varOneName := instructionData.FieldByName("VarOneName").Interface().(string)
+		if val := variable.SearchVariable(varOneName).Value; val != nil {
+			one = val.(float64)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", SOne)
+			fmt.Println("FIBER WARNING: Unable to find var ...", varOneName)
 			finished <- true
 			return -1
 		}
+	} else {
+		one = instructionData.FieldByName("ValueOne").Interface().(float64)
 	}
 
-	STwo := instructionData.FieldByName("ValueTwo").Interface().(string)
-	two, _ := strconv.Atoi(STwo)
+	var two float64
 	if twoIsVar := instructionData.FieldByName("ValueTwoIsVar").Interface().(bool); twoIsVar {
-		if val := variable.SearchVariable(STwo).Value; val != nil {
-			two = val.(int)
+		varTwoName := instructionData.FieldByName("VarTwoName").Interface().(string)
+		if val := variable.SearchVariable(varTwoName).Value; val != nil {
+			two = val.(float64)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", STwo)
+			fmt.Println("FIBER WARNING: Unable to find var ...", varTwoName)
 			finished <- true
 			return -1
 		}
+	} else {
+		two = instructionData.FieldByName("ValueTwo").Interface().(float64)
 	}
 
 	result := one + two
+	name := instructionData.FieldByName("Output").Interface().(string)
 	variable.SetVariable(name, result)
 	finished <- true
 	return -1

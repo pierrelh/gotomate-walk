@@ -8,12 +8,19 @@ var SleepTemplate = []declarative.Widget{
 		Title:  "Sleep For",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
+			declarative.TextEdit{
+				Text:          declarative.Bind("DurationVarName"),
+				Visible:       declarative.Bind("DurationIsAVar.Checked"),
+				CompactHeight: true,
+			},
 			declarative.NumberEdit{
 				Value:    declarative.Bind("Duration"),
+				Visible:  declarative.Bind("!DurationIsAVar.Checked"),
 				Suffix:   " s",
-				Decimals: 0,
+				Decimals: 2,
 			},
 			declarative.CheckBox{
+				Name:    "DurationIsAVar",
 				Text:    "Is a Var",
 				Checked: declarative.Bind("DurationIsVar"),
 			},
@@ -27,12 +34,19 @@ var MilliSleepTemplate = []declarative.Widget{
 		Title:  "Sleep For",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
+			declarative.TextEdit{
+				Text:          declarative.Bind("DurationVarName"),
+				Visible:       declarative.Bind("DurationIsAVar.Checked"),
+				CompactHeight: true,
+			},
 			declarative.NumberEdit{
 				Value:    declarative.Bind("Duration"),
+				Visible:  declarative.Bind("!DurationIsAVar.Checked"),
 				Suffix:   " ms",
-				Decimals: 0,
+				Decimals: 2,
 			},
 			declarative.CheckBox{
+				Name:    "DurationIsAVar",
 				Text:    "Is a Var",
 				Checked: declarative.Bind("DurationIsVar"),
 			},
