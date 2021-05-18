@@ -50,10 +50,15 @@ func CreateApp() {
 						AssignTo:    &aw.Menu.Import,
 						Text:        "Import",
 						Image:       "/img/menu-icons/import.png",
-						Enabled:     declarative.Bind("enabledCB.Checked"),
-						Visible:     declarative.Bind("!openHiddenCB.Checked"),
 						Shortcut:    declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyO},
 						OnTriggered: func() { aw.InitImportFiber() },
+					},
+					declarative.Action{
+						AssignTo:    &aw.Menu.Export,
+						Text:        "Export",
+						Image:       "/img/menu-icons/export.png",
+						Shortcut:    declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyO},
+						OnTriggered: func() { aw.ExportFiber() },
 					},
 					declarative.Menu{
 						AssignTo: &aw.Menu.FoldersMenu,
@@ -68,20 +73,16 @@ func CreateApp() {
 						OnTriggered: func() { aw.InitSaveFiber() },
 					},
 					declarative.Action{
-						AssignTo:    &aw.Menu.Export,
-						Text:        "Export",
-						Image:       "/img/menu-icons/export.png",
-						Enabled:     declarative.Bind("enabledCB.Checked"),
-						Visible:     declarative.Bind("!openHiddenCB.Checked"),
-						Shortcut:    declarative.Shortcut{Modifiers: walk.ModControl, Key: walk.KeyO},
-						OnTriggered: func() { aw.ExportFiber() },
-					},
-					declarative.Action{
 						AssignTo:    &aw.Menu.Exit,
 						Text:        "Exit",
 						OnTriggered: func() { aw.MainWindow.Close() },
 					},
 				},
+			},
+			declarative.Action{
+				AssignTo:    &aw.Menu.ImportPackage,
+				Text:        "Import Package",
+				OnTriggered: func() { aw.InitImportPackage() },
 			},
 			declarative.Menu{
 				AssignTo: &aw.Menu.FiberMenu,
