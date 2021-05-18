@@ -3,6 +3,8 @@ package fiber
 import (
 	"encoding/json"
 	"fmt"
+
+	// DON'T REMOVE ME / New packages inserted here
 	algorithmic "gotomate/fiber/packages/Algorithmic"
 	arithmetic "gotomate/fiber/packages/Arithmetic"
 	battery "gotomate/fiber/packages/Battery"
@@ -104,6 +106,7 @@ func (fiber *Fiber) RunFiber() {
 						running = 0
 						return
 					}
+				// DON'T REMOVE ME / New processing inserted here
 				case "Algorithmic":
 					nextID = algorithmic.Processing(funcName, instructionData, finished)
 				case "Arithmetic":

@@ -136,3 +136,36 @@ var NoFiberNameSetDialog = declarative.Dialog{
 		},
 	},
 }
+
+// PackageImportedDialog This dialog is showed when a package as successfully been imported
+var PackageImportedDialog = declarative.Dialog{
+	Icon:          "/img/icon.ico",
+	Title:         "Package Successfully imported",
+	AssignTo:      &Dlg,
+	DefaultButton: &acceptPB,
+	MinSize: declarative.Size{
+		Width:  200,
+		Height: 150,
+	},
+	Layout: declarative.VBox{},
+	Children: []declarative.Widget{
+		declarative.Composite{
+			Layout: declarative.VBox{},
+			Children: []declarative.Widget{
+				declarative.TextLabel{
+					Text:      "Package(s) successfully imported, please restart gotomate to use them.",
+					Alignment: declarative.Alignment2D(walk.AlignHCenterVCenter),
+					Font:      declarative.Font{Family: "Roboto", PointSize: 9},
+				},
+				declarative.PushButton{
+					AssignTo: &acceptPB,
+					Text:     "OK",
+					Font:     declarative.Font{Family: "Roboto", PointSize: 9},
+					OnClicked: func() {
+						Dlg.Cancel()
+					},
+				},
+			},
+		},
+	},
+}

@@ -2,6 +2,7 @@ package packages
 
 import (
 	"fmt"
+	// DON'T REMOVE ME / New packages inserted here
 	algorithmic "gotomate/fiber/packages/Algorithmic"
 	arithmetic "gotomate/fiber/packages/Arithmetic"
 	battery "gotomate/fiber/packages/Battery"
@@ -94,6 +95,7 @@ func CreateNewDialog(packageName string, funcName string, databinder ...interfac
 // PackageDecode Getting the right databinder & the right template needed
 func PackageDecode(packageName string, funcName string) (interface{}, []declarative.Widget) {
 	switch packageName {
+	// DON'T REMOVE ME / New Build inserted here
 	case "Battery":
 		return battery.Build(funcName)
 	case "Clipboard":
