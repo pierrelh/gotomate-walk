@@ -21,6 +21,8 @@ func Build(function string) (interface{}, []declarative.Widget) {
 		return new(RemoveAtDatabinder), RemoveAtTemplate
 	case "RemoveLast":
 		return new(RemoveLastDatabinder), RemoveLastTemplate
+	case "Shuffle":
+		return new(ShuffleDatabinder), ShuffleTemplate
 	case "UpdateValue":
 		return new(UpdateValueDatabinder), UpdateValueTemplate
 	default:

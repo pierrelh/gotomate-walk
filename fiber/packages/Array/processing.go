@@ -39,6 +39,11 @@ func Processing(funcName string, instructionData reflect.Value, finished chan bo
 			nextID = RemoveLast(instructionData, finished)
 		}()
 		<-finished
+	case "Shuffle":
+		go func() {
+			nextID = Shuffle(instructionData, finished)
+		}()
+		<-finished
 	case "UpdateValue":
 		go func() {
 			nextID = UpdateValue(instructionData, finished)

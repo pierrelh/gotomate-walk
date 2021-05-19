@@ -3,7 +3,9 @@ package array
 import (
 	"fmt"
 	"gotomate/fiber/variable"
+	"math/rand"
 	"reflect"
+	"time"
 )
 
 // PopAt Pop the wanted index of an array
@@ -183,7 +185,7 @@ func PushAt(instructionData reflect.Value, finished chan bool) int {
 		case bool:
 			boolValue = val
 		case int:
-			intValue = val
+			intValue = int(val)
 		case string:
 			stringValue = val
 		default:
@@ -392,6 +394,53 @@ func RemoveLast(instructionData reflect.Value, finished chan bool) int {
 	return -1
 }
 
+// Shuffle an array
+func Shuffle(instructionData reflect.Value, finished chan bool) int {
+	fmt.Println("FIBER INFO: Shuffling array ...")
+
+	var bools []bool
+	var ints []int
+	var strings []string
+	var typeOfArray string
+	arrayVarName := instructionData.FieldByName("ArrayVarName").Interface().(string)
+	if val := variable.SearchVariable(arrayVarName).Value; val != nil {
+		switch val := val.(type) {
+		case []bool:
+			bools = val
+			typeOfArray = "bool"
+		case []int:
+			ints = val
+			typeOfArray = "int"
+		case []string:
+			strings = val
+			typeOfArray = "string"
+		default:
+			fmt.Println("FIBER WARNING: Type error on updating value in array")
+			finished <- true
+			return -1
+		}
+	} else {
+		fmt.Println("FIBER WARNING: Unable to find var ...", arrayVarName)
+		finished <- true
+		return -1
+	}
+
+	rand.Seed(time.Now().UnixNano())
+
+	if typeOfArray == "bool" {
+		rand.Shuffle(len(bools), func(i, j int) { bools[i], bools[j] = bools[j], bools[i] })
+		variable.SetVariable(arrayVarName, bools)
+	} else if typeOfArray == "int" {
+		rand.Shuffle(len(ints), func(i, j int) { ints[i], ints[j] = ints[j], ints[i] })
+		variable.SetVariable(arrayVarName, ints)
+	} else {
+		rand.Shuffle(len(strings), func(i, j int) { strings[i], strings[j] = strings[j], strings[i] })
+		variable.SetVariable(arrayVarName, strings)
+	}
+	finished <- true
+	return -1
+}
+
 // UpdateValue Update a value of an array by index
 func UpdateValue(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Updating value in array by index ...")
@@ -446,7 +495,7 @@ func UpdateValue(instructionData reflect.Value, finished chan bool) int {
 		case bool:
 			boolValue = val
 		case int:
-			intValue = val
+			intValue = int(val)
 		case string:
 			stringValue = val
 		default:

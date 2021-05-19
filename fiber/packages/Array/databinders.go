@@ -43,6 +43,11 @@ type RemoveLastDatabinder struct {
 	ArrayVarName string
 }
 
+// ShuffleDatabinder Define the Shuffle parameters
+type ShuffleDatabinder struct {
+	ArrayVarName string
+}
+
 // UpdateValueDatabinder Define the UpdateValue parameters
 type UpdateValueDatabinder struct {
 	ArrayVarName string
