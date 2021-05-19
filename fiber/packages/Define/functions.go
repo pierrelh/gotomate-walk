@@ -58,9 +58,9 @@ func ArrayOfInt(instructionData reflect.Value, finished chan bool) int {
 	}
 
 	array := strings.Split(value, ",")
-	var intArray []int64
+	var intArray []int
 	for i := 0; i < len(array); i++ {
-		intValue, _ := strconv.ParseInt(array[i], 10, 64)
+		intValue, _ := strconv.Atoi(array[i])
 		intArray = append(intArray, intValue)
 	}
 

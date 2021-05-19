@@ -223,6 +223,25 @@ var RemoveLastTemplate = []declarative.Widget{
 	},
 }
 
+// ShuffleTemplate Dialog's Shuffle Template
+var ShuffleTemplate = []declarative.Widget{
+	declarative.GroupBox{
+		Title:  "Array:",
+		Layout: declarative.HBox{},
+		Children: []declarative.Widget{
+			declarative.TextEdit{
+				Text:          declarative.Bind("ArrayVarName"),
+				CompactHeight: true,
+			},
+			declarative.CheckBox{
+				Text:    "Is a Var",
+				Checked: true,
+				Enabled: false,
+			},
+		},
+	},
+}
+
 // UpdateValueTemplate Dialog's UpdateValue Template
 var UpdateValueTemplate = []declarative.Widget{
 	declarative.GroupBox{
