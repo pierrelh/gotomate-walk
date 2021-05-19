@@ -8,6 +8,7 @@ require (
 	github.com/go-ole/go-ole v1.2.5 // indirect
 	github.com/go-vgo/robotgo v0.93.1
 	github.com/gonutz/w32 v1.0.0
+	github.com/itchyny/volume-go v0.2.1
 	github.com/jpillora/overseer v1.1.6
 	github.com/kr/text v0.2.0 // indirect
 	github.com/lxn/walk v0.0.0-20210112085537-c389da54e794

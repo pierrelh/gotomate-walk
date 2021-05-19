@@ -1,5 +1,13 @@
 package define
 
+// ArrayDatabinder Define the Array parameters
+type ArrayDatabinder struct {
+	Name    string
+	Value   string
+	VarName string
+	IsVar   bool
+}
+
 // BoolDatabinder Define the Bool parameters
 type BoolDatabinder struct {
 	Name    string

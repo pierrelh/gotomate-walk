@@ -5,9 +5,11 @@ import (
 	// DON'T REMOVE ME / New packages inserted here
 	algorithmic "gotomate/fiber/packages/Algorithmic"
 	arithmetic "gotomate/fiber/packages/Arithmetic"
+	array "gotomate/fiber/packages/Array"
 	battery "gotomate/fiber/packages/Battery"
 	clipboard "gotomate/fiber/packages/Clipboard"
 	define "gotomate/fiber/packages/Define"
+	file "gotomate/fiber/packages/File"
 	flow "gotomate/fiber/packages/Flow"
 	input "gotomate/fiber/packages/Input"
 	keyboard "gotomate/fiber/packages/Keyboard"
@@ -17,6 +19,7 @@ import (
 	process "gotomate/fiber/packages/Process"
 	screen "gotomate/fiber/packages/Screen"
 	sleep "gotomate/fiber/packages/Sleep"
+	sound "gotomate/fiber/packages/Sound"
 	systime "gotomate/fiber/packages/Systime"
 
 	"github.com/lxn/walk"
@@ -96,19 +99,23 @@ func CreateNewDialog(packageName string, funcName string, databinder ...interfac
 // PackageDecode Getting the right databinder & the right template needed
 func PackageDecode(packageName string, funcName string) (interface{}, []declarative.Widget) {
 	switch packageName {
+	case "Flow":
+		return flow.Build(funcName)
 	// DON'T REMOVE ME / New Build inserted here
+	case "Algorithmic":
+		return algorithmic.Build(funcName)
+	case "Arithmetic":
+		return arithmetic.Build(funcName)
+	case "Array":
+		return array.Build(funcName)
 	case "Battery":
 		return battery.Build(funcName)
 	case "Clipboard":
 		return clipboard.Build(funcName)
 	case "Define":
 		return define.Build(funcName)
-	case "Flow":
-		return flow.Build(funcName)
-	case "Algorithmic":
-		return algorithmic.Build(funcName)
-	case "Arithmetic":
-		return arithmetic.Build(funcName)
+	case "File":
+		return file.Build(funcName)
 	case "Input":
 		return input.Build(funcName)
 	case "Keyboard":
@@ -125,6 +132,8 @@ func PackageDecode(packageName string, funcName string) (interface{}, []declarat
 		return screen.Build(funcName)
 	case "Sleep":
 		return sleep.Build(funcName)
+	case "Sound":
+		return sound.Build(funcName)
 	case "Systime":
 		return systime.Build(funcName)
 	default:
