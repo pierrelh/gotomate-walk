@@ -1,4 +1,4 @@
-package define
+package array
 
 import (
 	"fmt"
@@ -9,39 +9,39 @@ import (
 func Processing(funcName string, instructionData reflect.Value, finished chan bool) int {
 	nextID := -1
 	switch funcName {
-	case "ArrayOfBool":
+	case "PopAt":
 		go func() {
-			nextID = ArrayOfBool(instructionData, finished)
+			nextID = PopAt(instructionData, finished)
 		}()
 		<-finished
-	case "ArrayOfInt":
+	case "PopLast":
 		go func() {
-			nextID = ArrayOfInt(instructionData, finished)
+			nextID = PopLast(instructionData, finished)
 		}()
 		<-finished
-	case "ArrayOfString":
+	case "PushAt":
 		go func() {
-			nextID = ArrayOfString(instructionData, finished)
+			nextID = PushAt(instructionData, finished)
 		}()
 		<-finished
-	case "Bool":
+	case "PushLast":
 		go func() {
-			nextID = Bool(instructionData, finished)
+			nextID = PushLast(instructionData, finished)
 		}()
 		<-finished
-	case "Float":
+	case "RemoveAt":
 		go func() {
-			nextID = Float(instructionData, finished)
+			nextID = RemoveAt(instructionData, finished)
 		}()
 		<-finished
-	case "Int":
+	case "RemoveLast":
 		go func() {
-			nextID = Int(instructionData, finished)
+			nextID = RemoveLast(instructionData, finished)
 		}()
 		<-finished
-	case "String":
+	case "UpdateValue":
 		go func() {
-			nextID = String(instructionData, finished)
+			nextID = UpdateValue(instructionData, finished)
 		}()
 		<-finished
 	default:

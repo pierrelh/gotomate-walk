@@ -7,9 +7,11 @@ import (
 	// DON'T REMOVE ME / New packages inserted here
 	algorithmic "gotomate/fiber/packages/Algorithmic"
 	arithmetic "gotomate/fiber/packages/Arithmetic"
+	array "gotomate/fiber/packages/Array"
 	battery "gotomate/fiber/packages/Battery"
 	clipboard "gotomate/fiber/packages/Clipboard"
 	define "gotomate/fiber/packages/Define"
+	file "gotomate/fiber/packages/File"
 	flow "gotomate/fiber/packages/Flow"
 	input "gotomate/fiber/packages/Input"
 	keyboard "gotomate/fiber/packages/Keyboard"
@@ -19,6 +21,7 @@ import (
 	process "gotomate/fiber/packages/Process"
 	screen "gotomate/fiber/packages/Screen"
 	sleep "gotomate/fiber/packages/Sleep"
+	sound "gotomate/fiber/packages/Sound"
 	systime "gotomate/fiber/packages/Systime"
 	"gotomate/fiber/variable"
 	"reflect"
@@ -112,30 +115,36 @@ func (fiber *Fiber) RunFiber() {
 					nextID = algorithmic.Processing(funcName, instructionData, finished)
 				case "Arithmetic":
 					nextID = arithmetic.Processing(funcName, instructionData, finished)
-				case "Define":
-					nextID = define.Processing(funcName, instructionData, finished)
-				case "Sleep":
-					nextID = sleep.Processing(funcName, instructionData, finished)
-				case "Mouse":
-					nextID = mouse.Processing(funcName, instructionData, finished)
-				case "Keyboard":
-					nextID = keyboard.Processing(funcName, instructionData, finished)
-				case "Clipboard":
-					nextID = clipboard.Processing(funcName, instructionData, finished)
-				case "Log":
-					nextID = log.Processing(funcName, instructionData, finished)
-				case "Notification":
-					nextID = notification.Processing(funcName, instructionData, finished)
+				case "Array":
+					nextID = array.Processing(funcName, instructionData, finished)
 				case "Battery":
 					nextID = battery.Processing(funcName, instructionData, finished)
-				case "Systime":
-					nextID = systime.Processing(funcName, instructionData, finished)
-				case "Screen":
-					nextID = screen.Processing(funcName, instructionData, finished)
-				case "Process":
-					nextID = process.Processing(funcName, instructionData, finished)
+				case "Clipboard":
+					nextID = clipboard.Processing(funcName, instructionData, finished)
+				case "Define":
+					nextID = define.Processing(funcName, instructionData, finished)
+				case "File":
+					nextID = file.Processing(funcName, instructionData, finished)
 				case "Input":
 					nextID = input.Processing(funcName, instructionData, finished)
+				case "Keyboard":
+					nextID = keyboard.Processing(funcName, instructionData, finished)
+				case "Log":
+					nextID = log.Processing(funcName, instructionData, finished)
+				case "Mouse":
+					nextID = mouse.Processing(funcName, instructionData, finished)
+				case "Notification":
+					nextID = notification.Processing(funcName, instructionData, finished)
+				case "Process":
+					nextID = process.Processing(funcName, instructionData, finished)
+				case "Screen":
+					nextID = screen.Processing(funcName, instructionData, finished)
+				case "Sleep":
+					nextID = sleep.Processing(funcName, instructionData, finished)
+				case "Sound":
+					nextID = sound.Processing(funcName, instructionData, finished)
+				case "Systime":
+					nextID = systime.Processing(funcName, instructionData, finished)
 				default:
 					fmt.Println("FIBER WARNING: This package is not integrated yet: " + instruction.Package)
 					continue

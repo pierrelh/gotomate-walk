@@ -56,7 +56,7 @@ var IfTemplate = []declarative.Widget{
 		},
 	},
 	declarative.Label{
-		Text: "If false instruction ID:",
+		Text: "Else instruction ID:",
 	},
 	declarative.NumberEdit{
 		Value:    declarative.Bind("FalseInstruction"),
