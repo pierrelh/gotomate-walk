@@ -9,6 +9,8 @@ import (
 // Build Return the right databinder & the right template for a flow instruction
 func Build(function string) (interface{}, []declarative.Widget) {
 	switch function {
+	case "GetArrayLength":
+		return new(GetArrayLengthDatabinder), GetArrayLengthTemplate
 	case "PopAt":
 		return new(PopAtDatabinder), PopAtTemplate
 	case "PopLast":

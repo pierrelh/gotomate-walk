@@ -2,6 +2,32 @@ package array
 
 import "github.com/lxn/walk/declarative"
 
+// GetArrayLengthTemplate Dialog's GetArrayLength Template
+var GetArrayLengthTemplate = []declarative.Widget{
+	declarative.GroupBox{
+		Title:  "Array:",
+		Layout: declarative.HBox{},
+		Children: []declarative.Widget{
+			declarative.TextEdit{
+				Text:          declarative.Bind("ArrayVarName"),
+				CompactHeight: true,
+			},
+			declarative.CheckBox{
+				Text:    "Is a Var",
+				Checked: true,
+				Enabled: false,
+			},
+		},
+	},
+	declarative.Label{
+		Text: "Output:",
+	},
+	declarative.TextEdit{
+		Text:          declarative.Bind("Output"),
+		CompactHeight: true,
+	},
+}
+
 // PopAtTemplate Dialog's PopAt Template
 var PopAtTemplate = []declarative.Widget{
 	declarative.GroupBox{
