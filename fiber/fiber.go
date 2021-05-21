@@ -10,6 +10,7 @@ import (
 	array "gotomate/fiber/packages/Array"
 	battery "gotomate/fiber/packages/Battery"
 	clipboard "gotomate/fiber/packages/Clipboard"
+	conversion "gotomate/fiber/packages/Conversion"
 	define "gotomate/fiber/packages/Define"
 	file "gotomate/fiber/packages/File"
 	flow "gotomate/fiber/packages/Flow"
@@ -19,6 +20,7 @@ import (
 	mouse "gotomate/fiber/packages/Mouse"
 	notification "gotomate/fiber/packages/Notification"
 	process "gotomate/fiber/packages/Process"
+	scraping "gotomate/fiber/packages/Scraping"
 	screen "gotomate/fiber/packages/Screen"
 	sleep "gotomate/fiber/packages/Sleep"
 	sound "gotomate/fiber/packages/Sound"
@@ -121,6 +123,8 @@ func (fiber *Fiber) RunFiber() {
 					nextID = battery.Processing(funcName, instructionData, finished)
 				case "Clipboard":
 					nextID = clipboard.Processing(funcName, instructionData, finished)
+				case "Conversion":
+					nextID = conversion.Processing(funcName, instructionData, finished)
 				case "Define":
 					nextID = define.Processing(funcName, instructionData, finished)
 				case "File":
@@ -137,6 +141,8 @@ func (fiber *Fiber) RunFiber() {
 					nextID = notification.Processing(funcName, instructionData, finished)
 				case "Process":
 					nextID = process.Processing(funcName, instructionData, finished)
+				case "Scraping":
+					nextID = scraping.Processing(funcName, instructionData, finished)
 				case "Screen":
 					nextID = screen.Processing(funcName, instructionData, finished)
 				case "Sleep":

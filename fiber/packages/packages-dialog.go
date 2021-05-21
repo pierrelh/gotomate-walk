@@ -8,6 +8,7 @@ import (
 	array "gotomate/fiber/packages/Array"
 	battery "gotomate/fiber/packages/Battery"
 	clipboard "gotomate/fiber/packages/Clipboard"
+	conversion "gotomate/fiber/packages/Conversion"
 	define "gotomate/fiber/packages/Define"
 	file "gotomate/fiber/packages/File"
 	flow "gotomate/fiber/packages/Flow"
@@ -17,6 +18,7 @@ import (
 	mouse "gotomate/fiber/packages/Mouse"
 	notification "gotomate/fiber/packages/Notification"
 	process "gotomate/fiber/packages/Process"
+	scraping "gotomate/fiber/packages/Scraping"
 	screen "gotomate/fiber/packages/Screen"
 	sleep "gotomate/fiber/packages/Sleep"
 	sound "gotomate/fiber/packages/Sound"
@@ -112,6 +114,8 @@ func PackageDecode(packageName string, funcName string) (interface{}, []declarat
 		return battery.Build(funcName)
 	case "Clipboard":
 		return clipboard.Build(funcName)
+	case "Conversion":
+		return conversion.Build(funcName)
 	case "Define":
 		return define.Build(funcName)
 	case "File":
@@ -128,6 +132,8 @@ func PackageDecode(packageName string, funcName string) (interface{}, []declarat
 		return notification.Build(funcName)
 	case "Process":
 		return process.Build(funcName)
+	case "Scraping":
+		return scraping.Build(funcName)
 	case "Screen":
 		return screen.Build(funcName)
 	case "Sleep":

@@ -9,6 +9,11 @@ import (
 func Processing(funcName string, instructionData reflect.Value, finished chan bool) int {
 	nextID := -1
 	switch funcName {
+	case "GetArrayLength":
+		go func() {
+			nextID = GetArrayLength(instructionData, finished)
+		}()
+		<-finished
 	case "PopAt":
 		go func() {
 			nextID = PopAt(instructionData, finished)

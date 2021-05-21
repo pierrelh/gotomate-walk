@@ -1,5 +1,11 @@
 package array
 
+// GetArrayLengthDatabinder Define the GetArrayLength parameters
+type GetArrayLengthDatabinder struct {
+	ArrayVarName string
+	Output       string
+}
+
 // PopAtDatabinder Define the PopAt parameters
 type PopAtDatabinder struct {
 	ArrayVarName string

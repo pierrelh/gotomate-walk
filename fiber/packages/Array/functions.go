@@ -8,6 +8,50 @@ import (
 	"time"
 )
 
+// GetArrayLength Get the current length of an array
+func GetArrayLength(instructionData reflect.Value, finished chan bool) int {
+	fmt.Println("FIBER INFO: Get the lenth of an array ...")
+
+	var bools []bool
+	var ints []int
+	var strings []string
+	var typeOfArray string
+	arrayVarName := instructionData.FieldByName("ArrayVarName").Interface().(string)
+	if val := variable.SearchVariable(arrayVarName).Value; val != nil {
+		switch val := val.(type) {
+		case []bool:
+			bools = val
+			typeOfArray = "bool"
+		case []int:
+			ints = val
+			typeOfArray = "int"
+		case []string:
+			strings = val
+			typeOfArray = "string"
+		default:
+			fmt.Println("FIBER WARNING: Type error on length array")
+			finished <- true
+			return -1
+		}
+	} else {
+		fmt.Println("FIBER WARNING: Unable to find var ...", arrayVarName)
+		finished <- true
+		return -1
+	}
+
+	name := instructionData.FieldByName("Output").Interface().(string)
+
+	if typeOfArray == "bool" {
+		variable.SetVariable(name, len(bools))
+	} else if typeOfArray == "int" {
+		variable.SetVariable(name, len(ints))
+	} else {
+		variable.SetVariable(name, len(strings))
+	}
+	finished <- true
+	return -1
+}
+
 // PopAt Pop the wanted index of an array
 func PopAt(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Pop array at index ...")
