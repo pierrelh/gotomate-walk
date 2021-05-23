@@ -27,7 +27,6 @@ func Move(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(xVarName).Value; val != nil {
 			x = val.(int)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", xVarName)
 			finished <- true
 			return -1
 		}
@@ -41,7 +40,6 @@ func Move(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(yVarName).Value; val != nil {
 			y = val.(int)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", yVarName)
 			finished <- true
 			return -1
 		}
@@ -64,7 +62,6 @@ func Scroll(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(xVarName).Value; val != nil {
 			x = val.(int)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", xVarName)
 			finished <- true
 			return -1
 		}
@@ -78,7 +75,6 @@ func Scroll(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(yVarName).Value; val != nil {
 			y = val.(int)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", yVarName)
 			finished <- true
 			return -1
 		}

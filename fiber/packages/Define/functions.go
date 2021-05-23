@@ -18,7 +18,6 @@ func ArrayOfBool(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(varName).Value; val != nil {
 			value = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", varName)
 			finished <- true
 			return -1
 		}
@@ -49,7 +48,6 @@ func ArrayOfInt(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(varName).Value; val != nil {
 			value = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", varName)
 			finished <- true
 			return -1
 		}
@@ -80,7 +78,6 @@ func ArrayOfString(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(varName).Value; val != nil {
 			value = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", varName)
 			finished <- true
 			return -1
 		}
@@ -105,7 +102,6 @@ func Bool(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(varName).Value; val != nil {
 			value = val.(bool)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", varName)
 			finished <- true
 			return -1
 		}
@@ -129,7 +125,6 @@ func Float(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(varName).Value; val != nil {
 			value = val.(float64)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", varName)
 			finished <- true
 			return -1
 		}
@@ -153,7 +148,6 @@ func Int(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(varName).Value; val != nil {
 			value = val.(int)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", varName)
 			finished <- true
 			return -1
 		}
@@ -177,7 +171,6 @@ func String(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(varName).Value; val != nil {
 			value = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", varName)
 			finished <- true
 			return -1
 		}

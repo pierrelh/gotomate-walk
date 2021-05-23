@@ -48,7 +48,6 @@ func SetVolume(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(volumeVarName).Value; val != nil {
 			volumeLevel = val.(int)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", volumeVarName)
 			finished <- true
 			return -1
 		}

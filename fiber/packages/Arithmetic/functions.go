@@ -17,7 +17,6 @@ func Divide(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(varOneName).Value; val != nil {
 			one = val.(float64)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", varOneName)
 			finished <- true
 			return -1
 		}
@@ -31,7 +30,6 @@ func Divide(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(varTwoName).Value; val != nil {
 			two = val.(float64)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", varTwoName)
 			finished <- true
 			return -1
 		}
@@ -56,7 +54,6 @@ func Multiply(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(varOneName).Value; val != nil {
 			one = val.(float64)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", varOneName)
 			finished <- true
 			return -1
 		}
@@ -70,7 +67,6 @@ func Multiply(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(varTwoName).Value; val != nil {
 			two = val.(float64)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", varTwoName)
 			finished <- true
 			return -1
 		}
@@ -95,7 +91,6 @@ func Pow(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(varOneName).Value; val != nil {
 			one = val.(float64)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", varOneName)
 			finished <- true
 			return -1
 		}
@@ -109,7 +104,6 @@ func Pow(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(varTwoName).Value; val != nil {
 			two = val.(float64)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", varTwoName)
 			finished <- true
 			return -1
 		}
@@ -134,7 +128,6 @@ func Sqrt(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(varName).Value; val != nil {
 			value = val.(float64)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", varName)
 			finished <- true
 			return -1
 		}
@@ -159,7 +152,6 @@ func Substract(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(varOneName).Value; val != nil {
 			one = val.(float64)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", varOneName)
 			finished <- true
 			return -1
 		}
@@ -173,7 +165,6 @@ func Substract(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(varTwoName).Value; val != nil {
 			two = val.(float64)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", varTwoName)
 			finished <- true
 			return -1
 		}
@@ -198,7 +189,6 @@ func Sum(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(varOneName).Value; val != nil {
 			one = val.(float64)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", varOneName)
 			finished <- true
 			return -1
 		}
@@ -212,7 +202,6 @@ func Sum(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(varTwoName).Value; val != nil {
 			two = val.(float64)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", varTwoName)
 			finished <- true
 			return -1
 		}

@@ -17,7 +17,6 @@ func IntToString(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(inputVarName).Value; val != nil {
 			input = val.(int)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", inputVarName)
 			finished <- true
 			return -1
 		}
@@ -42,7 +41,6 @@ func StringToBool(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(inputVarName).Value; val != nil {
 			input = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", inputVarName)
 			finished <- true
 			return -1
 		}
@@ -67,7 +65,6 @@ func StringToInt(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(inputVarName).Value; val != nil {
 			input = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", inputVarName)
 			finished <- true
 			return -1
 		}

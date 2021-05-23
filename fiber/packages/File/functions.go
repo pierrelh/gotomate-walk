@@ -18,7 +18,6 @@ func Create(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(pathVarName).Value; val != nil {
 			path = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", pathVarName)
 			finished <- true
 			return -1
 		}
@@ -42,7 +41,6 @@ func Delete(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(pathVarName).Value; val != nil {
 			path = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", pathVarName)
 			finished <- true
 			return -1
 		}
@@ -65,7 +63,6 @@ func Read(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(pathVarName).Value; val != nil {
 			path = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", pathVarName)
 			finished <- true
 			return -1
 		}
@@ -90,7 +87,6 @@ func Write(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(pathVarName).Value; val != nil {
 			path = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", pathVarName)
 			finished <- true
 			return -1
 		}
@@ -104,7 +100,6 @@ func Write(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(ContentVarName).Value; val != nil {
 			content = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", ContentVarName)
 			finished <- true
 			return -1
 		}

@@ -34,7 +34,6 @@ func GetArrayLength(instructionData reflect.Value, finished chan bool) int {
 			return -1
 		}
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", arrayVarName)
 		finished <- true
 		return -1
 	}
@@ -78,7 +77,6 @@ func PopAt(instructionData reflect.Value, finished chan bool) int {
 			return -1
 		}
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", arrayVarName)
 		finished <- true
 		return -1
 	}
@@ -89,7 +87,6 @@ func PopAt(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(indexVarName).Value; val != nil {
 			index = val.(int)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", indexVarName)
 			finished <- true
 			return -1
 		}
@@ -148,7 +145,6 @@ func PopLast(instructionData reflect.Value, finished chan bool) int {
 			return -1
 		}
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", arrayVarName)
 		finished <- true
 		return -1
 	}
@@ -201,7 +197,6 @@ func PushAt(instructionData reflect.Value, finished chan bool) int {
 			return -1
 		}
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", arrayVarName)
 		finished <- true
 		return -1
 	}
@@ -212,7 +207,6 @@ func PushAt(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(indexVarName).Value; val != nil {
 			index = val.(int)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", indexVarName)
 			finished <- true
 			return -1
 		}
@@ -238,7 +232,6 @@ func PushAt(instructionData reflect.Value, finished chan bool) int {
 			return -1
 		}
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", valueVarName)
 		finished <- true
 		return -1
 	}
@@ -289,7 +282,6 @@ func PushLast(instructionData reflect.Value, finished chan bool) int {
 			return -1
 		}
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", arrayVarName)
 		finished <- true
 		return -1
 	}
@@ -312,7 +304,6 @@ func PushLast(instructionData reflect.Value, finished chan bool) int {
 			return -1
 		}
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", valueVarName)
 		finished <- true
 		return -1
 	}
@@ -357,7 +348,6 @@ func RemoveAt(instructionData reflect.Value, finished chan bool) int {
 			return -1
 		}
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", arrayVarName)
 		finished <- true
 		return -1
 	}
@@ -368,7 +358,6 @@ func RemoveAt(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(indexVarName).Value; val != nil {
 			index = val.(int)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", indexVarName)
 			finished <- true
 			return -1
 		}
@@ -419,7 +408,6 @@ func RemoveLast(instructionData reflect.Value, finished chan bool) int {
 			return -1
 		}
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", arrayVarName)
 		finished <- true
 		return -1
 	}
@@ -464,7 +452,6 @@ func Shuffle(instructionData reflect.Value, finished chan bool) int {
 			return -1
 		}
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", arrayVarName)
 		finished <- true
 		return -1
 	}
@@ -511,7 +498,6 @@ func UpdateValue(instructionData reflect.Value, finished chan bool) int {
 			return -1
 		}
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", arrayVarName)
 		finished <- true
 		return -1
 	}
@@ -522,7 +508,6 @@ func UpdateValue(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(indexVarName).Value; val != nil {
 			index = val.(int)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", indexVarName)
 			finished <- true
 			return -1
 		}
@@ -548,7 +533,6 @@ func UpdateValue(instructionData reflect.Value, finished chan bool) int {
 			return -1
 		}
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", valueVarName)
 		finished <- true
 		return -1
 	}

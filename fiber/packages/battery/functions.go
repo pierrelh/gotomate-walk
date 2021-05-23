@@ -40,8 +40,6 @@ func GetBatteryChargeRate(instructionData reflect.Value, finished chan bool) int
 	if batInstruction := variable.SearchVariable(batName).Value; batInstruction != nil {
 		bat := reflect.ValueOf(batInstruction).Interface().(*batType.Battery)
 		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), time.Duration(bat.ChargeRate))
-	} else {
-		fmt.Println("FIBER ERROR: Unable to find the battery named: ", batName)
 	}
 	finished <- true
 	return -1
@@ -54,8 +52,6 @@ func GetBatteryCurrentCapacity(instructionData reflect.Value, finished chan bool
 	if batInstruction := variable.SearchVariable(batName).Value; batInstruction != nil {
 		bat := reflect.ValueOf(batInstruction).Interface().(*batType.Battery)
 		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), bat.Current)
-	} else {
-		fmt.Println("FIBER ERROR: Unable to find the battery named: ", batName)
 	}
 	finished <- true
 	return -1
@@ -68,8 +64,6 @@ func GetBatteryDesignCapacity(instructionData reflect.Value, finished chan bool)
 	if batInstruction := variable.SearchVariable(batName).Value; batInstruction != nil {
 		bat := reflect.ValueOf(batInstruction).Interface().(*batType.Battery)
 		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), bat.Design)
-	} else {
-		fmt.Println("FIBER ERROR: Unable to find the battery named: ", batName)
 	}
 	finished <- true
 	return -1
@@ -82,8 +76,6 @@ func GetBatteryDesignVoltage(instructionData reflect.Value, finished chan bool) 
 	if batInstruction := variable.SearchVariable(batName).Value; batInstruction != nil {
 		bat := reflect.ValueOf(batInstruction).Interface().(*batType.Battery)
 		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), bat.DesignVoltage)
-	} else {
-		fmt.Println("FIBER ERROR: Unable to find the battery named: ", batName)
 	}
 	finished <- true
 	return -1
@@ -96,8 +88,6 @@ func GetBatteryLastFullCapacity(instructionData reflect.Value, finished chan boo
 	if batInstruction := variable.SearchVariable(batName).Value; batInstruction != nil {
 		bat := reflect.ValueOf(batInstruction).Interface().(*batType.Battery)
 		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), bat.Full)
-	} else {
-		fmt.Println("FIBER ERROR: Unable to find the battery named: ", batName)
 	}
 	finished <- true
 	return -1
@@ -110,8 +100,6 @@ func GetBatteryPercentage(instructionData reflect.Value, finished chan bool) int
 	if batInstruction := variable.SearchVariable(batName).Value; batInstruction != nil {
 		bat := reflect.ValueOf(batInstruction).Interface().(*batType.Battery)
 		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), bat.Current/bat.Full*100)
-	} else {
-		fmt.Println("FIBER ERROR: Unable to find the battery named: ", batName)
 	}
 	finished <- true
 	return -1
@@ -134,8 +122,6 @@ func GetBatteryRemainingTime(instructionData reflect.Value, finished chan bool) 
 		}
 		duration, _ := time.ParseDuration(fmt.Sprintf("%fh", timeNum))
 		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), duration)
-	} else {
-		fmt.Println("FIBER ERROR: Unable to find the battery named: ", batName)
 	}
 	finished <- true
 	return -1
@@ -148,8 +134,6 @@ func GetBatteryState(instructionData reflect.Value, finished chan bool) int {
 	if batInstruction := variable.SearchVariable(batName).Value; batInstruction != nil {
 		bat := reflect.ValueOf(batInstruction).Interface().(*batType.Battery)
 		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), bat.State)
-	} else {
-		fmt.Println("FIBER ERROR: Unable to find the battery named: ", batName)
 	}
 	finished <- true
 	return -1
@@ -162,8 +146,6 @@ func GetBatteryVoltage(instructionData reflect.Value, finished chan bool) int {
 	if batInstruction := variable.SearchVariable(batName).Value; batInstruction != nil {
 		bat := reflect.ValueOf(batInstruction).Interface().(*batType.Battery)
 		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), bat.Voltage)
-	} else {
-		fmt.Println("FIBER ERROR: Unable to find the battery named: ", batName)
 	}
 	finished <- true
 	return -1

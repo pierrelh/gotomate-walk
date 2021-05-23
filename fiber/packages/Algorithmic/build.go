@@ -9,6 +9,8 @@ import (
 // Build Return the right databinder & the right template for a flow instruction
 func Build(function string) (interface{}, []declarative.Widget) {
 	switch function {
+	case "For":
+		return new(ForDatabinder), ForTemplate
 	case "If":
 		return new(IfDatabinder), IfTemplate
 	}
