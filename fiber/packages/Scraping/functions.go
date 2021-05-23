@@ -17,7 +17,6 @@ func AddAllowedDomain(instructionData reflect.Value, finished chan bool) int {
 	if val := variable.SearchVariable(scraperVarName).Value; val != nil {
 		scraper = val.(*colly.Collector)
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", scraperVarName)
 		finished <- true
 		return -1
 	}
@@ -28,7 +27,6 @@ func AddAllowedDomain(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(pathVarName).Value; val != nil {
 			path = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", pathVarName)
 			finished <- true
 			return -1
 		}
@@ -51,7 +49,6 @@ func AddDisallowedDomain(instructionData reflect.Value, finished chan bool) int 
 	if val := variable.SearchVariable(scraperVarName).Value; val != nil {
 		scraper = val.(*colly.Collector)
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", scraperVarName)
 		finished <- true
 		return -1
 	}
@@ -62,7 +59,6 @@ func AddDisallowedDomain(instructionData reflect.Value, finished chan bool) int 
 		if val := variable.SearchVariable(pathVarName).Value; val != nil {
 			path = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", pathVarName)
 			finished <- true
 			return -1
 		}
@@ -85,7 +81,6 @@ func IgnoreRobotsTxt(instructionData reflect.Value, finished chan bool) int {
 	if val := variable.SearchVariable(scraperVarName).Value; val != nil {
 		scraper = val.(*colly.Collector)
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", scraperVarName)
 		finished <- true
 		return -1
 	}
@@ -96,7 +91,6 @@ func IgnoreRobotsTxt(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(ignoreVarName).Value; val != nil {
 			ignore = val.(bool)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", ignoreVarName)
 			finished <- true
 			return -1
 		}
@@ -129,7 +123,6 @@ func OnFindScrapAttribute(instructionData reflect.Value, finished chan bool) int
 	if val := variable.SearchVariable(scraperVarName).Value; val != nil {
 		scraper = val.(*colly.Collector)
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", scraperVarName)
 		finished <- true
 		return -1
 	}
@@ -140,7 +133,6 @@ func OnFindScrapAttribute(instructionData reflect.Value, finished chan bool) int
 		if val := variable.SearchVariable(elementVarName).Value; val != nil {
 			element = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", elementVarName)
 			finished <- true
 			return -1
 		}
@@ -154,7 +146,6 @@ func OnFindScrapAttribute(instructionData reflect.Value, finished chan bool) int
 		if val := variable.SearchVariable(attributeVarName).Value; val != nil {
 			attribute = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", attributeVarName)
 			finished <- true
 			return -1
 		}
@@ -167,7 +158,6 @@ func OnFindScrapAttribute(instructionData reflect.Value, finished chan bool) int
 	if val := variable.SearchVariable(tabVarName).Value; val != nil {
 		tab = val.([]string)
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", tabVarName)
 		finished <- true
 		return -1
 	}
@@ -192,7 +182,6 @@ func OnFindScrapChildAttribute(instructionData reflect.Value, finished chan bool
 	if val := variable.SearchVariable(scraperVarName).Value; val != nil {
 		scraper = val.(*colly.Collector)
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", scraperVarName)
 		finished <- true
 		return -1
 	}
@@ -203,7 +192,6 @@ func OnFindScrapChildAttribute(instructionData reflect.Value, finished chan bool
 		if val := variable.SearchVariable(elementVarName).Value; val != nil {
 			element = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", elementVarName)
 			finished <- true
 			return -1
 		}
@@ -217,7 +205,6 @@ func OnFindScrapChildAttribute(instructionData reflect.Value, finished chan bool
 		if val := variable.SearchVariable(childAttributeVarName).Value; val != nil {
 			childAttribute = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", childAttributeVarName)
 			finished <- true
 			return -1
 		}
@@ -231,7 +218,6 @@ func OnFindScrapChildAttribute(instructionData reflect.Value, finished chan bool
 		if val := variable.SearchVariable(attributeVarName).Value; val != nil {
 			attribute = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", attributeVarName)
 			finished <- true
 			return -1
 		}
@@ -244,7 +230,6 @@ func OnFindScrapChildAttribute(instructionData reflect.Value, finished chan bool
 	if val := variable.SearchVariable(tabVarName).Value; val != nil {
 		tab = val.([]string)
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", tabVarName)
 		finished <- true
 		return -1
 	}
@@ -269,7 +254,6 @@ func OnFindScrapText(instructionData reflect.Value, finished chan bool) int {
 	if val := variable.SearchVariable(scraperVarName).Value; val != nil {
 		scraper = val.(*colly.Collector)
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", scraperVarName)
 		finished <- true
 		return -1
 	}
@@ -280,7 +264,6 @@ func OnFindScrapText(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(elementVarName).Value; val != nil {
 			element = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", elementVarName)
 			finished <- true
 			return -1
 		}
@@ -293,7 +276,6 @@ func OnFindScrapText(instructionData reflect.Value, finished chan bool) int {
 	if val := variable.SearchVariable(tabVarName).Value; val != nil {
 		tab = val.([]string)
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", tabVarName)
 		finished <- true
 		return -1
 	}
@@ -317,7 +299,6 @@ func OnFindScrapChildText(instructionData reflect.Value, finished chan bool) int
 	if val := variable.SearchVariable(scraperVarName).Value; val != nil {
 		scraper = val.(*colly.Collector)
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", scraperVarName)
 		finished <- true
 		return -1
 	}
@@ -328,7 +309,6 @@ func OnFindScrapChildText(instructionData reflect.Value, finished chan bool) int
 		if val := variable.SearchVariable(childAttributeVarName).Value; val != nil {
 			childAttribute = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", childAttributeVarName)
 			finished <- true
 			return -1
 		}
@@ -342,7 +322,6 @@ func OnFindScrapChildText(instructionData reflect.Value, finished chan bool) int
 		if val := variable.SearchVariable(elementVarName).Value; val != nil {
 			element = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", elementVarName)
 			finished <- true
 			return -1
 		}
@@ -355,7 +334,6 @@ func OnFindScrapChildText(instructionData reflect.Value, finished chan bool) int
 	if val := variable.SearchVariable(tabVarName).Value; val != nil {
 		tab = val.([]string)
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", tabVarName)
 		finished <- true
 		return -1
 	}
@@ -379,7 +357,6 @@ func OnFindVisit(instructionData reflect.Value, finished chan bool) int {
 	if val := variable.SearchVariable(scraperVarName).Value; val != nil {
 		scraper = val.(*colly.Collector)
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", scraperVarName)
 		finished <- true
 		return -1
 	}
@@ -390,7 +367,6 @@ func OnFindVisit(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(elementVarName).Value; val != nil {
 			element = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", elementVarName)
 			finished <- true
 			return -1
 		}
@@ -417,7 +393,6 @@ func OnFindChildVisit(instructionData reflect.Value, finished chan bool) int {
 	if val := variable.SearchVariable(scraperVarName).Value; val != nil {
 		scraper = val.(*colly.Collector)
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", scraperVarName)
 		finished <- true
 		return -1
 	}
@@ -428,7 +403,6 @@ func OnFindChildVisit(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(childAttributeVarName).Value; val != nil {
 			childAttribute = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", childAttributeVarName)
 			finished <- true
 			return -1
 		}
@@ -442,7 +416,6 @@ func OnFindChildVisit(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(elementVarName).Value; val != nil {
 			element = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", elementVarName)
 			finished <- true
 			return -1
 		}
@@ -469,7 +442,6 @@ func ScraperEndCondition(instructionData reflect.Value, finished chan bool) int 
 	if val := variable.SearchVariable(scraperVarName).Value; val != nil {
 		scraper = val.(*colly.Collector)
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", scraperVarName)
 		finished <- true
 		return -1
 	}
@@ -513,7 +485,6 @@ func ScrapStart(instructionData reflect.Value, finished chan bool) int {
 	if val := variable.SearchVariable(scraperVarName).Value; val != nil {
 		scraper = val.(*colly.Collector)
 	} else {
-		fmt.Println("FIBER WARNING: Unable to find var ...", scraperVarName)
 		finished <- true
 		return -1
 	}
@@ -524,7 +495,6 @@ func ScrapStart(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(urlVarName).Value; val != nil {
 			url = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", urlVarName)
 			finished <- true
 			return -1
 		}

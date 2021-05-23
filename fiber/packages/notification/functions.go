@@ -20,7 +20,6 @@ func Create(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(titleVarName).Value; val != nil {
 			title = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", titleVarName)
 			finished <- true
 			return -1
 		}
@@ -34,7 +33,6 @@ func Create(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(messageVarName).Value; val != nil {
 			msg = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", messageVarName)
 			finished <- true
 			return -1
 		}

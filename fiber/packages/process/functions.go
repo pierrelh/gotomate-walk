@@ -17,7 +17,6 @@ func KillProcess(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(PIDVarName).Value; val != nil {
 			pid = val.(int)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", PIDVarName)
 			finished <- true
 			return -1
 		}
@@ -46,7 +45,6 @@ func StartProcess(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(pathVarName).Value; val != nil {
 			path = val.(string)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", pathVarName)
 			finished <- true
 			return -1
 		}

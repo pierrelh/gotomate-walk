@@ -16,7 +16,6 @@ func Print(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(varName).Value; val != nil {
 			log = val
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", varName)
 			finished <- true
 			return -1
 		}

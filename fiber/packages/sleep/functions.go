@@ -15,7 +15,6 @@ func MilliSleep(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(durationVarName).Value; val != nil {
 			duration = val.(float64)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", durationVarName)
 			finished <- true
 			return -1
 		}
@@ -37,7 +36,6 @@ func Sleep(instructionData reflect.Value, finished chan bool) int {
 		if val := variable.SearchVariable(durationVarName).Value; val != nil {
 			duration = val.(float64)
 		} else {
-			fmt.Println("FIBER WARNING: Unable to find var ...", durationVarName)
 			finished <- true
 			return -1
 		}
