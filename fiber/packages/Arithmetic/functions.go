@@ -11,35 +11,19 @@ import (
 func Divide(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Dividing ...")
 
-	var one float64
-	if oneIsVar := instructionData.FieldByName("ValueOneIsVar").Interface().(bool); oneIsVar {
-		varOneName := instructionData.FieldByName("VarOneName").Interface().(string)
-		if val := variable.SearchVariable(varOneName).Value; val != nil {
-			one = val.(float64)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		one = instructionData.FieldByName("ValueOne").Interface().(float64)
+	one, err := variable.GetValue(instructionData, "VarOneName", "ValueOneIsVar", "ValueOne")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	var two float64
-	if twoIsVar := instructionData.FieldByName("ValueTwoIsVar").Interface().(bool); twoIsVar {
-		varTwoName := instructionData.FieldByName("VarTwoName").Interface().(string)
-		if val := variable.SearchVariable(varTwoName).Value; val != nil {
-			two = val.(float64)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		two = instructionData.FieldByName("ValueTwo").Interface().(float64)
+	two, err := variable.GetValue(instructionData, "VarTwoName", "ValueTwoIsVar", "ValueTwo")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	result := one / two
-	name := instructionData.FieldByName("Output").Interface().(string)
-	variable.SetVariable(name, result)
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), variable.GetFloat(one)/variable.GetFloat(two))
 	finished <- true
 	return -1
 }
@@ -47,36 +31,20 @@ func Divide(instructionData reflect.Value, finished chan bool) int {
 // Multiply make the multiplication of two numbers
 func Multiply(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Multiplying ...")
-	var one float64
 
-	if oneIsVar := instructionData.FieldByName("ValueOneIsVar").Interface().(bool); oneIsVar {
-		varOneName := instructionData.FieldByName("VarOneName").Interface().(string)
-		if val := variable.SearchVariable(varOneName).Value; val != nil {
-			one = val.(float64)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		one = instructionData.FieldByName("ValueOne").Interface().(float64)
+	one, err := variable.GetValue(instructionData, "VarOneName", "ValueOneIsVar", "ValueOne")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	var two float64
-	if twoIsVar := instructionData.FieldByName("ValueTwoIsVar").Interface().(bool); twoIsVar {
-		varTwoName := instructionData.FieldByName("VarTwoName").Interface().(string)
-		if val := variable.SearchVariable(varTwoName).Value; val != nil {
-			two = val.(float64)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		two = instructionData.FieldByName("ValueTwo").Interface().(float64)
+	two, err := variable.GetValue(instructionData, "VarTwoName", "ValueTwoIsVar", "ValueTwo")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	result := one * two
-	name := instructionData.FieldByName("Output").Interface().(string)
-	variable.SetVariable(name, result)
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), variable.GetFloat(one)*variable.GetFloat(two))
 	finished <- true
 	return -1
 }
@@ -85,35 +53,19 @@ func Multiply(instructionData reflect.Value, finished chan bool) int {
 func Pow(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Pow ...")
 
-	var one float64
-	if oneIsVar := instructionData.FieldByName("ValueOneIsVar").Interface().(bool); oneIsVar {
-		varOneName := instructionData.FieldByName("VarOneName").Interface().(string)
-		if val := variable.SearchVariable(varOneName).Value; val != nil {
-			one = val.(float64)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		one = instructionData.FieldByName("ValueOne").Interface().(float64)
+	one, err := variable.GetValue(instructionData, "VarOneName", "ValueOneIsVar", "ValueOne")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	var two float64
-	if twoIsVar := instructionData.FieldByName("ValueTwoIsVar").Interface().(bool); twoIsVar {
-		varTwoName := instructionData.FieldByName("VarTwoName").Interface().(string)
-		if val := variable.SearchVariable(varTwoName).Value; val != nil {
-			two = val.(float64)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		two = instructionData.FieldByName("ValueTwo").Interface().(float64)
+	two, err := variable.GetValue(instructionData, "VarTwoName", "ValueTwoIsVar", "ValueTwo")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	result := math.Pow(one, two)
-	name := instructionData.FieldByName("Output").Interface().(string)
-	variable.SetVariable(name, result)
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), math.Pow(variable.GetFloat(one), variable.GetFloat(two)))
 	finished <- true
 	return -1
 }
@@ -122,22 +74,13 @@ func Pow(instructionData reflect.Value, finished chan bool) int {
 func Sqrt(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Sqrt ...")
 
-	var value float64
-	if isVar := instructionData.FieldByName("ValueIsVar").Interface().(bool); isVar {
-		varName := instructionData.FieldByName("VarName").Interface().(string)
-		if val := variable.SearchVariable(varName).Value; val != nil {
-			value = val.(float64)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		value = instructionData.FieldByName("Value").Interface().(float64)
+	value, err := variable.GetValue(instructionData, "VarName", "ValueIsVar", "Value")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	result := math.Sqrt(value)
-	name := instructionData.FieldByName("Output").Interface().(string)
-	variable.SetVariable(name, result)
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), math.Sqrt(variable.GetFloat(value)))
 	finished <- true
 	return -1
 }
@@ -146,35 +89,19 @@ func Sqrt(instructionData reflect.Value, finished chan bool) int {
 func Substract(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Substracting ...")
 
-	var one float64
-	if oneIsVar := instructionData.FieldByName("ValueOneIsVar").Interface().(bool); oneIsVar {
-		varOneName := instructionData.FieldByName("VarOneName").Interface().(string)
-		if val := variable.SearchVariable(varOneName).Value; val != nil {
-			one = val.(float64)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		one = instructionData.FieldByName("ValueOne").Interface().(float64)
+	one, err := variable.GetValue(instructionData, "VarOneName", "ValueOneIsVar", "ValueOne")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	var two float64
-	if twoIsVar := instructionData.FieldByName("ValueTwoIsVar").Interface().(bool); twoIsVar {
-		varTwoName := instructionData.FieldByName("VarTwoName").Interface().(string)
-		if val := variable.SearchVariable(varTwoName).Value; val != nil {
-			two = val.(float64)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		two = instructionData.FieldByName("ValueTwo").Interface().(float64)
+	two, err := variable.GetValue(instructionData, "VarTwoName", "ValueTwoIsVar", "ValueTwo")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	result := one - two
-	name := instructionData.FieldByName("Output").Interface().(string)
-	variable.SetVariable(name, result)
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), variable.GetFloat(one)-variable.GetFloat(two))
 	finished <- true
 	return -1
 }
@@ -183,35 +110,19 @@ func Substract(instructionData reflect.Value, finished chan bool) int {
 func Sum(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Additioning ...")
 
-	var one float64
-	if oneIsVar := instructionData.FieldByName("ValueOneIsVar").Interface().(bool); oneIsVar {
-		varOneName := instructionData.FieldByName("VarOneName").Interface().(string)
-		if val := variable.SearchVariable(varOneName).Value; val != nil {
-			one = val.(float64)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		one = instructionData.FieldByName("ValueOne").Interface().(float64)
+	one, err := variable.GetValue(instructionData, "VarOneName", "ValueOneIsVar", "ValueOne")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	var two float64
-	if twoIsVar := instructionData.FieldByName("ValueTwoIsVar").Interface().(bool); twoIsVar {
-		varTwoName := instructionData.FieldByName("VarTwoName").Interface().(string)
-		if val := variable.SearchVariable(varTwoName).Value; val != nil {
-			two = val.(float64)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		two = instructionData.FieldByName("ValueTwo").Interface().(float64)
+	two, err := variable.GetValue(instructionData, "VarTwoName", "ValueTwoIsVar", "ValueTwo")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	result := one + two
-	name := instructionData.FieldByName("Output").Interface().(string)
-	variable.SetVariable(name, result)
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), variable.GetFloat(one)+variable.GetFloat(two))
 	finished <- true
 	return -1
 }

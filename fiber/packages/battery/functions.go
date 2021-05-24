@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/distatus/battery"
-	batType "github.com/distatus/battery"
 )
 
 // GetBattery get the first system battery if exist
@@ -36,11 +35,15 @@ func GetBattery(instructionData reflect.Value, finished chan bool) int {
 // GetBatteryChargeRate : Return a battery charge rate mW
 func GetBatteryChargeRate(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Getting battery charge rate ...")
-	batName := instructionData.FieldByName("BatteryName").Interface().(string)
-	if batInstruction := variable.SearchVariable(batName).Value; batInstruction != nil {
-		bat := reflect.ValueOf(batInstruction).Interface().(*batType.Battery)
-		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), time.Duration(bat.ChargeRate))
+
+	batName, err := variable.GetValue(instructionData, "BatteryName")
+	if err != nil {
+		finished <- true
+		return -1
 	}
+
+	bat := batName.(*battery.Battery)
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), time.Duration(bat.ChargeRate))
 	finished <- true
 	return -1
 }
@@ -48,11 +51,15 @@ func GetBatteryChargeRate(instructionData reflect.Value, finished chan bool) int
 // GetBatteryCurrentCapacity : Return a battery current capacity
 func GetBatteryCurrentCapacity(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Getting battery current capacity ...")
-	batName := instructionData.FieldByName("BatteryName").Interface().(string)
-	if batInstruction := variable.SearchVariable(batName).Value; batInstruction != nil {
-		bat := reflect.ValueOf(batInstruction).Interface().(*batType.Battery)
-		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), bat.Current)
+
+	batName, err := variable.GetValue(instructionData, "BatteryName")
+	if err != nil {
+		finished <- true
+		return -1
 	}
+
+	bat := batName.(*battery.Battery)
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), bat.Current)
 	finished <- true
 	return -1
 }
@@ -60,11 +67,15 @@ func GetBatteryCurrentCapacity(instructionData reflect.Value, finished chan bool
 // GetBatteryDesignCapacity : Return a battery design capacity
 func GetBatteryDesignCapacity(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Getting battery design capacity ...")
-	batName := instructionData.FieldByName("BatteryName").Interface().(string)
-	if batInstruction := variable.SearchVariable(batName).Value; batInstruction != nil {
-		bat := reflect.ValueOf(batInstruction).Interface().(*batType.Battery)
-		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), bat.Design)
+
+	batName, err := variable.GetValue(instructionData, "BatteryName")
+	if err != nil {
+		finished <- true
+		return -1
 	}
+
+	bat := batName.(*battery.Battery)
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), bat.Design)
 	finished <- true
 	return -1
 }
@@ -72,11 +83,15 @@ func GetBatteryDesignCapacity(instructionData reflect.Value, finished chan bool)
 // GetBatteryDesignVoltage : Return a battery design voltage
 func GetBatteryDesignVoltage(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Getting battery design voltage ...")
-	batName := instructionData.FieldByName("BatteryName").Interface().(string)
-	if batInstruction := variable.SearchVariable(batName).Value; batInstruction != nil {
-		bat := reflect.ValueOf(batInstruction).Interface().(*batType.Battery)
-		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), bat.DesignVoltage)
+
+	batName, err := variable.GetValue(instructionData, "BatteryName")
+	if err != nil {
+		finished <- true
+		return -1
 	}
+
+	bat := batName.(*battery.Battery)
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), bat.DesignVoltage)
 	finished <- true
 	return -1
 }
@@ -84,11 +99,15 @@ func GetBatteryDesignVoltage(instructionData reflect.Value, finished chan bool) 
 // GetBatteryLastFullCapacity : Return a battery last full capacity
 func GetBatteryLastFullCapacity(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Getting battery last full capacity ...")
-	batName := instructionData.FieldByName("BatteryName").Interface().(string)
-	if batInstruction := variable.SearchVariable(batName).Value; batInstruction != nil {
-		bat := reflect.ValueOf(batInstruction).Interface().(*batType.Battery)
-		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), bat.Full)
+
+	batName, err := variable.GetValue(instructionData, "BatteryName")
+	if err != nil {
+		finished <- true
+		return -1
 	}
+
+	bat := batName.(*battery.Battery)
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), bat.Full)
 	finished <- true
 	return -1
 }
@@ -96,11 +115,15 @@ func GetBatteryLastFullCapacity(instructionData reflect.Value, finished chan boo
 // GetBatteryPercentage : Return the left percentage of a battery
 func GetBatteryPercentage(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Getting battery percentage ...")
-	batName := instructionData.FieldByName("BatteryName").Interface().(string)
-	if batInstruction := variable.SearchVariable(batName).Value; batInstruction != nil {
-		bat := reflect.ValueOf(batInstruction).Interface().(*batType.Battery)
-		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), bat.Current/bat.Full*100)
+
+	batName, err := variable.GetValue(instructionData, "BatteryName")
+	if err != nil {
+		finished <- true
+		return -1
 	}
+
+	bat := batName.(*battery.Battery)
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), bat.Current/bat.Full*100)
 	finished <- true
 	return -1
 }
@@ -109,20 +132,25 @@ func GetBatteryPercentage(instructionData reflect.Value, finished chan bool) int
 func GetBatteryRemainingTime(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Getting battery remaining time ...")
 	var timeNum float64
-	batName := instructionData.FieldByName("BatteryName").Interface().(string)
-	if batInstruction := variable.SearchVariable(batName).Value; batInstruction != nil {
-		bat := reflect.ValueOf(batInstruction).Interface().(*batType.Battery)
-		switch bat.State {
-		case battery.Discharging:
-			timeNum = bat.Current / bat.ChargeRate
-		case battery.Charging:
-			timeNum = (bat.Full - bat.Current) / bat.ChargeRate
-		default:
-			timeNum = 0
-		}
-		duration, _ := time.ParseDuration(fmt.Sprintf("%fh", timeNum))
-		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), duration)
+
+	batName, err := variable.GetValue(instructionData, "BatteryName")
+	if err != nil {
+		finished <- true
+		return -1
 	}
+
+	bat := batName.(*battery.Battery)
+	switch bat.State {
+	case battery.Discharging:
+		timeNum = bat.Current / bat.ChargeRate
+	case battery.Charging:
+		timeNum = (bat.Full - bat.Current) / bat.ChargeRate
+	default:
+		timeNum = 0
+	}
+	duration, _ := time.ParseDuration(fmt.Sprintf("%fh", timeNum))
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), duration)
+
 	finished <- true
 	return -1
 }
@@ -130,11 +158,15 @@ func GetBatteryRemainingTime(instructionData reflect.Value, finished chan bool) 
 // GetBatteryState : Return the battery state of a battery
 func GetBatteryState(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Getting battery state ...")
-	batName := instructionData.FieldByName("BatteryName").Interface().(string)
-	if batInstruction := variable.SearchVariable(batName).Value; batInstruction != nil {
-		bat := reflect.ValueOf(batInstruction).Interface().(*batType.Battery)
-		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), bat.State)
+
+	batName, err := variable.GetValue(instructionData, "BatteryName")
+	if err != nil {
+		finished <- true
+		return -1
 	}
+
+	bat := batName.(*battery.Battery)
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), bat.State)
 	finished <- true
 	return -1
 }
@@ -142,11 +174,15 @@ func GetBatteryState(instructionData reflect.Value, finished chan bool) int {
 // GetBatteryVoltage : Return a battery voltage
 func GetBatteryVoltage(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Getting battery voltage ...")
-	batName := instructionData.FieldByName("BatteryName").Interface().(string)
-	if batInstruction := variable.SearchVariable(batName).Value; batInstruction != nil {
-		bat := reflect.ValueOf(batInstruction).Interface().(*batType.Battery)
-		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), bat.Voltage)
+
+	batName, err := variable.GetValue(instructionData, "BatteryName")
+	if err != nil {
+		finished <- true
+		return -1
 	}
+
+	bat := batName.(*battery.Battery)
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), bat.Voltage)
 	finished <- true
 	return -1
 }

@@ -21,19 +21,13 @@ func Read(instructionData reflect.Value, finished chan bool) int {
 func Write(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Clipboard Writing ...")
 
-	var content string
-	if isVar := instructionData.FieldByName("IsVar").Interface().(bool); isVar {
-		varName := instructionData.FieldByName("VarName").Interface().(string)
-		if val := variable.SearchVariable(varName).Value; val != nil {
-			content = val.(string)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		content = instructionData.FieldByName("Content").Interface().(string)
+	content, err := variable.GetValue(instructionData, "VarName", "IsVar", "Content")
+	if err != nil {
+		finished <- true
+		return -1
 	}
-	robotgo.WriteAll(content)
+
+	robotgo.WriteAll(content.(string))
 	finished <- true
 	return -1
 }

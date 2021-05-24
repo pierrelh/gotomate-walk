@@ -12,30 +12,20 @@ import (
 func AddAllowedDomain(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Starting new process ...")
 
-	var scraper *colly.Collector
-	scraperVarName := instructionData.FieldByName("ScraperVarName").Interface().(string)
-	if val := variable.SearchVariable(scraperVarName).Value; val != nil {
-		scraper = val.(*colly.Collector)
-	} else {
+	scraper, err := variable.GetValue(instructionData, "ScraperVarName")
+	if err != nil {
 		finished <- true
 		return -1
 	}
 
-	var path string
-	if pathIsVar := instructionData.FieldByName("PathIsVar").Interface().(bool); pathIsVar {
-		pathVarName := instructionData.FieldByName("PathVarName").Interface().(string)
-		if val := variable.SearchVariable(pathVarName).Value; val != nil {
-			path = val.(string)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		path = instructionData.FieldByName("Path").Interface().(string)
+	path, err := variable.GetValue(instructionData, "PathVarName", "PathIsVar", "Path")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	scraper.AllowedDomains = append(scraper.AllowedDomains, path)
-	variable.SetVariable(scraperVarName, scraper)
+	scraper.(*colly.Collector).AllowedDomains = append(scraper.(*colly.Collector).AllowedDomains, path.(string))
+	variable.SetVariable(instructionData.FieldByName("ScraperVarName").Interface().(string), scraper.(*colly.Collector))
 	finished <- true
 	return -1
 }
@@ -44,30 +34,20 @@ func AddAllowedDomain(instructionData reflect.Value, finished chan bool) int {
 func AddDisallowedDomain(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Starting new process ...")
 
-	var scraper *colly.Collector
-	scraperVarName := instructionData.FieldByName("ScraperVarName").Interface().(string)
-	if val := variable.SearchVariable(scraperVarName).Value; val != nil {
-		scraper = val.(*colly.Collector)
-	} else {
+	scraper, err := variable.GetValue(instructionData, "ScraperVarName")
+	if err != nil {
 		finished <- true
 		return -1
 	}
 
-	var path string
-	if pathIsVar := instructionData.FieldByName("PathIsVar").Interface().(bool); pathIsVar {
-		pathVarName := instructionData.FieldByName("PathVarName").Interface().(string)
-		if val := variable.SearchVariable(pathVarName).Value; val != nil {
-			path = val.(string)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		path = instructionData.FieldByName("Path").Interface().(string)
+	path, err := variable.GetValue(instructionData, "PathVarName", "PathIsVar", "Path")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	scraper.DisallowedDomains = append(scraper.DisallowedDomains, path)
-	variable.SetVariable(scraperVarName, scraper)
+	scraper.(*colly.Collector).DisallowedDomains = append(scraper.(*colly.Collector).DisallowedDomains, path.(string))
+	variable.SetVariable(instructionData.FieldByName("ScraperVarName").Interface().(string), scraper.(*colly.Collector))
 	finished <- true
 	return -1
 }
@@ -76,30 +56,20 @@ func AddDisallowedDomain(instructionData reflect.Value, finished chan bool) int 
 func IgnoreRobotsTxt(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Starting new process ...")
 
-	var scraper *colly.Collector
-	scraperVarName := instructionData.FieldByName("ScraperVarName").Interface().(string)
-	if val := variable.SearchVariable(scraperVarName).Value; val != nil {
-		scraper = val.(*colly.Collector)
-	} else {
+	scraper, err := variable.GetValue(instructionData, "ScraperVarName")
+	if err != nil {
 		finished <- true
 		return -1
 	}
 
-	var ignore bool
-	if ignoreIsVar := instructionData.FieldByName("IgnoreIsVar").Interface().(bool); ignoreIsVar {
-		ignoreVarName := instructionData.FieldByName("IgnoreVarName").Interface().(string)
-		if val := variable.SearchVariable(ignoreVarName).Value; val != nil {
-			ignore = val.(bool)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		ignore = instructionData.FieldByName("Ignore").Interface().(bool)
+	ignore, err := variable.GetValue(instructionData, "IgnoreVarName", "IgnoreIsVar", "Ignore")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	scraper.IgnoreRobotsTxt = ignore
-	variable.SetVariable(scraperVarName, scraper)
+	scraper.(*colly.Collector).IgnoreRobotsTxt = ignore.(bool)
+	variable.SetVariable(instructionData.FieldByName("ScraperVarName").Interface().(string), scraper.(*colly.Collector))
 	finished <- true
 	return -1
 }
@@ -108,8 +78,7 @@ func IgnoreRobotsTxt(instructionData reflect.Value, finished chan bool) int {
 func NewScraper(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Starting new process ...")
 
-	scraper := colly.NewCollector()
-	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), scraper)
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), colly.NewCollector())
 	finished <- true
 	return -1
 }
@@ -118,57 +87,37 @@ func NewScraper(instructionData reflect.Value, finished chan bool) int {
 func OnFindScrapAttribute(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Starting new process ...")
 
-	var scraper *colly.Collector
-	scraperVarName := instructionData.FieldByName("ScraperVarName").Interface().(string)
-	if val := variable.SearchVariable(scraperVarName).Value; val != nil {
-		scraper = val.(*colly.Collector)
-	} else {
+	scraper, err := variable.GetValue(instructionData, "ScraperVarName")
+	if err != nil {
 		finished <- true
 		return -1
 	}
 
-	var element string
-	if elementIsVar := instructionData.FieldByName("ElementIsVar").Interface().(bool); elementIsVar {
-		elementVarName := instructionData.FieldByName("ElementVarName").Interface().(string)
-		if val := variable.SearchVariable(elementVarName).Value; val != nil {
-			element = val.(string)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		element = instructionData.FieldByName("Element").Interface().(string)
-	}
-
-	var attribute string
-	if attributeIsVar := instructionData.FieldByName("AttributeIsVar").Interface().(bool); attributeIsVar {
-		attributeVarName := instructionData.FieldByName("AttributeVarName").Interface().(string)
-		if val := variable.SearchVariable(attributeVarName).Value; val != nil {
-			attribute = val.(string)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		attribute = instructionData.FieldByName("Attribute").Interface().(string)
-	}
-
-	var tab []string
-	tabVarName := instructionData.FieldByName("TabVarName").Interface().(string)
-	if val := variable.SearchVariable(tabVarName).Value; val != nil {
-		tab = val.([]string)
-	} else {
+	element, err := variable.GetValue(instructionData, "ElementVarName", "ElementIsVar", "Element")
+	if err != nil {
 		finished <- true
 		return -1
 	}
 
-	scraper.OnHTML(element, func(e *colly.HTMLElement) {
-		value := e.Attr(attribute)
-		tab = append(tab, value)
-		variable.SetVariable(tabVarName, tab)
+	attribute, err := variable.GetValue(instructionData, "AttributeVarName", "AttributeIsVar", "Attribute")
+	if err != nil {
+		finished <- true
+		return -1
+	}
+
+	tab, err := variable.GetValue(instructionData, "TabVarName")
+	if err != nil {
+		finished <- true
+		return -1
+	}
+
+	scraper.(*colly.Collector).OnHTML(element.(string), func(e *colly.HTMLElement) {
+		value := e.Attr(attribute.(string))
+		tab = append(tab.([]string), value)
+		variable.SetVariable(instructionData.FieldByName("TabVarName").Interface().(string), tab.([]string))
 	})
 
-	variable.SetVariable(scraperVarName, scraper)
+	variable.SetVariable(instructionData.FieldByName("ScraperVarName").Interface().(string), scraper.(*colly.Collector))
 	finished <- true
 	return -1
 }
@@ -177,70 +126,43 @@ func OnFindScrapAttribute(instructionData reflect.Value, finished chan bool) int
 func OnFindScrapChildAttribute(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Starting new process ...")
 
-	var scraper *colly.Collector
-	scraperVarName := instructionData.FieldByName("ScraperVarName").Interface().(string)
-	if val := variable.SearchVariable(scraperVarName).Value; val != nil {
-		scraper = val.(*colly.Collector)
-	} else {
+	scraper, err := variable.GetValue(instructionData, "ScraperVarName")
+	if err != nil {
 		finished <- true
 		return -1
 	}
 
-	var element string
-	if elementIsVar := instructionData.FieldByName("ElementIsVar").Interface().(bool); elementIsVar {
-		elementVarName := instructionData.FieldByName("ElementVarName").Interface().(string)
-		if val := variable.SearchVariable(elementVarName).Value; val != nil {
-			element = val.(string)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		element = instructionData.FieldByName("Element").Interface().(string)
-	}
-
-	var childAttribute string
-	if childAttributeIsVar := instructionData.FieldByName("ChildAttributeIsVar").Interface().(bool); childAttributeIsVar {
-		childAttributeVarName := instructionData.FieldByName("ChildAttributeVarName").Interface().(string)
-		if val := variable.SearchVariable(childAttributeVarName).Value; val != nil {
-			childAttribute = val.(string)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		childAttribute = instructionData.FieldByName("ChildAttribute").Interface().(string)
-	}
-
-	var attribute string
-	if attributeIsVar := instructionData.FieldByName("AttributeIsVar").Interface().(bool); attributeIsVar {
-		attributeVarName := instructionData.FieldByName("AttributeVarName").Interface().(string)
-		if val := variable.SearchVariable(attributeVarName).Value; val != nil {
-			attribute = val.(string)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		attribute = instructionData.FieldByName("Attribute").Interface().(string)
-	}
-
-	var tab []string
-	tabVarName := instructionData.FieldByName("TabVarName").Interface().(string)
-	if val := variable.SearchVariable(tabVarName).Value; val != nil {
-		tab = val.([]string)
-	} else {
+	element, err := variable.GetValue(instructionData, "ElementVarName", "ElementIsVar", "Element")
+	if err != nil {
 		finished <- true
 		return -1
 	}
 
-	scraper.OnHTML(element, func(e *colly.HTMLElement) {
-		value := e.ChildAttr(childAttribute, attribute)
-		tab = append(tab, value)
-		variable.SetVariable(tabVarName, tab)
+	attribute, err := variable.GetValue(instructionData, "AttributeVarName", "AttributeIsVar", "Attribute")
+	if err != nil {
+		finished <- true
+		return -1
+	}
+
+	childAttribute, err := variable.GetValue(instructionData, "ChildAttributeVarName", "ChildAttributeIsVar", "ChildAttribute")
+	if err != nil {
+		finished <- true
+		return -1
+	}
+
+	tab, err := variable.GetValue(instructionData, "TabVarName")
+	if err != nil {
+		finished <- true
+		return -1
+	}
+
+	scraper.(*colly.Collector).OnHTML(element.(string), func(e *colly.HTMLElement) {
+		value := e.ChildAttr(childAttribute.(string), attribute.(string))
+		tab = append(tab.([]string), value)
+		variable.SetVariable(instructionData.FieldByName("TabVarName").Interface().(string), tab.([]string))
 	})
 
-	variable.SetVariable(scraperVarName, scraper)
+	variable.SetVariable(instructionData.FieldByName("ScraperVarName").Interface().(string), scraper.(*colly.Collector))
 	finished <- true
 	return -1
 }
@@ -249,43 +171,30 @@ func OnFindScrapChildAttribute(instructionData reflect.Value, finished chan bool
 func OnFindScrapText(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Starting new process ...")
 
-	var scraper *colly.Collector
-	scraperVarName := instructionData.FieldByName("ScraperVarName").Interface().(string)
-	if val := variable.SearchVariable(scraperVarName).Value; val != nil {
-		scraper = val.(*colly.Collector)
-	} else {
+	scraper, err := variable.GetValue(instructionData, "ScraperVarName")
+	if err != nil {
 		finished <- true
 		return -1
 	}
 
-	var element string
-	if elementIsVar := instructionData.FieldByName("ElementIsVar").Interface().(bool); elementIsVar {
-		elementVarName := instructionData.FieldByName("ElementVarName").Interface().(string)
-		if val := variable.SearchVariable(elementVarName).Value; val != nil {
-			element = val.(string)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		element = instructionData.FieldByName("Element").Interface().(string)
-	}
-
-	var tab []string
-	tabVarName := instructionData.FieldByName("TabVarName").Interface().(string)
-	if val := variable.SearchVariable(tabVarName).Value; val != nil {
-		tab = val.([]string)
-	} else {
+	element, err := variable.GetValue(instructionData, "ElementVarName", "ElementIsVar", "Element")
+	if err != nil {
 		finished <- true
 		return -1
 	}
 
-	scraper.OnHTML(element, func(e *colly.HTMLElement) {
+	tab, err := variable.GetValue(instructionData, "TabVarName")
+	if err != nil {
+		finished <- true
+		return -1
+	}
+
+	scraper.(*colly.Collector).OnHTML(element.(string), func(e *colly.HTMLElement) {
 		value := e.Text
-		tab = append(tab, value)
-		variable.SetVariable(tabVarName, tab)
+		tab = append(tab.([]string), value)
+		variable.SetVariable(instructionData.FieldByName("TabVarName").Interface().(string), tab.([]string))
 	})
-	variable.SetVariable(scraperVarName, scraper)
+	variable.SetVariable(instructionData.FieldByName("ScraperVarName").Interface().(string), scraper.(*colly.Collector))
 	finished <- true
 	return -1
 }
@@ -294,56 +203,36 @@ func OnFindScrapText(instructionData reflect.Value, finished chan bool) int {
 func OnFindScrapChildText(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Starting new process ...")
 
-	var scraper *colly.Collector
-	scraperVarName := instructionData.FieldByName("ScraperVarName").Interface().(string)
-	if val := variable.SearchVariable(scraperVarName).Value; val != nil {
-		scraper = val.(*colly.Collector)
-	} else {
+	scraper, err := variable.GetValue(instructionData, "ScraperVarName")
+	if err != nil {
 		finished <- true
 		return -1
 	}
 
-	var childAttribute string
-	if childAttributeIsVar := instructionData.FieldByName("ChildAttributeIsVar").Interface().(bool); childAttributeIsVar {
-		childAttributeVarName := instructionData.FieldByName("ChildAttributeVarName").Interface().(string)
-		if val := variable.SearchVariable(childAttributeVarName).Value; val != nil {
-			childAttribute = val.(string)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		childAttribute = instructionData.FieldByName("ChildAttribute").Interface().(string)
-	}
-
-	var element string
-	if elementIsVar := instructionData.FieldByName("ElementIsVar").Interface().(bool); elementIsVar {
-		elementVarName := instructionData.FieldByName("ElementVarName").Interface().(string)
-		if val := variable.SearchVariable(elementVarName).Value; val != nil {
-			element = val.(string)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		element = instructionData.FieldByName("Element").Interface().(string)
-	}
-
-	var tab []string
-	tabVarName := instructionData.FieldByName("TabVarName").Interface().(string)
-	if val := variable.SearchVariable(tabVarName).Value; val != nil {
-		tab = val.([]string)
-	} else {
+	element, err := variable.GetValue(instructionData, "ElementVarName", "ElementIsVar", "Element")
+	if err != nil {
 		finished <- true
 		return -1
 	}
 
-	scraper.OnHTML(element, func(e *colly.HTMLElement) {
-		value := e.ChildText(childAttribute)
-		tab = append(tab, value)
-		variable.SetVariable(tabVarName, tab)
+	childAttribute, err := variable.GetValue(instructionData, "ChildAttributeVarName", "ChildAttributeIsVar", "ChildAttribute")
+	if err != nil {
+		finished <- true
+		return -1
+	}
+
+	tab, err := variable.GetValue(instructionData, "TabVarName")
+	if err != nil {
+		finished <- true
+		return -1
+	}
+
+	scraper.(*colly.Collector).OnHTML(element.(string), func(e *colly.HTMLElement) {
+		value := e.ChildText(childAttribute.(string))
+		tab = append(tab.([]string), value)
+		variable.SetVariable(instructionData.FieldByName("TabVarName").Interface().(string), tab.([]string))
 	})
-	variable.SetVariable(scraperVarName, scraper)
+	variable.SetVariable(instructionData.FieldByName("ScraperVarName").Interface().(string), scraper.(*colly.Collector))
 	finished <- true
 	return -1
 }
@@ -352,34 +241,24 @@ func OnFindScrapChildText(instructionData reflect.Value, finished chan bool) int
 func OnFindVisit(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Starting new process ...")
 
-	var scraper *colly.Collector
-	scraperVarName := instructionData.FieldByName("ScraperVarName").Interface().(string)
-	if val := variable.SearchVariable(scraperVarName).Value; val != nil {
-		scraper = val.(*colly.Collector)
-	} else {
+	scraper, err := variable.GetValue(instructionData, "ScraperVarName")
+	if err != nil {
 		finished <- true
 		return -1
 	}
 
-	var element string
-	if elementIsVar := instructionData.FieldByName("ElementIsVar").Interface().(bool); elementIsVar {
-		elementVarName := instructionData.FieldByName("ElementVarName").Interface().(string)
-		if val := variable.SearchVariable(elementVarName).Value; val != nil {
-			element = val.(string)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		element = instructionData.FieldByName("Element").Interface().(string)
+	element, err := variable.GetValue(instructionData, "ElementVarName", "ElementIsVar", "Element")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	scraper.OnHTML(element, func(e *colly.HTMLElement) {
+	scraper.(*colly.Collector).OnHTML(element.(string), func(e *colly.HTMLElement) {
 		t := e.Attr("href")
-		scraper.Visit(t)
+		scraper.(*colly.Collector).Visit(t)
 	})
 
-	variable.SetVariable(scraperVarName, scraper)
+	variable.SetVariable(instructionData.FieldByName("ScraperVarName").Interface().(string), scraper.(*colly.Collector))
 	finished <- true
 	return -1
 }
@@ -388,47 +267,30 @@ func OnFindVisit(instructionData reflect.Value, finished chan bool) int {
 func OnFindChildVisit(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Starting new process ...")
 
-	var scraper *colly.Collector
-	scraperVarName := instructionData.FieldByName("ScraperVarName").Interface().(string)
-	if val := variable.SearchVariable(scraperVarName).Value; val != nil {
-		scraper = val.(*colly.Collector)
-	} else {
+	scraper, err := variable.GetValue(instructionData, "ScraperVarName")
+	if err != nil {
 		finished <- true
 		return -1
 	}
 
-	var childAttribute string
-	if childAttributeIsVar := instructionData.FieldByName("ChildAttributeIsVar").Interface().(bool); childAttributeIsVar {
-		childAttributeVarName := instructionData.FieldByName("ChildAttributeVarName").Interface().(string)
-		if val := variable.SearchVariable(childAttributeVarName).Value; val != nil {
-			childAttribute = val.(string)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		childAttribute = instructionData.FieldByName("ChildAttribute").Interface().(string)
+	element, err := variable.GetValue(instructionData, "ElementVarName", "ElementIsVar", "Element")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	var element string
-	if elementIsVar := instructionData.FieldByName("ElementIsVar").Interface().(bool); elementIsVar {
-		elementVarName := instructionData.FieldByName("ElementVarName").Interface().(string)
-		if val := variable.SearchVariable(elementVarName).Value; val != nil {
-			element = val.(string)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		element = instructionData.FieldByName("Element").Interface().(string)
+	childAttribute, err := variable.GetValue(instructionData, "ChildAttributeVarName", "ChildAttributeIsVar", "ChildAttribute")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	scraper.OnHTML(element, func(e *colly.HTMLElement) {
-		t := e.ChildAttr(childAttribute, "href")
-		scraper.Visit(t)
+	scraper.(*colly.Collector).OnHTML(element.(string), func(e *colly.HTMLElement) {
+		t := e.ChildAttr(childAttribute.(string), "href")
+		scraper.(*colly.Collector).Visit(t)
 	})
 
-	variable.SetVariable(scraperVarName, scraper)
+	variable.SetVariable(instructionData.FieldByName("ScraperVarName").Interface().(string), scraper.(*colly.Collector))
 	finished <- true
 	return -1
 }
@@ -437,41 +299,34 @@ func OnFindChildVisit(instructionData reflect.Value, finished chan bool) int {
 func ScraperEndCondition(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Starting new process ...")
 
-	var scraper *colly.Collector
-	scraperVarName := instructionData.FieldByName("ScraperVarName").Interface().(string)
-	if val := variable.SearchVariable(scraperVarName).Value; val != nil {
-		scraper = val.(*colly.Collector)
-	} else {
+	scraper, err := variable.GetValue(instructionData, "ScraperVarName")
+	if err != nil {
 		finished <- true
 		return -1
 	}
 
-	scraper.OnResponse(func(r *colly.Response) {
-		var end int64
-		if endIsVar := instructionData.FieldByName("EndIsVar").Interface().(bool); endIsVar {
-			endVarName := instructionData.FieldByName("EndVarName").Interface().(string)
-			if val := variable.SearchVariable(endVarName).Value; val != nil {
-				end = val.(int64)
-			}
-		} else {
-			end = instructionData.FieldByName("End").Interface().(int64)
+	scraper.(*colly.Collector).OnResponse(func(r *colly.Response) {
+
+		end, err := variable.GetValue(instructionData, "EndVarName", "EndIsVar", "End")
+		if err != nil {
+			finished <- true
+			return
 		}
 
-		end--
+		end = end.(int) - 1
 
-		if end <= 0 {
+		if end.(int) <= 0 {
 			panic("Scrap finished")
 		}
 		if endIsVar := instructionData.FieldByName("EndIsVar").Interface().(bool); endIsVar {
-			endVarName := instructionData.FieldByName("EndVarName").Interface().(string)
-			variable.SetVariable(endVarName, end)
+			variable.SetVariable(instructionData.FieldByName("EndVarName").Interface().(string), end.(int))
 		} else {
-			instructionData.FieldByName("End").SetInt(end)
+			instructionData.FieldByName("End").SetInt(end.(int64))
 		}
 
 	})
 
-	variable.SetVariable(scraperVarName, scraper)
+	variable.SetVariable(instructionData.FieldByName("ScraperVarName").Interface().(string), scraper.(*colly.Collector))
 	finished <- true
 	return -1
 }
@@ -480,30 +335,20 @@ func ScraperEndCondition(instructionData reflect.Value, finished chan bool) int 
 func ScrapStart(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Starting new process ...")
 
-	var scraper *colly.Collector
-	scraperVarName := instructionData.FieldByName("ScraperVarName").Interface().(string)
-	if val := variable.SearchVariable(scraperVarName).Value; val != nil {
-		scraper = val.(*colly.Collector)
-	} else {
+	scraper, err := variable.GetValue(instructionData, "ScraperVarName")
+	if err != nil {
 		finished <- true
 		return -1
 	}
 
-	var url string
-	if urlIsVar := instructionData.FieldByName("UrlIsVar").Interface().(bool); urlIsVar {
-		urlVarName := instructionData.FieldByName("UrlVarName").Interface().(string)
-		if val := variable.SearchVariable(urlVarName).Value; val != nil {
-			url = val.(string)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		url = instructionData.FieldByName("Url").Interface().(string)
+	url, err := variable.GetValue(instructionData, "UrlVarName", "UrlIsVar", "Url")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	scraper.Visit(url)
-	scraper.Wait()
+	scraper.(*colly.Collector).Visit(url.(string))
+	scraper.(*colly.Collector).Wait()
 	finished <- true
 	return -1
 }

@@ -12,20 +12,13 @@ import (
 func Create(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Creating File ...")
 
-	var path string
-	if IsVar := instructionData.FieldByName("PathIsVar").Interface().(bool); IsVar {
-		pathVarName := instructionData.FieldByName("PathVarName").Interface().(string)
-		if val := variable.SearchVariable(pathVarName).Value; val != nil {
-			path = val.(string)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		path = instructionData.FieldByName("Path").Interface().(string)
+	path, err := variable.GetValue(instructionData, "PathVarName", "PathIsVar", "Path")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	f, _ := os.Create(path)
+	f, _ := os.Create(path.(string))
 	f.Close()
 	finished <- true
 	return -1
@@ -35,20 +28,13 @@ func Create(instructionData reflect.Value, finished chan bool) int {
 func Delete(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Deleting File ...")
 
-	var path string
-	if IsVar := instructionData.FieldByName("PathIsVar").Interface().(bool); IsVar {
-		pathVarName := instructionData.FieldByName("PathVarName").Interface().(string)
-		if val := variable.SearchVariable(pathVarName).Value; val != nil {
-			path = val.(string)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		path = instructionData.FieldByName("Path").Interface().(string)
+	path, err := variable.GetValue(instructionData, "PathVarName", "PathIsVar", "Path")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	os.Remove(path)
+	os.Remove(path.(string))
 	finished <- true
 	return -1
 }
@@ -57,22 +43,14 @@ func Delete(instructionData reflect.Value, finished chan bool) int {
 func Read(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Reading File ...")
 
-	var path string
-	if IsVar := instructionData.FieldByName("PathIsVar").Interface().(bool); IsVar {
-		pathVarName := instructionData.FieldByName("PathVarName").Interface().(string)
-		if val := variable.SearchVariable(pathVarName).Value; val != nil {
-			path = val.(string)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		path = instructionData.FieldByName("Path").Interface().(string)
+	path, err := variable.GetValue(instructionData, "PathVarName", "PathIsVar", "Path")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	content, _ := ioutil.ReadFile(path)
-	name := instructionData.FieldByName("Output").Interface().(string)
-	variable.SetVariable(name, string(content))
+	content, _ := ioutil.ReadFile(path.(string))
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), string(content))
 	finished <- true
 	return -1
 }
@@ -81,33 +59,19 @@ func Read(instructionData reflect.Value, finished chan bool) int {
 func Write(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Reading File ...")
 
-	var path string
-	if pathIsVar := instructionData.FieldByName("PathIsVar").Interface().(bool); pathIsVar {
-		pathVarName := instructionData.FieldByName("PathVarName").Interface().(string)
-		if val := variable.SearchVariable(pathVarName).Value; val != nil {
-			path = val.(string)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		path = instructionData.FieldByName("Path").Interface().(string)
+	path, err := variable.GetValue(instructionData, "PathVarName", "PathIsVar", "Path")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	var content string
-	if contentIsVar := instructionData.FieldByName("ContentIsVar").Interface().(bool); contentIsVar {
-		ContentVarName := instructionData.FieldByName("ContentVarName").Interface().(string)
-		if val := variable.SearchVariable(ContentVarName).Value; val != nil {
-			content = val.(string)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		content = instructionData.FieldByName("Content").Interface().(string)
+	content, err := variable.GetValue(instructionData, "ContentVarName", "ContentIsVar", "Content")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	ioutil.WriteFile(path, []byte(content), 0644)
+	ioutil.WriteFile(path.(string), []byte(content.(string)), 0644)
 	finished <- true
 	return -1
 }

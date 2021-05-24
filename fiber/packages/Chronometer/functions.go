@@ -11,16 +11,13 @@ import (
 func End(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Getting elapsed chronometer time ...")
 
-	var chrono time.Time
-	chronoVarName := instructionData.FieldByName("ChronoVarName").Interface().(string)
-	if val := variable.SearchVariable(chronoVarName).Value; val != nil {
-		chrono = val.(time.Time)
-	} else {
+	chrono, err := variable.GetValue(instructionData, "ChronoVarName")
+	if err != nil {
 		finished <- true
 		return -1
 	}
 
-	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), time.Since(chrono))
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), time.Since(chrono.(time.Time)))
 	finished <- true
 	return -1
 }

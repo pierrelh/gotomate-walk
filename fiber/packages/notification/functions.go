@@ -14,39 +14,25 @@ import (
 func Create(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Creating notification ...")
 
-	var title string
-	if titleIsVar := instructionData.FieldByName("TitleIsVar").Interface().(bool); titleIsVar {
-		titleVarName := instructionData.FieldByName("TitleVarName").Interface().(string)
-		if val := variable.SearchVariable(titleVarName).Value; val != nil {
-			title = val.(string)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		title = instructionData.FieldByName("Title").Interface().(string)
+	title, err := variable.GetValue(instructionData, "TitleVarName", "TitleIsVar", "Title")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	var msg string
-	if msgIsVar := instructionData.FieldByName("MessageIsVar").Interface().(bool); msgIsVar {
-		messageVarName := instructionData.FieldByName("MessageVarName").Interface().(string)
-		if val := variable.SearchVariable(messageVarName).Value; val != nil {
-			msg = val.(string)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		msg = instructionData.FieldByName("Message").Interface().(string)
+	msg, err := variable.GetValue(instructionData, "MessageVarName", "MessageIsVar", "Message")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
 	notTitle := "Default Title"
 	notMsg := "Default Message"
 	if title != "" {
-		notTitle = title
+		notTitle = title.(string)
 	}
 	if msg != "" {
-		notMsg = msg
+		notMsg = msg.(string)
 	}
 
 	mw, err := walk.NewMainWindow()

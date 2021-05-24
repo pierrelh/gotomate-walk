@@ -9,8 +9,7 @@ import (
 // Bool Wait for user to set a bool
 func Bool(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Waiting for user input ...")
-	msg := instructionData.FieldByName("Message").Interface().(string)
-	fmt.Println(msg)
+	fmt.Println(instructionData.FieldByName("Message").Interface().(string))
 	var input bool
 	fmt.Scanln(&input)
 	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), input)
@@ -21,8 +20,7 @@ func Bool(instructionData reflect.Value, finished chan bool) int {
 // Float Wait for user to set a Float
 func Float(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Waiting for user input ...")
-	msg := instructionData.FieldByName("Message").Interface().(string)
-	fmt.Println(msg)
+	fmt.Println(instructionData.FieldByName("Message").Interface().(string))
 	var input float64
 	fmt.Scanln(&input)
 	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), input)
@@ -33,8 +31,7 @@ func Float(instructionData reflect.Value, finished chan bool) int {
 // Int Wait for user to set a int
 func Int(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Waiting for user input ...")
-	msg := instructionData.FieldByName("Message").Interface().(string)
-	fmt.Println(msg)
+	fmt.Println(instructionData.FieldByName("Message").Interface().(string))
 	var input int
 	fmt.Scanln(&input)
 	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), input)
@@ -45,8 +42,7 @@ func Int(instructionData reflect.Value, finished chan bool) int {
 // String Wait for user to set a string
 func String(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Waiting for user input ...")
-	msg := instructionData.FieldByName("Message").Interface().(string)
-	fmt.Println(msg)
+	fmt.Println(instructionData.FieldByName("Message").Interface().(string))
 	var input string
 	fmt.Scanln(&input)
 	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), input)

@@ -9,42 +9,29 @@ import (
 
 // MilliSleep sleep tm milli second
 func MilliSleep(instructionData reflect.Value, finished chan bool) int {
-	var duration float64
-	if durationIsVar := instructionData.FieldByName("DurationIsVar").Interface().(bool); durationIsVar {
-		durationVarName := instructionData.FieldByName("DurationVarName").Interface().(string)
-		if val := variable.SearchVariable(durationVarName).Value; val != nil {
-			duration = val.(float64)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		duration = instructionData.FieldByName("Duration").Interface().(float64)
+
+	duration, err := variable.GetValue(instructionData, "DurationVarName", "DurationIsVar", "Duration")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	fmt.Println("FIBER INFO: Sleeping for: ", duration, "ms")
-	time.Sleep(time.Duration(duration) * time.Millisecond)
+	fmt.Println("FIBER INFO: Sleeping for: ", duration.(float64), "ms")
+	time.Sleep(time.Duration(duration.(float64)) * time.Millisecond)
 	finished <- true
 	return -1
 }
 
 // Sleep time.Sleep tm second
 func Sleep(instructionData reflect.Value, finished chan bool) int {
-	var duration float64
-	if durationIsVar := instructionData.FieldByName("DurationIsVar").Interface().(bool); durationIsVar {
-		durationVarName := instructionData.FieldByName("DurationVarName").Interface().(string)
-		if val := variable.SearchVariable(durationVarName).Value; val != nil {
-			duration = val.(float64)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		duration = instructionData.FieldByName("Duration").Interface().(float64)
+	duration, err := variable.GetValue(instructionData, "DurationVarName", "DurationIsVar", "Duration")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	fmt.Println("FIBER INFO: Sleeping for: ", duration, "s")
-	time.Sleep(time.Duration(duration) * time.Second)
+	fmt.Println("FIBER INFO: Sleeping for: ", duration.(float64), "s")
+	time.Sleep(time.Duration(duration.(float64)) * time.Second)
 	finished <- true
 	return -1
 }

@@ -11,8 +11,8 @@ import (
 // GetMouseColor Get a pixel color by mouse position
 func GetMouseColor(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Getting mouse pixel color ...")
-	color := robotgo.GetMouseColor()
-	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), color)
+
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), robotgo.GetMouseColor())
 	finished <- true
 	return -1
 }
@@ -21,34 +21,19 @@ func GetMouseColor(instructionData reflect.Value, finished chan bool) int {
 func GetPixelColor(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Getting pixel color ...")
 
-	var x int
-	if xIsVar := instructionData.FieldByName("XIsVar").Interface().(bool); xIsVar {
-		xVarName := instructionData.FieldByName("XVarName").Interface().(string)
-		if val := variable.SearchVariable(xVarName).Value; val != nil {
-			x = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		x = instructionData.FieldByName("X").Interface().(int)
+	x, err := variable.GetValue(instructionData, "XVarName", "XIsVar", "X")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	var y int
-	if yIsVar := instructionData.FieldByName("YIsVar").Interface().(bool); yIsVar {
-		yVarName := instructionData.FieldByName("YVarName").Interface().(string)
-		if val := variable.SearchVariable(yVarName).Value; val != nil {
-			y = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		y = instructionData.FieldByName("Y").Interface().(int)
+	y, err := variable.GetValue(instructionData, "YVarName", "YIsVar", "Y")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	color := robotgo.GetPixelColor(x, y)
-	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), color)
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), robotgo.GetPixelColor(x.(int), y.(int)))
 	finished <- true
 	return -1
 }
@@ -56,6 +41,7 @@ func GetPixelColor(instructionData reflect.Value, finished chan bool) int {
 // GetScreenSize Get the screen size
 func GetScreenSize(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Getting screen size ...")
+
 	w, h := robotgo.GetScreenSize()
 	variable.SetVariable(instructionData.FieldByName("HeightOutput").Interface().(string), h)
 	variable.SetVariable(instructionData.FieldByName("WidthOutput").Interface().(string), w)
@@ -66,72 +52,37 @@ func GetScreenSize(instructionData reflect.Value, finished chan bool) int {
 func PartScreenShot(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Saving screen shot ...")
 
-	var path string
-	if pathIsVar := instructionData.FieldByName("PathIsVar").Interface().(bool); pathIsVar {
-		pathVarName := instructionData.FieldByName("PathVarName").Interface().(string)
-		if val := variable.SearchVariable(pathVarName).Value; val != nil {
-			path = val.(string)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		path = instructionData.FieldByName("Path").Interface().(string)
+	path, err := variable.GetValue(instructionData, "PathVarName", "PathIsVar", "Path")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	var x int
-	if xIsVar := instructionData.FieldByName("XIsVar").Interface().(bool); xIsVar {
-		xVarName := instructionData.FieldByName("XVarName").Interface().(string)
-		if val := variable.SearchVariable(xVarName).Value; val != nil {
-			x = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		x = instructionData.FieldByName("X").Interface().(int)
+	x, err := variable.GetValue(instructionData, "XVarName", "XIsVar", "X")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	var y int
-	if yIsVar := instructionData.FieldByName("YIsVar").Interface().(bool); yIsVar {
-		yVarName := instructionData.FieldByName("YVarName").Interface().(string)
-		if val := variable.SearchVariable(yVarName).Value; val != nil {
-			y = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		y = instructionData.FieldByName("Y").Interface().(int)
+	y, err := variable.GetValue(instructionData, "YVarName", "YIsVar", "Y")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	var w int
-	if wIsVar := instructionData.FieldByName("WIsVar").Interface().(bool); wIsVar {
-		wVarName := instructionData.FieldByName("WVarName").Interface().(string)
-		if val := variable.SearchVariable(wVarName).Value; val != nil {
-			w = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		w = instructionData.FieldByName("W").Interface().(int)
+	w, err := variable.GetValue(instructionData, "WVarName", "WIsVar", "W")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	var h int
-	if hIsVar := instructionData.FieldByName("HIsVar").Interface().(bool); hIsVar {
-		hVarName := instructionData.FieldByName("HVarName").Interface().(string)
-		if val := variable.SearchVariable(hVarName).Value; val != nil {
-			h = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		h = instructionData.FieldByName("H").Interface().(int)
+	h, err := variable.GetValue(instructionData, "HVarName", "HIsVar", "H")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	robotgo.SaveCapture(path, x, y, w, h)
+	robotgo.SaveCapture(path.(string), x.(int), y.(int), w.(int), h.(int))
 	finished <- true
 	return -1
 }
@@ -140,20 +91,13 @@ func PartScreenShot(instructionData reflect.Value, finished chan bool) int {
 func ScreenShot(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Saving screen shot ...")
 
-	var path string
-	if pathIsVar := instructionData.FieldByName("PathIsVar").Interface().(bool); pathIsVar {
-		pathVarName := instructionData.FieldByName("PathVarName").Interface().(string)
-		if val := variable.SearchVariable(pathVarName).Value; val != nil {
-			path = val.(string)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		path = instructionData.FieldByName("Path").Interface().(string)
+	path, err := variable.GetValue(instructionData, "PathVarName", "PathIsVar", "Path")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	robotgo.SaveCapture(path)
+	robotgo.SaveCapture(path.(string))
 	finished <- true
 	return -1
 }

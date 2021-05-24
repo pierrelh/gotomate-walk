@@ -13,8 +13,7 @@ func GetMuted(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Getting Mute status ...")
 
 	mute, _ := volume.GetMuted()
-	name := instructionData.FieldByName("Output").Interface().(string)
-	variable.SetVariable(name, mute)
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), mute)
 	finished <- true
 	return -1
 }
@@ -24,8 +23,7 @@ func GetVolume(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Get Volume ...")
 
 	volume, _ := volume.GetVolume()
-	name := instructionData.FieldByName("Output").Interface().(string)
-	variable.SetVariable(name, volume)
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), volume)
 	finished <- true
 	return -1
 }
@@ -42,20 +40,13 @@ func Mute(instructionData reflect.Value, finished chan bool) int {
 func SetVolume(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Setting Volume ...")
 
-	var volumeLevel int
-	if volumeIsVar := instructionData.FieldByName("VolumeIsVar").Interface().(bool); volumeIsVar {
-		volumeVarName := instructionData.FieldByName("VolumeVarName").Interface().(string)
-		if val := variable.SearchVariable(volumeVarName).Value; val != nil {
-			volumeLevel = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		volumeLevel = instructionData.FieldByName("Volume").Interface().(int)
+	volumeLevel, err := variable.GetValue(instructionData, "VolumeVarName", "VolumeIsVar", "Volume")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	volume.SetVolume(volumeLevel)
+	volume.SetVolume(volumeLevel.(int))
 	finished <- true
 	return -1
 }
