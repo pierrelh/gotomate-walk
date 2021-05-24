@@ -18,6 +18,18 @@ func Bool(instructionData reflect.Value, finished chan bool) int {
 	return -1
 }
 
+// Float Wait for user to set a Float
+func Float(instructionData reflect.Value, finished chan bool) int {
+	fmt.Println("FIBER INFO: Waiting for user input ...")
+	msg := instructionData.FieldByName("Message").Interface().(string)
+	fmt.Println(msg)
+	var input float64
+	fmt.Scanln(&input)
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), input)
+	finished <- true
+	return -1
+}
+
 // Int Wait for user to set a int
 func Int(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Waiting for user input ...")

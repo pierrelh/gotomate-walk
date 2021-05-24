@@ -11,6 +11,8 @@ func Build(function string) (interface{}, []declarative.Widget) {
 	switch function {
 	case "ArrayOfBool":
 		return new(ArrayDatabinder), ArrayTemplate
+	case "ArrayOfFloat":
+		return new(ArrayDatabinder), ArrayTemplate
 	case "ArrayOfInt":
 		return new(ArrayDatabinder), ArrayTemplate
 	case "ArrayOfString":

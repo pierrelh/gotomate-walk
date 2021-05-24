@@ -14,6 +14,11 @@ func Processing(funcName string, instructionData reflect.Value, finished chan bo
 			nextID = ArrayOfBool(instructionData, finished)
 		}()
 		<-finished
+	case "ArrayOfFloat":
+		go func() {
+			nextID = ArrayOfFloat(instructionData, finished)
+		}()
+		<-finished
 	case "ArrayOfInt":
 		go func() {
 			nextID = ArrayOfInt(instructionData, finished)

@@ -38,6 +38,36 @@ func ArrayOfBool(instructionData reflect.Value, finished chan bool) int {
 	return -1
 }
 
+// ArrayOfFloat Define an array of float in a flow
+func ArrayOfFloat(instructionData reflect.Value, finished chan bool) int {
+	fmt.Println("FIBER INFO: Defining an array of float ...")
+
+	var value string
+	if isVar := instructionData.FieldByName("IsVar").Interface().(bool); isVar {
+		varName := instructionData.FieldByName("VarName").Interface().(string)
+		if val := variable.SearchVariable(varName).Value; val != nil {
+			value = val.(string)
+		} else {
+			finished <- true
+			return -1
+		}
+	} else {
+		value = instructionData.FieldByName("Value").Interface().(string)
+	}
+
+	array := strings.Split(value, ",")
+	var floatArray []float64
+	for i := 0; i < len(array); i++ {
+		floatvalue, _ := strconv.ParseFloat(array[i], 64)
+		floatArray = append(floatArray, floatvalue)
+	}
+
+	name := instructionData.FieldByName("Name").Interface().(string)
+	variable.SetVariable(name, floatArray)
+	finished <- true
+	return -1
+}
+
 // ArrayOfInt Define an array of int in a flow
 func ArrayOfInt(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Defining an array of int ...")

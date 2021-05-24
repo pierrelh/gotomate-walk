@@ -24,6 +24,8 @@ func GetArrayLength(instructionData reflect.Value, finished chan bool) int {
 	switch variable.GetVariableType(array) {
 	case "[]bool":
 		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), len(array.([]bool)))
+	case "[]float64":
+		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), len(array.([]float64)))
 	case "[]int":
 		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), len(array.([]int)))
 	case "[]string":
@@ -62,6 +64,8 @@ func GetValue(instructionData reflect.Value, finished chan bool) int {
 	switch variable.GetVariableType(array) {
 	case "[]bool":
 		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), array.([]bool)[index])
+	case "[]float64":
+		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), array.([]float64)[index])
 	case "[]int":
 		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), array.([]int)[index])
 	case "[]string":
@@ -104,6 +108,12 @@ func PopAt(instructionData reflect.Value, finished chan bool) int {
 		array = array.([]bool)[:len(array.([]bool))-1]
 		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), popped)
 		variable.SetVariable(arrayVarName, array.([]bool))
+	case "[]float64":
+		popped := array.([]float64)[index]
+		copy(array.([]float64)[index:], array.([]float64)[index+1:])
+		array = array.([]float64)[:len(array.([]float64))-1]
+		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), popped)
+		variable.SetVariable(arrayVarName, array.([]float64))
 	case "[]int":
 		popped := array.([]int)[index]
 		copy(array.([]int)[index:], array.([]int)[index+1:])
@@ -140,6 +150,11 @@ func PopLast(instructionData reflect.Value, finished chan bool) int {
 		array = array.([]bool)[:len(array.([]bool))-1]
 		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), popped)
 		variable.SetVariable(arrayVarName, array.([]bool))
+	case "[]float64":
+		popped := array.([]float64)[len(array.([]float64))-1]
+		array = array.([]float64)[:len(array.([]float64))-1]
+		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), popped)
+		variable.SetVariable(arrayVarName, array.([]float64))
 	case "[]int":
 		popped := array.([]int)[len(array.([]int))-1]
 		array = array.([]int)[:len(array.([]int))-1]
@@ -196,6 +211,11 @@ func PushAt(instructionData reflect.Value, finished chan bool) int {
 		copy(array.([]bool)[index+1:], array.([]bool)[index:])
 		array.([]bool)[index] = value.(bool)
 		variable.SetVariable(arrayVarName, array.([]bool))
+	case "[]float64":
+		array = append(array.([]bool), false)
+		copy(array.([]float64)[index+1:], array.([]float64)[index:])
+		array.([]float64)[index] = value.(float64)
+		variable.SetVariable(arrayVarName, array.([]float64))
 	case "[]int":
 		array = append(array.([]int), 0)
 		copy(array.([]int)[index+1:], array.([]int)[index:])
@@ -237,6 +257,9 @@ func PushLast(instructionData reflect.Value, finished chan bool) int {
 	case "[]bool":
 		array = append(array.([]bool), value.(bool))
 		variable.SetVariable(arrayVarName, array.([]bool))
+	case "[]float64":
+		array = append(array.([]float64), value.(float64))
+		variable.SetVariable(arrayVarName, array.([]float64))
 	case "[]int":
 		array = append(array.([]int), value.(int))
 		variable.SetVariable(arrayVarName, array.([]int))
@@ -279,6 +302,10 @@ func RemoveAt(instructionData reflect.Value, finished chan bool) int {
 		copy(array.([]bool)[index:], array.([]bool)[index+1:])
 		array = array.([]bool)[:len(array.([]bool))-1]
 		variable.SetVariable(arrayVarName, array.([]bool))
+	case "[]float64":
+		copy(array.([]float64)[index:], array.([]float64)[index+1:])
+		array = array.([]float64)[:len(array.([]float64))-1]
+		variable.SetVariable(arrayVarName, array.([]float64))
 	case "[]int":
 		copy(array.([]int)[index:], array.([]int)[index+1:])
 		array = array.([]int)[:len(array.([]int))-1]
@@ -309,6 +336,9 @@ func RemoveLast(instructionData reflect.Value, finished chan bool) int {
 	case "[]bool":
 		array = array.([]bool)[:len(array.([]bool))-1]
 		variable.SetVariable(arrayVarName, array.([]bool))
+	case "[]float64":
+		array = array.([]float64)[:len(array.([]float64))-1]
+		variable.SetVariable(arrayVarName, array.([]float64))
 	case "[]int":
 		array = array.([]int)[:len(array.([]int))-1]
 		variable.SetVariable(arrayVarName, array.([]int))
@@ -339,6 +369,11 @@ func Shuffle(instructionData reflect.Value, finished chan bool) int {
 	case "[]bool":
 		rand.Shuffle(len(array.([]bool)), func(i, j int) { array.([]bool)[i], array.([]bool)[j] = array.([]bool)[j], array.([]bool)[i] })
 		variable.SetVariable(arrayVarName, array.([]bool))
+	case "[]float64":
+		rand.Shuffle(len(array.([]float64)), func(i, j int) {
+			array.([]float64)[i], array.([]float64)[j] = array.([]float64)[j], array.([]float64)[i]
+		})
+		variable.SetVariable(arrayVarName, array.([]float64))
 	case "[]int":
 		rand.Shuffle(len(array.([]int)), func(i, j int) { array.([]int)[i], array.([]int)[j] = array.([]int)[j], array.([]int)[i] })
 		variable.SetVariable(arrayVarName, array.([]int))
@@ -389,6 +424,9 @@ func UpdateValue(instructionData reflect.Value, finished chan bool) int {
 	case "[]bool":
 		array.([]bool)[index] = value.(bool)
 		variable.SetVariable(arrayVarName, array.([]bool))
+	case "[]float64":
+		array.([]float64)[index] = value.(float64)
+		variable.SetVariable(arrayVarName, array.([]float64))
 	case "[]int":
 		array.([]int)[index] = value.(int)
 		variable.SetVariable(arrayVarName, array.([]int))
