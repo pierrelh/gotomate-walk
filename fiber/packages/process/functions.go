@@ -6,8 +6,42 @@ import (
 	"os"
 	"os/exec"
 	"reflect"
+
+	"github.com/go-vgo/robotgo"
 )
 
+// GetTitle get the title of a process
+func GetTitle(instructionData reflect.Value, finished chan bool) int {
+	fmt.Println("FIBER INFO: Getting title of process ...")
+
+	var pid int
+	if pidIsVar := instructionData.FieldByName("PIDIsVar").Interface().(bool); pidIsVar {
+		PIDVarName := instructionData.FieldByName("PIDVarName").Interface().(string)
+		if val := variable.SearchVariable(PIDVarName).Value; val != nil {
+			pid = val.(int)
+		} else {
+			finished <- true
+			return -1
+		}
+	} else {
+		pid = instructionData.FieldByName("PID").Interface().(int)
+	}
+
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), robotgo.GetTitle(int32(pid)))
+	finished <- true
+	return -1
+}
+
+// GetPid get the pid of the active window
+func GetPid(instructionData reflect.Value, finished chan bool) int {
+	fmt.Println("FIBER INFO: Getting process pid ...")
+
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), robotgo.GetPID())
+	finished <- true
+	return -1
+}
+
+// KillProcess Kill a process by his pid
 func KillProcess(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Killing process ...")
 
@@ -31,6 +65,50 @@ func KillProcess(instructionData reflect.Value, finished chan bool) int {
 		return -1
 	}
 	proc.Kill()
+	finished <- true
+	return -1
+}
+
+// MaxSize set the max size for a process
+func MaxSize(instructionData reflect.Value, finished chan bool) int {
+	fmt.Println("FIBER INFO: Maximizing process size ...")
+
+	var pid int
+	if pidIsVar := instructionData.FieldByName("PIDIsVar").Interface().(bool); pidIsVar {
+		PIDVarName := instructionData.FieldByName("PIDVarName").Interface().(string)
+		if val := variable.SearchVariable(PIDVarName).Value; val != nil {
+			pid = val.(int)
+		} else {
+			finished <- true
+			return -1
+		}
+	} else {
+		pid = instructionData.FieldByName("PID").Interface().(int)
+	}
+
+	robotgo.MaxWindow(int32(pid))
+	finished <- true
+	return -1
+}
+
+// Reduce a process
+func Reduce(instructionData reflect.Value, finished chan bool) int {
+	fmt.Println("FIBER INFO: Reducing a process ...")
+
+	var pid int
+	if pidIsVar := instructionData.FieldByName("PIDIsVar").Interface().(bool); pidIsVar {
+		PIDVarName := instructionData.FieldByName("PIDVarName").Interface().(string)
+		if val := variable.SearchVariable(PIDVarName).Value; val != nil {
+			pid = val.(int)
+		} else {
+			finished <- true
+			return -1
+		}
+	} else {
+		pid = instructionData.FieldByName("PID").Interface().(int)
+	}
+
+	robotgo.MinWindow(int32(pid))
 	finished <- true
 	return -1
 }

@@ -15,8 +15,10 @@ func Build(function string) (interface{}, []declarative.Widget) {
 		return new(MouseColorDatabinder), MouseColorTemplate
 	case "GetScreenSize":
 		return new(SizeDatabinder), ScreenSizeTemplate
-	case "SaveCapture":
-		return new(SaveCaptureDatabinder), SaveCaptureTemplate
+	case "PartScreenShot":
+		return new(PartScreenShotDatabinder), PartScreenShotTemplate
+	case "ScreenShot":
+		return new(ScreenShotDatabinder), ScreenShotTemplate
 	}
 	fmt.Println("GOTOMATE ERROR: Unable to find the function for instruction building")
 	return nil, nil
