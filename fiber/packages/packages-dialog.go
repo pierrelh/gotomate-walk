@@ -7,6 +7,7 @@ import (
 	arithmetic "gotomate/fiber/packages/Arithmetic"
 	array "gotomate/fiber/packages/Array"
 	battery "gotomate/fiber/packages/Battery"
+	chronometer "gotomate/fiber/packages/Chronometer"
 	clipboard "gotomate/fiber/packages/Clipboard"
 	conversion "gotomate/fiber/packages/Conversion"
 	define "gotomate/fiber/packages/Define"
@@ -112,6 +113,8 @@ func PackageDecode(packageName string, funcName string) (interface{}, []declarat
 		return array.Build(funcName)
 	case "Battery":
 		return battery.Build(funcName)
+	case "Chronometer":
+		return chronometer.Build(funcName)
 	case "Clipboard":
 		return clipboard.Build(funcName)
 	case "Conversion":

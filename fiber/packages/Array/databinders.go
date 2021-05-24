@@ -6,6 +6,15 @@ type GetArrayLengthDatabinder struct {
 	Output       string
 }
 
+// GetValueDatabinder Define the GetValue parameters
+type GetValueDatabinder struct {
+	ArrayVarName string
+	Index        int
+	IndexVarName string
+	IndexIsVar   bool
+	Output       string
+}
+
 // PopAtDatabinder Define the PopAt parameters
 type PopAtDatabinder struct {
 	ArrayVarName string

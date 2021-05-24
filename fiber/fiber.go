@@ -9,6 +9,7 @@ import (
 	arithmetic "gotomate/fiber/packages/Arithmetic"
 	array "gotomate/fiber/packages/Array"
 	battery "gotomate/fiber/packages/Battery"
+	chronometer "gotomate/fiber/packages/Chronometer"
 	clipboard "gotomate/fiber/packages/Clipboard"
 	conversion "gotomate/fiber/packages/Conversion"
 	define "gotomate/fiber/packages/Define"
@@ -121,6 +122,8 @@ func (fiber *Fiber) RunFiber() {
 					nextID = array.Processing(funcName, instructionData, finished)
 				case "Battery":
 					nextID = battery.Processing(funcName, instructionData, finished)
+				case "Chronometer":
+					nextID = chronometer.Processing(funcName, instructionData, finished)
 				case "Clipboard":
 					nextID = clipboard.Processing(funcName, instructionData, finished)
 				case "Conversion":

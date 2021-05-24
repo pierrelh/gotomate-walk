@@ -11,6 +11,8 @@ func Build(function string) (interface{}, []declarative.Widget) {
 	switch function {
 	case "GetArrayLength":
 		return new(GetArrayLengthDatabinder), GetArrayLengthTemplate
+	case "GetValue":
+		return new(GetValueDatabinder), GetValueTemplate
 	case "PopAt":
 		return new(PopAtDatabinder), PopAtTemplate
 	case "PopLast":
