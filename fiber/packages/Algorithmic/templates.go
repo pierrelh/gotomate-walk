@@ -19,9 +19,6 @@ var ForTemplate = []declarative.Widget{
 			},
 		},
 	},
-	declarative.Label{
-		Text: declarative.Bind("VarOneName"),
-	},
 	declarative.ComboBox{
 		Value:         declarative.Bind("Comparator", declarative.SelRequired{}),
 		BindingMember: "Name",

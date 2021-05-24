@@ -12,11 +12,8 @@ import (
 func GetArrayLength(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Get the lenth of an array ...")
 
-	var array interface{}
-	arrayVarName := instructionData.FieldByName("ArrayVarName").Interface().(string)
-	if val := variable.SearchVariable(arrayVarName).Value; val != nil {
-		array = val
-	} else {
+	array, err := variable.GetValue(instructionData, "ArrayVarName")
+	if err != nil {
 		finished <- true
 		return -1
 	}
@@ -39,37 +36,27 @@ func GetArrayLength(instructionData reflect.Value, finished chan bool) int {
 func GetValue(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Getting a value from array ...")
 
-	var array interface{}
-	arrayVarName := instructionData.FieldByName("ArrayVarName").Interface().(string)
-	if val := variable.SearchVariable(arrayVarName).Value; val != nil {
-		array = val
-	} else {
+	array, err := variable.GetValue(instructionData, "ArrayVarName")
+	if err != nil {
 		finished <- true
 		return -1
 	}
 
-	var index int
-	if indexIsVar := instructionData.FieldByName("IndexIsVar").Interface().(bool); indexIsVar {
-		indexVarName := instructionData.FieldByName("IndexVarName").Interface().(string)
-		if val := variable.SearchVariable(indexVarName).Value; val != nil {
-			index = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		index = instructionData.FieldByName("Index").Interface().(int)
+	index, err := variable.GetValue(instructionData, "IndexVarName", "IndexIsVar", "Index")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
 	switch variable.GetVariableType(array) {
 	case "[]bool":
-		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), array.([]bool)[index])
+		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), array.([]bool)[index.(int)])
 	case "[]float64":
-		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), array.([]float64)[index])
+		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), array.([]float64)[index.(int)])
 	case "[]int":
-		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), array.([]int)[index])
+		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), array.([]int)[index.(int)])
 	case "[]string":
-		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), array.([]string)[index])
+		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), array.([]string)[index.(int)])
 	}
 	finished <- true
 	return -1
@@ -79,53 +66,43 @@ func GetValue(instructionData reflect.Value, finished chan bool) int {
 func PopAt(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Pop array at index ...")
 
-	var array interface{}
-	arrayVarName := instructionData.FieldByName("ArrayVarName").Interface().(string)
-	if val := variable.SearchVariable(arrayVarName).Value; val != nil {
-		array = val
-	} else {
+	array, err := variable.GetValue(instructionData, "ArrayVarName")
+	if err != nil {
 		finished <- true
 		return -1
 	}
 
-	var index int
-	if indexIsVar := instructionData.FieldByName("IndexIsVar").Interface().(bool); indexIsVar {
-		indexVarName := instructionData.FieldByName("IndexVarName").Interface().(string)
-		if val := variable.SearchVariable(indexVarName).Value; val != nil {
-			index = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		index = instructionData.FieldByName("Index").Interface().(int)
+	index, err := variable.GetValue(instructionData, "IndexVarName", "IndexIsVar", "Index")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
 	switch variable.GetVariableType(array) {
 	case "[]bool":
-		popped := array.([]bool)[index]
-		copy(array.([]bool)[index:], array.([]bool)[index+1:])
+		popped := array.([]bool)[index.(int)]
+		copy(array.([]bool)[index.(int):], array.([]bool)[index.(int)+1:])
 		array = array.([]bool)[:len(array.([]bool))-1]
 		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), popped)
-		variable.SetVariable(arrayVarName, array.([]bool))
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]bool))
 	case "[]float64":
-		popped := array.([]float64)[index]
-		copy(array.([]float64)[index:], array.([]float64)[index+1:])
+		popped := array.([]float64)[index.(int)]
+		copy(array.([]float64)[index.(int):], array.([]float64)[index.(int)+1:])
 		array = array.([]float64)[:len(array.([]float64))-1]
 		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), popped)
-		variable.SetVariable(arrayVarName, array.([]float64))
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]float64))
 	case "[]int":
-		popped := array.([]int)[index]
-		copy(array.([]int)[index:], array.([]int)[index+1:])
+		popped := array.([]int)[index.(int)]
+		copy(array.([]int)[index.(int):], array.([]int)[index.(int)+1:])
 		array = array.([]int)[:len(array.([]int))-1]
 		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), popped)
-		variable.SetVariable(arrayVarName, array.([]int))
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]int))
 	case "[]string":
-		popped := array.([]string)[index]
-		copy(array.([]string)[index:], array.([]string)[index+1:])
+		popped := array.([]string)[index.(int)]
+		copy(array.([]string)[index.(int):], array.([]string)[index.(int)+1:])
 		array = array.([]string)[:len(array.([]string))-1]
 		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), popped)
-		variable.SetVariable(arrayVarName, array.([]string))
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]string))
 	}
 	finished <- true
 	return -1
@@ -135,11 +112,8 @@ func PopAt(instructionData reflect.Value, finished chan bool) int {
 func PopLast(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Pop array at end ...")
 
-	var array interface{}
-	arrayVarName := instructionData.FieldByName("ArrayVarName").Interface().(string)
-	if val := variable.SearchVariable(arrayVarName).Value; val != nil {
-		array = val
-	} else {
+	array, err := variable.GetValue(instructionData, "ArrayVarName")
+	if err != nil {
 		finished <- true
 		return -1
 	}
@@ -149,22 +123,22 @@ func PopLast(instructionData reflect.Value, finished chan bool) int {
 		popped := array.([]bool)[len(array.([]bool))-1]
 		array = array.([]bool)[:len(array.([]bool))-1]
 		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), popped)
-		variable.SetVariable(arrayVarName, array.([]bool))
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]bool))
 	case "[]float64":
 		popped := array.([]float64)[len(array.([]float64))-1]
 		array = array.([]float64)[:len(array.([]float64))-1]
 		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), popped)
-		variable.SetVariable(arrayVarName, array.([]float64))
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]float64))
 	case "[]int":
 		popped := array.([]int)[len(array.([]int))-1]
 		array = array.([]int)[:len(array.([]int))-1]
 		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), popped)
-		variable.SetVariable(arrayVarName, array.([]int))
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]int))
 	case "[]string":
 		popped := array.([]string)[len(array.([]string))-1]
 		array = array.([]string)[:len(array.([]string))-1]
 		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), popped)
-		variable.SetVariable(arrayVarName, array.([]string))
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]string))
 	}
 	finished <- true
 	return -1
@@ -174,33 +148,20 @@ func PopLast(instructionData reflect.Value, finished chan bool) int {
 func PushAt(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Push value in array at index ...")
 
-	var array interface{}
-	arrayVarName := instructionData.FieldByName("ArrayVarName").Interface().(string)
-	if val := variable.SearchVariable(arrayVarName).Value; val != nil {
-		array = val
-	} else {
+	array, err := variable.GetValue(instructionData, "ArrayVarName")
+	if err != nil {
 		finished <- true
 		return -1
 	}
 
-	var index int
-	if indexIsVar := instructionData.FieldByName("IndexIsVar").Interface().(bool); indexIsVar {
-		indexVarName := instructionData.FieldByName("IndexVarName").Interface().(string)
-		if val := variable.SearchVariable(indexVarName).Value; val != nil {
-			index = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		index = instructionData.FieldByName("Index").Interface().(int)
+	index, err := variable.GetValue(instructionData, "IndexVarName", "IndexIsVar", "Index")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	var value interface{}
-	valueVarName := instructionData.FieldByName("ValueVarName").Interface().(string)
-	if val := variable.SearchVariable(valueVarName).Value; val != nil {
-		value = val
-	} else {
+	value, err := variable.GetValue(instructionData, "ValueVarName")
+	if err != nil {
 		finished <- true
 		return -1
 	}
@@ -208,24 +169,24 @@ func PushAt(instructionData reflect.Value, finished chan bool) int {
 	switch variable.GetVariableType(array) {
 	case "[]bool":
 		array = append(array.([]bool), false)
-		copy(array.([]bool)[index+1:], array.([]bool)[index:])
-		array.([]bool)[index] = value.(bool)
-		variable.SetVariable(arrayVarName, array.([]bool))
+		copy(array.([]bool)[index.(int)+1:], array.([]bool)[index.(int):])
+		array.([]bool)[index.(int)] = value.(bool)
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]bool))
 	case "[]float64":
 		array = append(array.([]bool), false)
-		copy(array.([]float64)[index+1:], array.([]float64)[index:])
-		array.([]float64)[index] = value.(float64)
-		variable.SetVariable(arrayVarName, array.([]float64))
+		copy(array.([]float64)[index.(int)+1:], array.([]float64)[index.(int):])
+		array.([]float64)[index.(int)] = value.(float64)
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]float64))
 	case "[]int":
 		array = append(array.([]int), 0)
-		copy(array.([]int)[index+1:], array.([]int)[index:])
-		array.([]int)[index] = value.(int)
-		variable.SetVariable(arrayVarName, array.([]int))
+		copy(array.([]int)[index.(int)+1:], array.([]int)[index.(int):])
+		array.([]int)[index.(int)] = value.(int)
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]int))
 	case "[]string":
 		array = append(array.([]string), "")
-		copy(array.([]string)[index+1:], array.([]string)[index:])
-		array.([]string)[index] = value.(string)
-		variable.SetVariable(arrayVarName, array.([]string))
+		copy(array.([]string)[index.(int)+1:], array.([]string)[index.(int):])
+		array.([]string)[index.(int)] = value.(string)
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]string))
 	}
 	finished <- true
 	return -1
@@ -235,20 +196,14 @@ func PushAt(instructionData reflect.Value, finished chan bool) int {
 func PushLast(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Push value in array at end ...")
 
-	var array interface{}
-	arrayVarName := instructionData.FieldByName("ArrayVarName").Interface().(string)
-	if val := variable.SearchVariable(arrayVarName).Value; val != nil {
-		array = val
-	} else {
+	array, err := variable.GetValue(instructionData, "ArrayVarName")
+	if err != nil {
 		finished <- true
 		return -1
 	}
 
-	var value interface{}
-	valueVarName := instructionData.FieldByName("ValueVarName").Interface().(string)
-	if val := variable.SearchVariable(valueVarName).Value; val != nil {
-		value = val
-	} else {
+	value, err := variable.GetValue(instructionData, "ValueVarName")
+	if err != nil {
 		finished <- true
 		return -1
 	}
@@ -256,16 +211,16 @@ func PushLast(instructionData reflect.Value, finished chan bool) int {
 	switch variable.GetVariableType(array) {
 	case "[]bool":
 		array = append(array.([]bool), value.(bool))
-		variable.SetVariable(arrayVarName, array.([]bool))
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]bool))
 	case "[]float64":
 		array = append(array.([]float64), value.(float64))
-		variable.SetVariable(arrayVarName, array.([]float64))
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]float64))
 	case "[]int":
 		array = append(array.([]int), value.(int))
-		variable.SetVariable(arrayVarName, array.([]int))
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]int))
 	case "[]string":
 		array = append(array.([]string), value.(string))
-		variable.SetVariable(arrayVarName, array.([]string))
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]string))
 	}
 	finished <- true
 	return -1
@@ -275,45 +230,35 @@ func PushLast(instructionData reflect.Value, finished chan bool) int {
 func RemoveAt(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Remove value from array at index ...")
 
-	var array interface{}
-	arrayVarName := instructionData.FieldByName("ArrayVarName").Interface().(string)
-	if val := variable.SearchVariable(arrayVarName).Value; val != nil {
-		array = val
-	} else {
+	array, err := variable.GetValue(instructionData, "ArrayVarName")
+	if err != nil {
 		finished <- true
 		return -1
 	}
 
-	var index int
-	if indexIsVar := instructionData.FieldByName("IndexIsVar").Interface().(bool); indexIsVar {
-		indexVarName := instructionData.FieldByName("IndexVarName").Interface().(string)
-		if val := variable.SearchVariable(indexVarName).Value; val != nil {
-			index = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		index = instructionData.FieldByName("Index").Interface().(int)
+	index, err := variable.GetValue(instructionData, "IndexVarName", "IndexIsVar", "Index")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
 	switch variable.GetVariableType(array) {
 	case "[]bool":
-		copy(array.([]bool)[index:], array.([]bool)[index+1:])
+		copy(array.([]bool)[index.(int):], array.([]bool)[index.(int)+1:])
 		array = array.([]bool)[:len(array.([]bool))-1]
-		variable.SetVariable(arrayVarName, array.([]bool))
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]bool))
 	case "[]float64":
-		copy(array.([]float64)[index:], array.([]float64)[index+1:])
+		copy(array.([]float64)[index.(int):], array.([]float64)[index.(int)+1:])
 		array = array.([]float64)[:len(array.([]float64))-1]
-		variable.SetVariable(arrayVarName, array.([]float64))
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]float64))
 	case "[]int":
-		copy(array.([]int)[index:], array.([]int)[index+1:])
+		copy(array.([]int)[index.(int):], array.([]int)[index.(int)+1:])
 		array = array.([]int)[:len(array.([]int))-1]
-		variable.SetVariable(arrayVarName, array.([]int))
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]int))
 	case "[]string":
-		copy(array.([]string)[index:], array.([]string)[index+1:])
+		copy(array.([]string)[index.(int):], array.([]string)[index.(int)+1:])
 		array = array.([]string)[:len(array.([]string))-1]
-		variable.SetVariable(arrayVarName, array.([]string))
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]string))
 	}
 	finished <- true
 	return -1
@@ -323,11 +268,8 @@ func RemoveAt(instructionData reflect.Value, finished chan bool) int {
 func RemoveLast(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Remove value from array at end ...")
 
-	var array interface{}
-	arrayVarName := instructionData.FieldByName("ArrayVarName").Interface().(string)
-	if val := variable.SearchVariable(arrayVarName).Value; val != nil {
-		array = val
-	} else {
+	array, err := variable.GetValue(instructionData, "ArrayVarName")
+	if err != nil {
 		finished <- true
 		return -1
 	}
@@ -335,16 +277,16 @@ func RemoveLast(instructionData reflect.Value, finished chan bool) int {
 	switch variable.GetVariableType(array) {
 	case "[]bool":
 		array = array.([]bool)[:len(array.([]bool))-1]
-		variable.SetVariable(arrayVarName, array.([]bool))
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]bool))
 	case "[]float64":
 		array = array.([]float64)[:len(array.([]float64))-1]
-		variable.SetVariable(arrayVarName, array.([]float64))
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]float64))
 	case "[]int":
 		array = array.([]int)[:len(array.([]int))-1]
-		variable.SetVariable(arrayVarName, array.([]int))
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]int))
 	case "[]string":
 		array = array.([]string)[:len(array.([]string))-1]
-		variable.SetVariable(arrayVarName, array.([]string))
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]string))
 	}
 	finished <- true
 	return -1
@@ -354,11 +296,8 @@ func RemoveLast(instructionData reflect.Value, finished chan bool) int {
 func Shuffle(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Shuffling array ...")
 
-	var array interface{}
-	arrayVarName := instructionData.FieldByName("ArrayVarName").Interface().(string)
-	if val := variable.SearchVariable(arrayVarName).Value; val != nil {
-		array = val
-	} else {
+	array, err := variable.GetValue(instructionData, "ArrayVarName")
+	if err != nil {
 		finished <- true
 		return -1
 	}
@@ -368,18 +307,18 @@ func Shuffle(instructionData reflect.Value, finished chan bool) int {
 	switch variable.GetVariableType(array) {
 	case "[]bool":
 		rand.Shuffle(len(array.([]bool)), func(i, j int) { array.([]bool)[i], array.([]bool)[j] = array.([]bool)[j], array.([]bool)[i] })
-		variable.SetVariable(arrayVarName, array.([]bool))
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]bool))
 	case "[]float64":
 		rand.Shuffle(len(array.([]float64)), func(i, j int) {
 			array.([]float64)[i], array.([]float64)[j] = array.([]float64)[j], array.([]float64)[i]
 		})
-		variable.SetVariable(arrayVarName, array.([]float64))
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]float64))
 	case "[]int":
 		rand.Shuffle(len(array.([]int)), func(i, j int) { array.([]int)[i], array.([]int)[j] = array.([]int)[j], array.([]int)[i] })
-		variable.SetVariable(arrayVarName, array.([]int))
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]int))
 	case "[]string":
 		rand.Shuffle(len(array.([]string)), func(i, j int) { array.([]string)[i], array.([]string)[j] = array.([]string)[j], array.([]string)[i] })
-		variable.SetVariable(arrayVarName, array.([]string))
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]string))
 	}
 	finished <- true
 	return -1
@@ -389,50 +328,37 @@ func Shuffle(instructionData reflect.Value, finished chan bool) int {
 func UpdateValue(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Updating value in array by index ...")
 
-	var array interface{}
-	arrayVarName := instructionData.FieldByName("ArrayVarName").Interface().(string)
-	if val := variable.SearchVariable(arrayVarName).Value; val != nil {
-		array = val
-	} else {
+	array, err := variable.GetValue(instructionData, "ArrayVarName")
+	if err != nil {
 		finished <- true
 		return -1
 	}
 
-	var index int
-	if indexIsVar := instructionData.FieldByName("IndexIsVar").Interface().(bool); indexIsVar {
-		indexVarName := instructionData.FieldByName("IndexVarName").Interface().(string)
-		if val := variable.SearchVariable(indexVarName).Value; val != nil {
-			index = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		index = instructionData.FieldByName("Index").Interface().(int)
+	index, err := variable.GetValue(instructionData, "IndexVarName", "IndexIsVar", "Index")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	var value interface{}
-	valueVarName := instructionData.FieldByName("ValueVarName").Interface().(string)
-	if val := variable.SearchVariable(valueVarName).Value; val != nil {
-		value = val
-	} else {
+	value, err := variable.GetValue(instructionData, "ValueVarName")
+	if err != nil {
 		finished <- true
 		return -1
 	}
 
 	switch variable.GetVariableType(array) {
 	case "[]bool":
-		array.([]bool)[index] = value.(bool)
-		variable.SetVariable(arrayVarName, array.([]bool))
+		array.([]bool)[index.(int)] = value.(bool)
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]bool))
 	case "[]float64":
-		array.([]float64)[index] = value.(float64)
-		variable.SetVariable(arrayVarName, array.([]float64))
+		array.([]float64)[index.(int)] = value.(float64)
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]float64))
 	case "[]int":
-		array.([]int)[index] = value.(int)
-		variable.SetVariable(arrayVarName, array.([]int))
+		array.([]int)[index.(int)] = value.(int)
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]int))
 	case "[]string":
-		array.([]string)[index] = value.(string)
-		variable.SetVariable(arrayVarName, array.([]string))
+		array.([]string)[index.(int)] = value.(string)
+		variable.SetVariable(instructionData.FieldByName("ArrayVarName").Interface().(string), array.([]string))
 	}
 	finished <- true
 	return -1

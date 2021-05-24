@@ -11,8 +11,8 @@ import (
 // Click Simulate a user click
 func Click(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Clicking mouse  ...")
-	button := instructionData.FieldByName("MouseButtonName").Interface().(string)
-	robotgo.Click(button)
+
+	robotgo.Click(instructionData.FieldByName("MouseButtonName").Interface().(string))
 	finished <- true
 	return -1
 }
@@ -21,34 +21,20 @@ func Click(instructionData reflect.Value, finished chan bool) int {
 func Drag(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Clicking mouse  ...")
 
-	var x int
-	if xIsVar := instructionData.FieldByName("XIsVar").Interface().(bool); xIsVar {
-		xVarName := instructionData.FieldByName("XVarName").Interface().(string)
-		if val := variable.SearchVariable(xVarName).Value; val != nil {
-			x = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		x = instructionData.FieldByName("X").Interface().(int)
+	x, err := variable.GetValue(instructionData, "XVarName", "XIsVar", "X")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	var y int
-	if yIsVar := instructionData.FieldByName("YIsVar").Interface().(bool); yIsVar {
-		yVarName := instructionData.FieldByName("YVarName").Interface().(string)
-		if val := variable.SearchVariable(yVarName).Value; val != nil {
-			y = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		y = instructionData.FieldByName("Y").Interface().(int)
+	y, err := variable.GetValue(instructionData, "YVarName", "YIsVar", "Y")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
 	robotgo.MouseToggle("down")
-	robotgo.Drag(x, y)
+	robotgo.Drag(x.(int), y.(int))
 	robotgo.MouseToggle("up")
 	finished <- true
 	return -1
@@ -58,34 +44,20 @@ func Drag(instructionData reflect.Value, finished chan bool) int {
 func DragSmooth(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Clicking mouse  ...")
 
-	var x int
-	if xIsVar := instructionData.FieldByName("XIsVar").Interface().(bool); xIsVar {
-		xVarName := instructionData.FieldByName("XVarName").Interface().(string)
-		if val := variable.SearchVariable(xVarName).Value; val != nil {
-			x = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		x = instructionData.FieldByName("X").Interface().(int)
+	x, err := variable.GetValue(instructionData, "XVarName", "XIsVar", "X")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	var y int
-	if yIsVar := instructionData.FieldByName("YIsVar").Interface().(bool); yIsVar {
-		yVarName := instructionData.FieldByName("YVarName").Interface().(string)
-		if val := variable.SearchVariable(yVarName).Value; val != nil {
-			y = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		y = instructionData.FieldByName("Y").Interface().(int)
+	y, err := variable.GetValue(instructionData, "YVarName", "YIsVar", "Y")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
 	robotgo.MouseToggle("down")
-	robotgo.DragSmooth(x, y)
+	robotgo.DragSmooth(x.(int), y.(int))
 	robotgo.MouseToggle("up")
 	finished <- true
 	return -1
@@ -95,33 +67,19 @@ func DragSmooth(instructionData reflect.Value, finished chan bool) int {
 func Move(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Moving mouse ...")
 
-	var x int
-	if xIsVar := instructionData.FieldByName("XIsVar").Interface().(bool); xIsVar {
-		xVarName := instructionData.FieldByName("XVarName").Interface().(string)
-		if val := variable.SearchVariable(xVarName).Value; val != nil {
-			x = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		x = instructionData.FieldByName("X").Interface().(int)
+	x, err := variable.GetValue(instructionData, "XVarName", "XIsVar", "X")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	var y int
-	if yIsVar := instructionData.FieldByName("YIsVar").Interface().(bool); yIsVar {
-		yVarName := instructionData.FieldByName("YVarName").Interface().(string)
-		if val := variable.SearchVariable(yVarName).Value; val != nil {
-			y = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		y = instructionData.FieldByName("Y").Interface().(int)
+	y, err := variable.GetValue(instructionData, "YVarName", "YIsVar", "Y")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	robotgo.MoveMouse(x, y)
+	robotgo.MoveMouse(x.(int), y.(int))
 	finished <- true
 	return -1
 }
@@ -130,33 +88,19 @@ func Move(instructionData reflect.Value, finished chan bool) int {
 func MoveSmooth(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Moving mouse ...")
 
-	var x int
-	if xIsVar := instructionData.FieldByName("XIsVar").Interface().(bool); xIsVar {
-		xVarName := instructionData.FieldByName("XVarName").Interface().(string)
-		if val := variable.SearchVariable(xVarName).Value; val != nil {
-			x = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		x = instructionData.FieldByName("X").Interface().(int)
+	x, err := variable.GetValue(instructionData, "XVarName", "XIsVar", "X")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	var y int
-	if yIsVar := instructionData.FieldByName("YIsVar").Interface().(bool); yIsVar {
-		yVarName := instructionData.FieldByName("YVarName").Interface().(string)
-		if val := variable.SearchVariable(yVarName).Value; val != nil {
-			y = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		y = instructionData.FieldByName("Y").Interface().(int)
+	y, err := variable.GetValue(instructionData, "YVarName", "YIsVar", "Y")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	robotgo.MoveSmooth(x, y)
+	robotgo.MoveSmooth(x.(int), y.(int))
 	finished <- true
 	return -1
 }
@@ -165,33 +109,19 @@ func MoveSmooth(instructionData reflect.Value, finished chan bool) int {
 func Scroll(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Scrolling mouse ...")
 
-	var x int
-	if xIsVar := instructionData.FieldByName("XIsVar").Interface().(bool); xIsVar {
-		xVarName := instructionData.FieldByName("XVarName").Interface().(string)
-		if val := variable.SearchVariable(xVarName).Value; val != nil {
-			x = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		x = instructionData.FieldByName("X").Interface().(int)
+	x, err := variable.GetValue(instructionData, "XVarName", "XIsVar", "X")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	var y int
-	if yIsVar := instructionData.FieldByName("YIsVar").Interface().(bool); yIsVar {
-		yVarName := instructionData.FieldByName("YVarName").Interface().(string)
-		if val := variable.SearchVariable(yVarName).Value; val != nil {
-			y = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		y = instructionData.FieldByName("Y").Interface().(int)
+	y, err := variable.GetValue(instructionData, "YVarName", "YIsVar", "Y")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	robotgo.Scroll(x, y)
+	robotgo.Scroll(x.(int), y.(int))
 	finished <- true
 	return -1
 }

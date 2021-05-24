@@ -10,6 +10,7 @@ import (
 // GetCurrentSysClock return the current sys clock
 func GetCurrentSysClock(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Getting sys clock...")
+
 	h, m, s := time.Now().Clock()
 	variable.SetVariable(instructionData.FieldByName("HoursOutput").Interface().(string), h)
 	variable.SetVariable(instructionData.FieldByName("MinutesOutput").Interface().(string), m)
@@ -21,8 +22,8 @@ func GetCurrentSysClock(instructionData reflect.Value, finished chan bool) int {
 // GetCurrentSysTime return the current sys time
 func GetCurrentSysTime(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Getting sys time...")
-	t := time.Now()
-	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), t)
+
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), time.Now())
 	finished <- true
 	return -1
 }

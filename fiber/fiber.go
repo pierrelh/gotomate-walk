@@ -31,7 +31,7 @@ import (
 	"sort"
 )
 
-//NewFiber Define the new automate's fiber
+// NewFiber Define the new automate's fiber
 var NewFiber = new(Fiber)
 var running = 0
 var finished = make(chan bool)
@@ -71,13 +71,13 @@ type Instruction struct {
 	InstructionData   interface{}
 }
 
-//CleanFiber Delete all the instructions of the current fiber
+// CleanFiber Delete all the instructions of the current fiber
 func (fiber *Fiber) CleanFiber() {
 	p := reflect.ValueOf(fiber).Elem()
 	p.Set(reflect.Zero(p.Type()))
 }
 
-//StopFiber stop the current fiber
+// StopFiber stop the current fiber
 func (fiber *Fiber) StopFiber() {
 	if running == 1 {
 		fmt.Println("| Fiber Stopped |")
@@ -89,7 +89,7 @@ func (fiber *Fiber) StopFiber() {
 	}
 }
 
-//RunFiber run the current fiber
+// RunFiber run the current fiber
 func (fiber *Fiber) RunFiber() {
 	running++
 	if running > 1 {

@@ -2,6 +2,9 @@ package variable
 
 import (
 	"fmt"
+	"math"
+	"reflect"
+	"strconv"
 )
 
 // FiberVariable define the fiber's key / values
@@ -121,5 +124,68 @@ func GetVariableType(value interface{}) string {
 	default:
 		fmt.Println("FIBER WARNING: Unknown type")
 		return ""
+	}
+}
+
+func GetValue(instructionData reflect.Value, varName string, args ...string) (interface{}, error) {
+	if len(args) == 2 {
+		if isAVar := instructionData.FieldByName(args[0]).Interface().(bool); isAVar {
+			variableName := instructionData.FieldByName(varName).Interface().(string)
+			if val := SearchVariable(variableName).Value; val != nil {
+				return val, nil
+			} else {
+				return false, fmt.Errorf("FIBER ERROR: Variable not found")
+			}
+		} else {
+			return instructionData.FieldByName(args[1]).Interface(), nil
+		}
+	} else {
+		variableName := instructionData.FieldByName(varName).Interface().(string)
+		if val := SearchVariable(variableName).Value; val != nil {
+			return val, nil
+		} else {
+			return false, fmt.Errorf("FIBER ERROR: Variable not found")
+		}
+	}
+}
+
+// GetFloat Return the float value of an interface
+func GetFloat(unk interface{}) float64 {
+	var floatType = reflect.TypeOf(float64(0))
+	var stringType = reflect.TypeOf("")
+	switch i := unk.(type) {
+	case float64:
+		return i
+	case float32:
+		return float64(i)
+	case int64:
+		return float64(i)
+	case int32:
+		return float64(i)
+	case int:
+		return float64(i)
+	case uint64:
+		return float64(i)
+	case uint32:
+		return float64(i)
+	case uint:
+		return float64(i)
+	case string:
+		v, _ := strconv.ParseFloat(i, 64)
+		return v
+	default:
+		v := reflect.ValueOf(unk)
+		v = reflect.Indirect(v)
+		if v.Type().ConvertibleTo(floatType) {
+			fv := v.Convert(floatType)
+			return fv.Float()
+		} else if v.Type().ConvertibleTo(stringType) {
+			sv := v.Convert(stringType)
+			s := sv.String()
+			v, _ := strconv.ParseFloat(s, 64)
+			return v
+		} else {
+			return math.NaN()
+		}
 	}
 }

@@ -14,20 +14,13 @@ import (
 func GetTitle(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Getting title of process ...")
 
-	var pid int
-	if pidIsVar := instructionData.FieldByName("PIDIsVar").Interface().(bool); pidIsVar {
-		PIDVarName := instructionData.FieldByName("PIDVarName").Interface().(string)
-		if val := variable.SearchVariable(PIDVarName).Value; val != nil {
-			pid = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		pid = instructionData.FieldByName("PID").Interface().(int)
+	pid, err := variable.GetValue(instructionData, "PIDVarName", "PIDIsVar", "PID")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), robotgo.GetTitle(int32(pid)))
+	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), robotgo.GetTitle(int32(pid.(int))))
 	finished <- true
 	return -1
 }
@@ -45,20 +38,13 @@ func GetPid(instructionData reflect.Value, finished chan bool) int {
 func KillProcess(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Killing process ...")
 
-	var pid int
-	if pidIsVar := instructionData.FieldByName("PIDIsVar").Interface().(bool); pidIsVar {
-		PIDVarName := instructionData.FieldByName("PIDVarName").Interface().(string)
-		if val := variable.SearchVariable(PIDVarName).Value; val != nil {
-			pid = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		pid = instructionData.FieldByName("PID").Interface().(int)
+	pid, err := variable.GetValue(instructionData, "PIDVarName", "PIDIsVar", "PID")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	proc, err := os.FindProcess(pid)
+	proc, err := os.FindProcess(pid.(int))
 	if err != nil {
 		fmt.Println("FIBER WARNING: Didn't find process with pid", pid)
 		finished <- true
@@ -73,20 +59,13 @@ func KillProcess(instructionData reflect.Value, finished chan bool) int {
 func MaxSize(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Maximizing process size ...")
 
-	var pid int
-	if pidIsVar := instructionData.FieldByName("PIDIsVar").Interface().(bool); pidIsVar {
-		PIDVarName := instructionData.FieldByName("PIDVarName").Interface().(string)
-		if val := variable.SearchVariable(PIDVarName).Value; val != nil {
-			pid = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		pid = instructionData.FieldByName("PID").Interface().(int)
+	pid, err := variable.GetValue(instructionData, "PIDVarName", "PIDIsVar", "PID")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	robotgo.MaxWindow(int32(pid))
+	robotgo.MaxWindow(int32(pid.(int)))
 	finished <- true
 	return -1
 }
@@ -95,20 +74,13 @@ func MaxSize(instructionData reflect.Value, finished chan bool) int {
 func Reduce(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Reducing a process ...")
 
-	var pid int
-	if pidIsVar := instructionData.FieldByName("PIDIsVar").Interface().(bool); pidIsVar {
-		PIDVarName := instructionData.FieldByName("PIDVarName").Interface().(string)
-		if val := variable.SearchVariable(PIDVarName).Value; val != nil {
-			pid = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		pid = instructionData.FieldByName("PID").Interface().(int)
+	pid, err := variable.GetValue(instructionData, "PIDVarName", "PIDIsVar", "PID")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	robotgo.MinWindow(int32(pid))
+	robotgo.MinWindow(int32(pid.(int)))
 	finished <- true
 	return -1
 }
@@ -117,20 +89,13 @@ func Reduce(instructionData reflect.Value, finished chan bool) int {
 func StartProcess(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Starting new process ...")
 
-	var path string
-	if pathIsVar := instructionData.FieldByName("PathIsVar").Interface().(bool); pathIsVar {
-		pathVarName := instructionData.FieldByName("PathVarName").Interface().(string)
-		if val := variable.SearchVariable(pathVarName).Value; val != nil {
-			path = val.(string)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		path = instructionData.FieldByName("Path").Interface().(string)
+	path, err := variable.GetValue(instructionData, "PathVarName", "PathIsVar", "Path")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	cmd := exec.Command(path)
+	cmd := exec.Command(path.(string))
 	cmd.Env = os.Environ()
 	cmd.Start()
 	variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), cmd.Process.Pid)

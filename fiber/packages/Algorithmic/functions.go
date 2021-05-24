@@ -10,26 +10,16 @@ import (
 func For(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: For Statement ...")
 
-	var valueOne int
-	varOneName := instructionData.FieldByName("VarOneName").Interface().(string)
-	if val := variable.SearchVariable(varOneName).Value; val != nil {
-		valueOne = val.(int)
-	} else {
+	valueOne, err := variable.GetValue(instructionData, "VarOneName")
+	if err != nil {
 		finished <- true
 		return -1
 	}
 
-	var valueTwo int
-	if twoIsVar := instructionData.FieldByName("TwoIsVar").Interface().(bool); twoIsVar {
-		varTwoName := instructionData.FieldByName("VarTwoName").Interface().(string)
-		if val := variable.SearchVariable(varTwoName).Value; val != nil {
-			valueTwo = val.(int)
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		valueTwo = instructionData.FieldByName("ValueTwo").Interface().(int)
+	valueTwo, err := variable.GetValue(instructionData, "VarTwoName", "TwoIsVar", "ValueTwo")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
 	comparator := instructionData.FieldByName("Comparator").Interface().(string)
@@ -44,87 +34,58 @@ func For(instructionData reflect.Value, finished chan bool) int {
 			statement = true
 		}
 	case ">":
-		if valueOne > valueTwo {
+		if variable.GetFloat(valueOne) > variable.GetFloat(valueTwo) {
 			statement = true
 		}
 	case ">=":
-		if valueOne >= valueTwo {
+		if variable.GetFloat(valueOne) >= variable.GetFloat(valueTwo) {
 			statement = true
 		}
 	case "<":
-		if valueOne < valueTwo {
+		if variable.GetFloat(valueOne) < variable.GetFloat(valueTwo) {
 			statement = true
 		}
 	case "<=":
-		if valueOne <= valueTwo {
+		if variable.GetFloat(valueOne) <= variable.GetFloat(valueTwo) {
 			statement = true
 		}
 	}
 
 	if statement {
-		var increment int
-		if incrementIsVar := instructionData.FieldByName("IncrementIsVar").Interface().(bool); incrementIsVar {
-			incrementVarName := instructionData.FieldByName("IncrementVarName").Interface().(string)
-			if val := variable.SearchVariable(incrementVarName).Value; val != nil {
-				increment = val.(int)
-			} else {
-				finished <- true
-				return -1
-			}
-		} else {
-			increment = instructionData.FieldByName("Increment").Interface().(int)
+		increment, err := variable.GetValue(instructionData, "IncrementVarName", "IncrementIsVar", "Increment")
+		if err != nil {
+			finished <- true
+			return -1
 		}
 
-		valueOne = valueOne + increment
-		variable.SetVariable(varOneName, valueOne)
+		variable.SetVariable(instructionData.FieldByName("VarOneName").Interface().(string), variable.GetFloat(valueOne)+float64(increment.(int)))
 		finished <- true
 		return -1
 	} else {
-		var falseInstruction int
-		if falseInstructionIsVar := instructionData.FieldByName("FalseInstructionIsVar").Interface().(bool); falseInstructionIsVar {
-			falseInstructionVarName := instructionData.FieldByName("FalseInstructionVarName").Interface().(string)
-			if val := variable.SearchVariable(falseInstructionVarName).Value; val != nil {
-				falseInstruction = val.(int)
-			} else {
-				finished <- true
-				return -1
-			}
-		} else {
-			falseInstruction = instructionData.FieldByName("FalseInstruction").Interface().(int)
+		falseInstruction, err := variable.GetValue(instructionData, "FalseInstructionVarName", "FalseInstructionIsVar", "FalseInstruction")
+		if err != nil {
+			finished <- true
+			return -1
 		}
 		finished <- true
-		return falseInstruction
+		return falseInstruction.(int)
 	}
 }
 
 // If Compare if a statement is true
 func If(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: If Statement ...")
-	var valueOne interface{}
 
-	if oneIsVar := instructionData.FieldByName("OneIsVar").Interface().(bool); oneIsVar {
-		varOneName := instructionData.FieldByName("VarOneName").Interface().(string)
-		if val := variable.SearchVariable(varOneName).Value; val != nil {
-			valueOne = val
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		valueOne = instructionData.FieldByName("ValueOne").Interface()
+	valueOne, err := variable.GetValue(instructionData, "VarOneName", "OneIsVar", "ValueOne")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
-	var valueTwo interface{}
-	if twoIsVar := instructionData.FieldByName("TwoIsVar").Interface().(bool); twoIsVar {
-		varTwoName := instructionData.FieldByName("VarTwoName").Interface().(string)
-		if val := variable.SearchVariable(varTwoName).Value; val != nil {
-			valueTwo = val
-		} else {
-			finished <- true
-			return -1
-		}
-	} else {
-		valueTwo = instructionData.FieldByName("ValueTwo").Interface()
+	valueTwo, err := variable.GetValue(instructionData, "VarTwoName", "TwoIsVar", "ValueTwo")
+	if err != nil {
+		finished <- true
+		return -1
 	}
 
 	comparator := instructionData.FieldByName("Comparator").Interface().(string)
@@ -139,19 +100,19 @@ func If(instructionData reflect.Value, finished chan bool) int {
 			statement = true
 		}
 	case ">":
-		if valueOne.(int) > valueTwo.(int) {
+		if variable.GetFloat(valueOne) > variable.GetFloat(valueTwo) {
 			statement = true
 		}
 	case ">=":
-		if valueOne.(int) >= valueTwo.(int) {
+		if variable.GetFloat(valueOne) >= variable.GetFloat(valueTwo) {
 			statement = true
 		}
 	case "<":
-		if valueOne.(int) < valueTwo.(int) {
+		if variable.GetFloat(valueOne) < variable.GetFloat(valueTwo) {
 			statement = true
 		}
 	case "<=":
-		if valueOne.(int) <= valueTwo.(int) {
+		if variable.GetFloat(valueOne) <= variable.GetFloat(valueTwo) {
 			statement = true
 		}
 	}
@@ -159,18 +120,11 @@ func If(instructionData reflect.Value, finished chan bool) int {
 	if statement {
 		return -1
 	} else {
-		var falseInstruction int
-		if falseInstructionIsVar := instructionData.FieldByName("FalseInstructionIsVar").Interface().(bool); falseInstructionIsVar {
-			falseInstructionVarName := instructionData.FieldByName("FalseInstructionVarName").Interface().(string)
-			if val := variable.SearchVariable(falseInstructionVarName).Value; val != nil {
-				falseInstruction = val.(int)
-			} else {
-				finished <- true
-				return -1
-			}
-		} else {
-			falseInstruction = instructionData.FieldByName("FalseInstruction").Interface().(int)
+		falseInstruction, err := variable.GetValue(instructionData, "FalseInstructionVarName", "FalseInstructionIsVar", "FalseInstruction")
+		if err != nil {
+			finished <- true
+			return -1
 		}
-		return falseInstruction
+		return falseInstruction.(int)
 	}
 }

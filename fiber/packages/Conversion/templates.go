@@ -49,7 +49,7 @@ var FloatConversionTemplate = []declarative.Widget{
 			declarative.NumberEdit{
 				Value:    declarative.Bind("Input"),
 				Visible:  declarative.Bind("!IsAVar.Checked"),
-				Decimals: 10,
+				Decimals: 5,
 			},
 			declarative.CheckBox{
 				Name:    "IsAVar",
