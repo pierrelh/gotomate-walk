@@ -24,9 +24,14 @@ func Processing(funcName string, instructionData reflect.Value, finished chan bo
 			nextID = GetScreenSize(instructionData, finished)
 		}()
 		<-finished
-	case "SaveCapture":
+	case "PartScreenShot":
 		go func() {
-			nextID = SaveCapture(instructionData, finished)
+			nextID = PartScreenShot(instructionData, finished)
+		}()
+		<-finished
+	case "ScreenShot":
+		go func() {
+			nextID = ScreenShot(instructionData, finished)
 		}()
 		<-finished
 	default:

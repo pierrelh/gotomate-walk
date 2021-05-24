@@ -11,10 +11,16 @@ func Build(function string) (interface{}, []declarative.Widget) {
 	switch function {
 	case "Click":
 		return new(ClickDatabinder), ClickTemplate
-	case "Scroll":
-		return new(ScrollDatabinder), ScrollTemplate
+	case "Drag":
+		return new(DragDatabinder), DragTemplate
+	case "DragSmooth":
+		return new(DragDatabinder), DragTemplate
 	case "Move":
 		return new(MoveDatabinder), MoveTemplate
+	case "MoveSmooth":
+		return new(MoveDatabinder), MoveTemplate
+	case "Scroll":
+		return new(ScrollDatabinder), ScrollTemplate
 	}
 	fmt.Println("GOTOMATE ERROR: Unable to find the function for instruction building")
 	return nil, nil

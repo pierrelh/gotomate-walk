@@ -14,9 +14,24 @@ func Processing(funcName string, instructionData reflect.Value, finished chan bo
 			nextID = Click(instructionData, finished)
 		}()
 		<-finished
+	case "Drag":
+		go func() {
+			nextID = Drag(instructionData, finished)
+		}()
+		<-finished
+	case "DragSmooth":
+		go func() {
+			nextID = DragSmooth(instructionData, finished)
+		}()
+		<-finished
 	case "Move":
 		go func() {
 			nextID = Move(instructionData, finished)
+		}()
+		<-finished
+	case "MoveSmooth":
+		go func() {
+			nextID = MoveSmooth(instructionData, finished)
 		}()
 		<-finished
 	case "Scroll":
