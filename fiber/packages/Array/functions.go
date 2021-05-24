@@ -12,40 +12,60 @@ import (
 func GetArrayLength(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Get the lenth of an array ...")
 
-	var bools []bool
-	var ints []int
-	var strings []string
-	var typeOfArray string
+	var array interface{}
 	arrayVarName := instructionData.FieldByName("ArrayVarName").Interface().(string)
 	if val := variable.SearchVariable(arrayVarName).Value; val != nil {
-		switch val := val.(type) {
-		case []bool:
-			bools = val
-			typeOfArray = "bool"
-		case []int:
-			ints = val
-			typeOfArray = "int"
-		case []string:
-			strings = val
-			typeOfArray = "string"
-		default:
-			fmt.Println("FIBER WARNING: Type error on length array")
-			finished <- true
-			return -1
-		}
+		array = val
 	} else {
 		finished <- true
 		return -1
 	}
 
-	name := instructionData.FieldByName("Output").Interface().(string)
+	switch variable.GetVariableType(array) {
+	case "[]bool":
+		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), len(array.([]bool)))
+	case "[]int":
+		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), len(array.([]int)))
+	case "[]string":
+		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), len(array.([]string)))
+	}
+	finished <- true
+	return -1
+}
 
-	if typeOfArray == "bool" {
-		variable.SetVariable(name, len(bools))
-	} else if typeOfArray == "int" {
-		variable.SetVariable(name, len(ints))
+// GetValue Get a value from an array by index
+func GetValue(instructionData reflect.Value, finished chan bool) int {
+	fmt.Println("FIBER INFO: Getting a value from array ...")
+
+	var array interface{}
+	arrayVarName := instructionData.FieldByName("ArrayVarName").Interface().(string)
+	if val := variable.SearchVariable(arrayVarName).Value; val != nil {
+		array = val
 	} else {
-		variable.SetVariable(name, len(strings))
+		finished <- true
+		return -1
+	}
+
+	var index int
+	if indexIsVar := instructionData.FieldByName("IndexIsVar").Interface().(bool); indexIsVar {
+		indexVarName := instructionData.FieldByName("IndexVarName").Interface().(string)
+		if val := variable.SearchVariable(indexVarName).Value; val != nil {
+			index = val.(int)
+		} else {
+			finished <- true
+			return -1
+		}
+	} else {
+		index = instructionData.FieldByName("Index").Interface().(int)
+	}
+
+	switch variable.GetVariableType(array) {
+	case "[]bool":
+		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), array.([]bool)[index])
+	case "[]int":
+		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), array.([]int)[index])
+	case "[]string":
+		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), array.([]string)[index])
 	}
 	finished <- true
 	return -1
@@ -55,27 +75,10 @@ func GetArrayLength(instructionData reflect.Value, finished chan bool) int {
 func PopAt(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Pop array at index ...")
 
-	var bools []bool
-	var ints []int
-	var strings []string
-	var typeOfArray string
+	var array interface{}
 	arrayVarName := instructionData.FieldByName("ArrayVarName").Interface().(string)
 	if val := variable.SearchVariable(arrayVarName).Value; val != nil {
-		switch val := val.(type) {
-		case []bool:
-			bools = val
-			typeOfArray = "bool"
-		case []int:
-			ints = val
-			typeOfArray = "int"
-		case []string:
-			strings = val
-			typeOfArray = "string"
-		default:
-			fmt.Println("FIBER WARNING: Type error on popping array")
-			finished <- true
-			return -1
-		}
+		array = val
 	} else {
 		finished <- true
 		return -1
@@ -94,26 +97,25 @@ func PopAt(instructionData reflect.Value, finished chan bool) int {
 		index = instructionData.FieldByName("Index").Interface().(int)
 	}
 
-	name := instructionData.FieldByName("Output").Interface().(string)
-
-	if typeOfArray == "bool" {
-		popped := bools[index]
-		copy(bools[index:], bools[index+1:])
-		bools = bools[:len(bools)-1]
-		variable.SetVariable(name, popped)
-		variable.SetVariable(arrayVarName, bools)
-	} else if typeOfArray == "int" {
-		popped := ints[index]
-		copy(ints[index:], ints[index+1:])
-		ints = ints[:len(ints)-1]
-		variable.SetVariable(name, popped)
-		variable.SetVariable(arrayVarName, ints)
-	} else {
-		popped := strings[index]
-		copy(strings[index:], strings[index+1:])
-		strings = strings[:len(strings)-1]
-		variable.SetVariable(name, popped)
-		variable.SetVariable(arrayVarName, strings)
+	switch variable.GetVariableType(array) {
+	case "[]bool":
+		popped := array.([]bool)[index]
+		copy(array.([]bool)[index:], array.([]bool)[index+1:])
+		array = array.([]bool)[:len(array.([]bool))-1]
+		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), popped)
+		variable.SetVariable(arrayVarName, array.([]bool))
+	case "[]int":
+		popped := array.([]int)[index]
+		copy(array.([]int)[index:], array.([]int)[index+1:])
+		array = array.([]int)[:len(array.([]int))-1]
+		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), popped)
+		variable.SetVariable(arrayVarName, array.([]int))
+	case "[]string":
+		popped := array.([]string)[index]
+		copy(array.([]string)[index:], array.([]string)[index+1:])
+		array = array.([]string)[:len(array.([]string))-1]
+		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), popped)
+		variable.SetVariable(arrayVarName, array.([]string))
 	}
 	finished <- true
 	return -1
@@ -123,49 +125,31 @@ func PopAt(instructionData reflect.Value, finished chan bool) int {
 func PopLast(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Pop array at end ...")
 
-	var bools []bool
-	var ints []int
-	var strings []string
-	var typeOfArray string
+	var array interface{}
 	arrayVarName := instructionData.FieldByName("ArrayVarName").Interface().(string)
 	if val := variable.SearchVariable(arrayVarName).Value; val != nil {
-		switch val := val.(type) {
-		case []bool:
-			bools = val
-			typeOfArray = "bool"
-		case []int:
-			ints = val
-			typeOfArray = "int"
-		case []string:
-			strings = val
-			typeOfArray = "string"
-		default:
-			fmt.Println("FIBER WARNING: Type error on popping array")
-			finished <- true
-			return -1
-		}
+		array = val
 	} else {
 		finished <- true
 		return -1
 	}
 
-	name := instructionData.FieldByName("Output").Interface().(string)
-
-	if typeOfArray == "bool" {
-		popped := bools[len(bools)-1]
-		bools = bools[:len(bools)-1]
-		variable.SetVariable(name, popped)
-		variable.SetVariable(arrayVarName, bools)
-	} else if typeOfArray == "int" {
-		popped := ints[len(ints)-1]
-		ints = ints[:len(ints)-1]
-		variable.SetVariable(name, popped)
-		variable.SetVariable(arrayVarName, ints)
-	} else {
-		popped := strings[len(strings)-1]
-		strings = strings[:len(strings)-1]
-		variable.SetVariable(name, popped)
-		variable.SetVariable(arrayVarName, strings)
+	switch variable.GetVariableType(array) {
+	case "[]bool":
+		popped := array.([]bool)[len(array.([]bool))-1]
+		array = array.([]bool)[:len(array.([]bool))-1]
+		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), popped)
+		variable.SetVariable(arrayVarName, array.([]bool))
+	case "[]int":
+		popped := array.([]int)[len(array.([]int))-1]
+		array = array.([]int)[:len(array.([]int))-1]
+		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), popped)
+		variable.SetVariable(arrayVarName, array.([]int))
+	case "[]string":
+		popped := array.([]string)[len(array.([]string))-1]
+		array = array.([]string)[:len(array.([]string))-1]
+		variable.SetVariable(instructionData.FieldByName("Output").Interface().(string), popped)
+		variable.SetVariable(arrayVarName, array.([]string))
 	}
 	finished <- true
 	return -1
@@ -175,27 +159,10 @@ func PopLast(instructionData reflect.Value, finished chan bool) int {
 func PushAt(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Push value in array at index ...")
 
-	var bools []bool
-	var ints []int
-	var strings []string
-	var typeOfArray string
+	var array interface{}
 	arrayVarName := instructionData.FieldByName("ArrayVarName").Interface().(string)
 	if val := variable.SearchVariable(arrayVarName).Value; val != nil {
-		switch val := val.(type) {
-		case []bool:
-			bools = val
-			typeOfArray = "bool"
-		case []int:
-			ints = val
-			typeOfArray = "int"
-		case []string:
-			strings = val
-			typeOfArray = "string"
-		default:
-			fmt.Println("FIBER WARNING: Type error on pushing value in array")
-			finished <- true
-			return -1
-		}
+		array = val
 	} else {
 		finished <- true
 		return -1
@@ -214,43 +181,31 @@ func PushAt(instructionData reflect.Value, finished chan bool) int {
 		index = instructionData.FieldByName("Index").Interface().(int)
 	}
 
-	var boolValue bool
-	var intValue int
-	var stringValue string
+	var value interface{}
 	valueVarName := instructionData.FieldByName("ValueVarName").Interface().(string)
 	if val := variable.SearchVariable(valueVarName).Value; val != nil {
-		switch val := val.(type) {
-		case bool:
-			boolValue = val
-		case int:
-			intValue = int(val)
-		case string:
-			stringValue = val
-		default:
-			fmt.Println("FIBER WARNING: Type error on pushing value in array")
-			finished <- true
-			return -1
-		}
+		value = val
 	} else {
 		finished <- true
 		return -1
 	}
 
-	if typeOfArray == "bool" {
-		bools = append(bools, false)
-		copy(bools[index+1:], bools[index:])
-		bools[index] = boolValue
-		variable.SetVariable(arrayVarName, bools)
-	} else if typeOfArray == "int" {
-		ints = append(ints, 0)
-		copy(ints[index+1:], ints[index:])
-		ints[index] = intValue
-		variable.SetVariable(arrayVarName, ints)
-	} else {
-		strings = append(strings, "")
-		copy(strings[index+1:], strings[index:])
-		strings[index] = stringValue
-		variable.SetVariable(arrayVarName, strings)
+	switch variable.GetVariableType(array) {
+	case "[]bool":
+		array = append(array.([]bool), false)
+		copy(array.([]bool)[index+1:], array.([]bool)[index:])
+		array.([]bool)[index] = value.(bool)
+		variable.SetVariable(arrayVarName, array.([]bool))
+	case "[]int":
+		array = append(array.([]int), 0)
+		copy(array.([]int)[index+1:], array.([]int)[index:])
+		array.([]int)[index] = value.(int)
+		variable.SetVariable(arrayVarName, array.([]int))
+	case "[]string":
+		array = append(array.([]string), "")
+		copy(array.([]string)[index+1:], array.([]string)[index:])
+		array.([]string)[index] = value.(string)
+		variable.SetVariable(arrayVarName, array.([]string))
 	}
 	finished <- true
 	return -1
@@ -260,63 +215,34 @@ func PushAt(instructionData reflect.Value, finished chan bool) int {
 func PushLast(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Push value in array at end ...")
 
-	var bools []bool
-	var ints []int
-	var strings []string
-	var typeOfArray string
+	var array interface{}
 	arrayVarName := instructionData.FieldByName("ArrayVarName").Interface().(string)
 	if val := variable.SearchVariable(arrayVarName).Value; val != nil {
-		switch val := val.(type) {
-		case []bool:
-			bools = val
-			typeOfArray = "bool"
-		case []int:
-			ints = val
-			typeOfArray = "int"
-		case []string:
-			strings = val
-			typeOfArray = "string"
-		default:
-			fmt.Println("FIBER WARNING: Type error on pushing value in array")
-			finished <- true
-			return -1
-		}
+		array = val
 	} else {
 		finished <- true
 		return -1
 	}
 
-	var boolValue bool
-	var intValue int
-	var stringValue string
+	var value interface{}
 	valueVarName := instructionData.FieldByName("ValueVarName").Interface().(string)
 	if val := variable.SearchVariable(valueVarName).Value; val != nil {
-		switch val := val.(type) {
-		case bool:
-			boolValue = val
-		case int:
-			intValue = val
-		case string:
-			stringValue = val
-		default:
-			fmt.Println("FIBER WARNING: Type error on pushing value in array")
-			finished <- true
-			return -1
-		}
+		value = val
 	} else {
 		finished <- true
 		return -1
 	}
 
-	if typeOfArray == "bool" {
-		bools = append(bools, boolValue)
-		variable.SetVariable(arrayVarName, bools)
-	} else if typeOfArray == "int" {
-		ints = append(ints, intValue)
-		variable.SetVariable(arrayVarName, ints)
-	} else {
-		strings = append(strings, stringValue)
-		variable.SetVariable(arrayVarName, strings)
+	switch variable.GetVariableType(array) {
+	case "[]bool":
+		array = append(array.([]bool), value.(bool))
+		variable.SetVariable(arrayVarName, array.([]bool))
+	case "[]int":
+		array = append(array.([]int), value.(int))
+		variable.SetVariable(arrayVarName, array.([]int))
+	case "[]string":
+		array = append(array.([]string), value.(string))
+		variable.SetVariable(arrayVarName, array.([]string))
 	}
 	finished <- true
 	return -1
@@ -326,27 +252,10 @@ func PushLast(instructionData reflect.Value, finished chan bool) int {
 func RemoveAt(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Remove value from array at index ...")
 
-	var bools []bool
-	var ints []int
-	var strings []string
-	var typeOfArray string
+	var array interface{}
 	arrayVarName := instructionData.FieldByName("ArrayVarName").Interface().(string)
 	if val := variable.SearchVariable(arrayVarName).Value; val != nil {
-		switch val := val.(type) {
-		case []bool:
-			bools = val
-			typeOfArray = "bool"
-		case []int:
-			ints = val
-			typeOfArray = "int"
-		case []string:
-			strings = val
-			typeOfArray = "string"
-		default:
-			fmt.Println("FIBER WARNING: Type error on removing value in array")
-			finished <- true
-			return -1
-		}
+		array = val
 	} else {
 		finished <- true
 		return -1
@@ -365,18 +274,19 @@ func RemoveAt(instructionData reflect.Value, finished chan bool) int {
 		index = instructionData.FieldByName("Index").Interface().(int)
 	}
 
-	if typeOfArray == "bool" {
-		copy(bools[index:], bools[index+1:])
-		bools = bools[:len(bools)-1]
-		variable.SetVariable(arrayVarName, bools)
-	} else if typeOfArray == "int" {
-		copy(ints[index:], ints[index+1:])
-		ints = ints[:len(ints)-1]
-		variable.SetVariable(arrayVarName, ints)
-	} else {
-		copy(strings[index:], strings[index+1:])
-		strings = strings[:len(strings)-1]
-		variable.SetVariable(arrayVarName, strings)
+	switch variable.GetVariableType(array) {
+	case "[]bool":
+		copy(array.([]bool)[index:], array.([]bool)[index+1:])
+		array = array.([]bool)[:len(array.([]bool))-1]
+		variable.SetVariable(arrayVarName, array.([]bool))
+	case "[]int":
+		copy(array.([]int)[index:], array.([]int)[index+1:])
+		array = array.([]int)[:len(array.([]int))-1]
+		variable.SetVariable(arrayVarName, array.([]int))
+	case "[]string":
+		copy(array.([]string)[index:], array.([]string)[index+1:])
+		array = array.([]string)[:len(array.([]string))-1]
+		variable.SetVariable(arrayVarName, array.([]string))
 	}
 	finished <- true
 	return -1
@@ -386,41 +296,25 @@ func RemoveAt(instructionData reflect.Value, finished chan bool) int {
 func RemoveLast(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Remove value from array at end ...")
 
-	var bools []bool
-	var ints []int
-	var strings []string
-	var typeOfArray string
+	var array interface{}
 	arrayVarName := instructionData.FieldByName("ArrayVarName").Interface().(string)
 	if val := variable.SearchVariable(arrayVarName).Value; val != nil {
-		switch val := val.(type) {
-		case []bool:
-			bools = val
-			typeOfArray = "bool"
-		case []int:
-			ints = val
-			typeOfArray = "int"
-		case []string:
-			strings = val
-			typeOfArray = "string"
-		default:
-			fmt.Println("FIBER WARNING: Type error on removing value in array")
-			finished <- true
-			return -1
-		}
+		array = val
 	} else {
 		finished <- true
 		return -1
 	}
 
-	if typeOfArray == "bool" {
-		bools = bools[:len(bools)-1]
-		variable.SetVariable(arrayVarName, bools)
-	} else if typeOfArray == "int" {
-		ints = ints[:len(ints)-1]
-		variable.SetVariable(arrayVarName, ints)
-	} else {
-		strings = strings[:len(strings)-1]
-		variable.SetVariable(arrayVarName, strings)
+	switch variable.GetVariableType(array) {
+	case "[]bool":
+		array = array.([]bool)[:len(array.([]bool))-1]
+		variable.SetVariable(arrayVarName, array.([]bool))
+	case "[]int":
+		array = array.([]int)[:len(array.([]int))-1]
+		variable.SetVariable(arrayVarName, array.([]int))
+	case "[]string":
+		array = array.([]string)[:len(array.([]string))-1]
+		variable.SetVariable(arrayVarName, array.([]string))
 	}
 	finished <- true
 	return -1
@@ -430,27 +324,10 @@ func RemoveLast(instructionData reflect.Value, finished chan bool) int {
 func Shuffle(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Shuffling array ...")
 
-	var bools []bool
-	var ints []int
-	var strings []string
-	var typeOfArray string
+	var array interface{}
 	arrayVarName := instructionData.FieldByName("ArrayVarName").Interface().(string)
 	if val := variable.SearchVariable(arrayVarName).Value; val != nil {
-		switch val := val.(type) {
-		case []bool:
-			bools = val
-			typeOfArray = "bool"
-		case []int:
-			ints = val
-			typeOfArray = "int"
-		case []string:
-			strings = val
-			typeOfArray = "string"
-		default:
-			fmt.Println("FIBER WARNING: Type error on updating value in array")
-			finished <- true
-			return -1
-		}
+		array = val
 	} else {
 		finished <- true
 		return -1
@@ -458,15 +335,16 @@ func Shuffle(instructionData reflect.Value, finished chan bool) int {
 
 	rand.Seed(time.Now().UnixNano())
 
-	if typeOfArray == "bool" {
-		rand.Shuffle(len(bools), func(i, j int) { bools[i], bools[j] = bools[j], bools[i] })
-		variable.SetVariable(arrayVarName, bools)
-	} else if typeOfArray == "int" {
-		rand.Shuffle(len(ints), func(i, j int) { ints[i], ints[j] = ints[j], ints[i] })
-		variable.SetVariable(arrayVarName, ints)
-	} else {
-		rand.Shuffle(len(strings), func(i, j int) { strings[i], strings[j] = strings[j], strings[i] })
-		variable.SetVariable(arrayVarName, strings)
+	switch variable.GetVariableType(array) {
+	case "[]bool":
+		rand.Shuffle(len(array.([]bool)), func(i, j int) { array.([]bool)[i], array.([]bool)[j] = array.([]bool)[j], array.([]bool)[i] })
+		variable.SetVariable(arrayVarName, array.([]bool))
+	case "[]int":
+		rand.Shuffle(len(array.([]int)), func(i, j int) { array.([]int)[i], array.([]int)[j] = array.([]int)[j], array.([]int)[i] })
+		variable.SetVariable(arrayVarName, array.([]int))
+	case "[]string":
+		rand.Shuffle(len(array.([]string)), func(i, j int) { array.([]string)[i], array.([]string)[j] = array.([]string)[j], array.([]string)[i] })
+		variable.SetVariable(arrayVarName, array.([]string))
 	}
 	finished <- true
 	return -1
@@ -476,27 +354,10 @@ func Shuffle(instructionData reflect.Value, finished chan bool) int {
 func UpdateValue(instructionData reflect.Value, finished chan bool) int {
 	fmt.Println("FIBER INFO: Updating value in array by index ...")
 
-	var bools []bool
-	var ints []int
-	var strings []string
-	var typeOfArray string
+	var array interface{}
 	arrayVarName := instructionData.FieldByName("ArrayVarName").Interface().(string)
 	if val := variable.SearchVariable(arrayVarName).Value; val != nil {
-		switch val := val.(type) {
-		case []bool:
-			bools = val
-			typeOfArray = "bool"
-		case []int:
-			ints = val
-			typeOfArray = "int"
-		case []string:
-			strings = val
-			typeOfArray = "string"
-		default:
-			fmt.Println("FIBER WARNING: Type error on updating value in array")
-			finished <- true
-			return -1
-		}
+		array = val
 	} else {
 		finished <- true
 		return -1
@@ -515,37 +376,25 @@ func UpdateValue(instructionData reflect.Value, finished chan bool) int {
 		index = instructionData.FieldByName("Index").Interface().(int)
 	}
 
-	var boolValue bool
-	var intValue int
-	var stringValue string
+	var value interface{}
 	valueVarName := instructionData.FieldByName("ValueVarName").Interface().(string)
 	if val := variable.SearchVariable(valueVarName).Value; val != nil {
-		switch val := val.(type) {
-		case bool:
-			boolValue = val
-		case int:
-			intValue = int(val)
-		case string:
-			stringValue = val
-		default:
-			fmt.Println("FIBER WARNING: Type error on pushing value in array")
-			finished <- true
-			return -1
-		}
+		value = val
 	} else {
 		finished <- true
 		return -1
 	}
 
-	if typeOfArray == "bool" {
-		bools[index] = boolValue
-		variable.SetVariable(arrayVarName, bools)
-	} else if typeOfArray == "int" {
-		ints[index] = intValue
-		variable.SetVariable(arrayVarName, ints)
-	} else {
-		strings[index] = stringValue
-		variable.SetVariable(arrayVarName, strings)
+	switch variable.GetVariableType(array) {
+	case "[]bool":
+		array.([]bool)[index] = value.(bool)
+		variable.SetVariable(arrayVarName, array.([]bool))
+	case "[]int":
+		array.([]int)[index] = value.(int)
+		variable.SetVariable(arrayVarName, array.([]int))
+	case "[]string":
+		array.([]string)[index] = value.(string)
+		variable.SetVariable(arrayVarName, array.([]string))
 	}
 	finished <- true
 	return -1

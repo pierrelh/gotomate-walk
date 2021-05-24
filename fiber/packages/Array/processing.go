@@ -14,6 +14,11 @@ func Processing(funcName string, instructionData reflect.Value, finished chan bo
 			nextID = GetArrayLength(instructionData, finished)
 		}()
 		<-finished
+	case "GetValue":
+		go func() {
+			nextID = GetValue(instructionData, finished)
+		}()
+		<-finished
 	case "PopAt":
 		go func() {
 			nextID = PopAt(instructionData, finished)
