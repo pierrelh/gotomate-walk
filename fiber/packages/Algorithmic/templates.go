@@ -91,7 +91,7 @@ var ForTemplate = []declarative.Widget{
 // IfTemplate Dialog's If Template
 var IfTemplate = []declarative.Widget{
 	declarative.GroupBox{
-		Title:  "Value 1:",
+		Title:  "Value 1",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -121,7 +121,7 @@ var IfTemplate = []declarative.Widget{
 		Model:         Comparators(),
 	},
 	declarative.GroupBox{
-		Title:  "Value 2:",
+		Title:  "Value 2",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{

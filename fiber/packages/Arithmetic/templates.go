@@ -5,7 +5,7 @@ import "github.com/lxn/walk/declarative"
 // DivideTemplate Dialog's Divide Template
 var DivideTemplate = []declarative.Widget{
 	declarative.GroupBox{
-		Title:  "Value One:",
+		Title:  "Value One",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -31,7 +31,7 @@ var DivideTemplate = []declarative.Widget{
 		Font:          declarative.Font{Family: "Roboto", PointSize: 12, Bold: true},
 	},
 	declarative.GroupBox{
-		Title:  "Value Two:",
+		Title:  "Value Two",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -63,7 +63,7 @@ var DivideTemplate = []declarative.Widget{
 // MultiplyTemplate Dialog's Multiply Template
 var MultiplyTemplate = []declarative.Widget{
 	declarative.GroupBox{
-		Title:  "Value One:",
+		Title:  "Value One",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -89,7 +89,7 @@ var MultiplyTemplate = []declarative.Widget{
 		Font:          declarative.Font{Family: "Roboto", PointSize: 12, Bold: true},
 	},
 	declarative.GroupBox{
-		Title:  "Value Two:",
+		Title:  "Value Two",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -121,7 +121,7 @@ var MultiplyTemplate = []declarative.Widget{
 // PowTemplate Dialog's Pow Template
 var PowTemplate = []declarative.Widget{
 	declarative.GroupBox{
-		Title:  "Value One:",
+		Title:  "Value One",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -147,7 +147,7 @@ var PowTemplate = []declarative.Widget{
 		Font:          declarative.Font{Family: "Roboto", PointSize: 12, Bold: true},
 	},
 	declarative.GroupBox{
-		Title:  "Value Two:",
+		Title:  "Value Two",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -184,7 +184,7 @@ var SqrtTemplate = []declarative.Widget{
 		Font:          declarative.Font{Family: "Roboto", PointSize: 12, Bold: true},
 	},
 	declarative.GroupBox{
-		Title:  "Value:",
+		Title:  "Value",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -216,7 +216,7 @@ var SqrtTemplate = []declarative.Widget{
 // SubstractTemplate Dialog's Substract Template
 var SubstractTemplate = []declarative.Widget{
 	declarative.GroupBox{
-		Title:  "Value One:",
+		Title:  "Value One",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -242,7 +242,7 @@ var SubstractTemplate = []declarative.Widget{
 		Font:          declarative.Font{Family: "Roboto", PointSize: 12, Bold: true},
 	},
 	declarative.GroupBox{
-		Title:  "Value Two:",
+		Title:  "Value Two",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -274,7 +274,7 @@ var SubstractTemplate = []declarative.Widget{
 // SumTemplate Dialog's Sum Template
 var SumTemplate = []declarative.Widget{
 	declarative.GroupBox{
-		Title:  "Value One:",
+		Title:  "Value One",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -300,7 +300,7 @@ var SumTemplate = []declarative.Widget{
 		Font:          declarative.Font{Family: "Roboto", PointSize: 12, Bold: true},
 	},
 	declarative.GroupBox{
-		Title:  "Value Two:",
+		Title:  "Value Two",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{

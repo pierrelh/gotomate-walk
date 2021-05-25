@@ -35,7 +35,7 @@ var TapTemplate = []declarative.Widget{
 // TypeTemplate Dialog's KeyboardType Template
 var TypeTemplate = []declarative.Widget{
 	declarative.GroupBox{
-		Title:  "Input:",
+		Title:  "Input",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -44,9 +44,8 @@ var TypeTemplate = []declarative.Widget{
 				CompactHeight: true,
 			},
 			declarative.TextEdit{
-				Text:          declarative.Bind("Input"),
-				Visible:       declarative.Bind("!IsAVar.Checked"),
-				CompactHeight: true,
+				Text:    declarative.Bind("Input"),
+				Visible: declarative.Bind("!IsAVar.Checked"),
 			},
 			declarative.CheckBox{
 				Name:    "IsAVar",

@@ -4,6 +4,7 @@ import (
 	"fmt"
 	// DON'T REMOVE ME / New packages inserted here
 	algorithmic "gotomate/fiber/packages/Algorithmic"
+	api "gotomate/fiber/packages/Api"
 	arithmetic "gotomate/fiber/packages/Arithmetic"
 	array "gotomate/fiber/packages/Array"
 	battery "gotomate/fiber/packages/Battery"
@@ -11,9 +12,11 @@ import (
 	clipboard "gotomate/fiber/packages/Clipboard"
 	conversion "gotomate/fiber/packages/Conversion"
 	define "gotomate/fiber/packages/Define"
+	dictionary "gotomate/fiber/packages/Dictionary"
 	file "gotomate/fiber/packages/File"
 	flow "gotomate/fiber/packages/Flow"
 	input "gotomate/fiber/packages/Input"
+	gotomatejson "gotomate/fiber/packages/Json"
 	keyboard "gotomate/fiber/packages/Keyboard"
 	log "gotomate/fiber/packages/Log"
 	mouse "gotomate/fiber/packages/Mouse"
@@ -107,6 +110,8 @@ func PackageDecode(packageName string, funcName string) (interface{}, []declarat
 	// DON'T REMOVE ME / New Build inserted here
 	case "Algorithmic":
 		return algorithmic.Build(funcName)
+	case "Api":
+		return api.Build(funcName)
 	case "Arithmetic":
 		return arithmetic.Build(funcName)
 	case "Array":
@@ -121,10 +126,14 @@ func PackageDecode(packageName string, funcName string) (interface{}, []declarat
 		return conversion.Build(funcName)
 	case "Define":
 		return define.Build(funcName)
+	case "Dictionary":
+		return dictionary.Build(funcName)
 	case "File":
 		return file.Build(funcName)
 	case "Input":
 		return input.Build(funcName)
+	case "Json":
+		return gotomatejson.Build(funcName)
 	case "Keyboard":
 		return keyboard.Build(funcName)
 	case "Log":

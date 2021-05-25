@@ -27,7 +27,7 @@ var GetVolumeTemplate = []declarative.Widget{
 // SetVolumeTemplate Dialog's SetVolume Template
 var SetVolumeTemplate = []declarative.Widget{
 	declarative.GroupBox{
-		Title:  "Set Volume to:",
+		Title:  "Set Volume to",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{

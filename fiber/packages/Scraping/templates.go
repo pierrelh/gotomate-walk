@@ -29,9 +29,8 @@ var AddAllowedDomainTemplate = []declarative.Widget{
 				CompactHeight: true,
 			},
 			declarative.TextEdit{
-				Text:          declarative.Bind("Path"),
-				Visible:       declarative.Bind("!PathIsAVar.Checked"),
-				CompactHeight: true,
+				Text:    declarative.Bind("Path"),
+				Visible: declarative.Bind("!PathIsAVar.Checked"),
 			},
 			declarative.CheckBox{
 				Name:    "PathIsAVar",
@@ -69,9 +68,8 @@ var AddDisallowedDomainTemplate = []declarative.Widget{
 				CompactHeight: true,
 			},
 			declarative.TextEdit{
-				Text:          declarative.Bind("Path"),
-				Visible:       declarative.Bind("!PathIsAVar.Checked"),
-				CompactHeight: true,
+				Text:    declarative.Bind("Path"),
+				Visible: declarative.Bind("!PathIsAVar.Checked"),
 			},
 			declarative.CheckBox{
 				Name:    "PathIsAVar",
@@ -161,9 +159,8 @@ var OnFindScrapAttributeTemplate = []declarative.Widget{
 				CompactHeight: true,
 			},
 			declarative.TextEdit{
-				Text:          declarative.Bind("Element"),
-				Visible:       declarative.Bind("!ElementIsAVar.Checked"),
-				CompactHeight: true,
+				Text:    declarative.Bind("Element"),
+				Visible: declarative.Bind("!ElementIsAVar.Checked"),
 			},
 			declarative.CheckBox{
 				Name:    "ElementIsAVar",
@@ -182,9 +179,8 @@ var OnFindScrapAttributeTemplate = []declarative.Widget{
 				CompactHeight: true,
 			},
 			declarative.TextEdit{
-				Text:          declarative.Bind("Attribute"),
-				Visible:       declarative.Bind("!AttributeIsAVar.Checked"),
-				CompactHeight: true,
+				Text:    declarative.Bind("Attribute"),
+				Visible: declarative.Bind("!AttributeIsAVar.Checked"),
 			},
 			declarative.CheckBox{
 				Name:    "AttributeIsAVar",
@@ -237,9 +233,8 @@ var OnFindScrapChildAttributeTemplate = []declarative.Widget{
 				CompactHeight: true,
 			},
 			declarative.TextEdit{
-				Text:          declarative.Bind("Element"),
-				Visible:       declarative.Bind("!ElementIsAVar.Checked"),
-				CompactHeight: true,
+				Text:    declarative.Bind("Element"),
+				Visible: declarative.Bind("!ElementIsAVar.Checked"),
 			},
 			declarative.CheckBox{
 				Name:    "ElementIsAVar",
@@ -258,9 +253,8 @@ var OnFindScrapChildAttributeTemplate = []declarative.Widget{
 				CompactHeight: true,
 			},
 			declarative.TextEdit{
-				Text:          declarative.Bind("ChildAttribute"),
-				Visible:       declarative.Bind("!ChildAttributeIsAVar.Checked"),
-				CompactHeight: true,
+				Text:    declarative.Bind("ChildAttribute"),
+				Visible: declarative.Bind("!ChildAttributeIsAVar.Checked"),
 			},
 			declarative.CheckBox{
 				Name:    "ChildAttributeIsAVar",
@@ -279,9 +273,8 @@ var OnFindScrapChildAttributeTemplate = []declarative.Widget{
 				CompactHeight: true,
 			},
 			declarative.TextEdit{
-				Text:          declarative.Bind("Attribute"),
-				Visible:       declarative.Bind("!AttributeIsAVar.Checked"),
-				CompactHeight: true,
+				Text:    declarative.Bind("Attribute"),
+				Visible: declarative.Bind("!AttributeIsAVar.Checked"),
 			},
 			declarative.CheckBox{
 				Name:    "AttributeIsAVar",
@@ -334,9 +327,8 @@ var OnFindScrapTextTemplate = []declarative.Widget{
 				CompactHeight: true,
 			},
 			declarative.TextEdit{
-				Text:          declarative.Bind("Element"),
-				Visible:       declarative.Bind("!ElementIsAVar.Checked"),
-				CompactHeight: true,
+				Text:    declarative.Bind("Element"),
+				Visible: declarative.Bind("!ElementIsAVar.Checked"),
 			},
 			declarative.CheckBox{
 				Name:    "ElementIsAVar",
@@ -389,9 +381,8 @@ var OnFindScrapChildTextTemplate = []declarative.Widget{
 				CompactHeight: true,
 			},
 			declarative.TextEdit{
-				Text:          declarative.Bind("Element"),
-				Visible:       declarative.Bind("!ElementIsAVar.Checked"),
-				CompactHeight: true,
+				Text:    declarative.Bind("Element"),
+				Visible: declarative.Bind("!ElementIsAVar.Checked"),
 			},
 			declarative.CheckBox{
 				Name:    "ElementIsAVar",
@@ -410,9 +401,8 @@ var OnFindScrapChildTextTemplate = []declarative.Widget{
 				CompactHeight: true,
 			},
 			declarative.TextEdit{
-				Text:          declarative.Bind("ChildAttribute"),
-				Visible:       declarative.Bind("!ChildAttributeIsAVar.Checked"),
-				CompactHeight: true,
+				Text:    declarative.Bind("ChildAttribute"),
+				Visible: declarative.Bind("!ChildAttributeIsAVar.Checked"),
 			},
 			declarative.CheckBox{
 				Name:    "ChildAttributeIsAVar",
@@ -465,9 +455,8 @@ var OnFindVisitTemplate = []declarative.Widget{
 				CompactHeight: true,
 			},
 			declarative.TextEdit{
-				Text:          declarative.Bind("Element"),
-				Visible:       declarative.Bind("!ElementIsAVar.Checked"),
-				CompactHeight: true,
+				Text:    declarative.Bind("Element"),
+				Visible: declarative.Bind("!ElementIsAVar.Checked"),
 			},
 			declarative.CheckBox{
 				Name:    "ElementIsAVar",
@@ -505,9 +494,8 @@ var OnFindChildVisitTemplate = []declarative.Widget{
 				CompactHeight: true,
 			},
 			declarative.TextEdit{
-				Text:          declarative.Bind("Element"),
-				Visible:       declarative.Bind("!ElementIsAVar.Checked"),
-				CompactHeight: true,
+				Text:    declarative.Bind("Element"),
+				Visible: declarative.Bind("!ElementIsAVar.Checked"),
 			},
 			declarative.CheckBox{
 				Name:    "ElementIsAVar",
@@ -526,9 +514,8 @@ var OnFindChildVisitTemplate = []declarative.Widget{
 				CompactHeight: true,
 			},
 			declarative.TextEdit{
-				Text:          declarative.Bind("ChildAttribute"),
-				Visible:       declarative.Bind("!ChildAttributeIsAVar.Checked"),
-				CompactHeight: true,
+				Text:    declarative.Bind("ChildAttribute"),
+				Visible: declarative.Bind("!ChildAttributeIsAVar.Checked"),
 			},
 			declarative.CheckBox{
 				Name:    "ChildAttributeIsAVar",
@@ -606,9 +593,8 @@ var ScrapStartTemplate = []declarative.Widget{
 				CompactHeight: true,
 			},
 			declarative.TextEdit{
-				Text:          declarative.Bind("Url"),
-				Visible:       declarative.Bind("!UrlIsAVar.Checked"),
-				CompactHeight: true,
+				Text:    declarative.Bind("Url"),
+				Visible: declarative.Bind("!UrlIsAVar.Checked"),
 			},
 			declarative.CheckBox{
 				Name:    "UrlIsAVar",

@@ -5,7 +5,7 @@ import "github.com/lxn/walk/declarative"
 // EndTemplate Dialog's End Template
 var EndTemplate = []declarative.Widget{
 	declarative.GroupBox{
-		Title:  "Chronometer value:",
+		Title:  "Chronometer value",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{

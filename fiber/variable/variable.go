@@ -189,3 +189,17 @@ func GetFloat(unk interface{}) float64 {
 		}
 	}
 }
+
+// GetString Return the string value of an interface
+func GetString(unk interface{}) string {
+	str := fmt.Sprintf("%v", unk)
+	return str
+}
+
+func ToArrayOfString(unk []interface{}) []string {
+	var strings []string
+	for _, element := range unk {
+		strings = append(strings, GetString(element))
+	}
+	return strings
+}

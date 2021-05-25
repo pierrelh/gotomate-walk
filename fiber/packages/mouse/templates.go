@@ -30,6 +30,7 @@ var DragTemplate = []declarative.Widget{
 				Visible:  declarative.Bind("!XIsAVar.Checked"),
 				Value:    declarative.Bind("X"),
 				Decimals: 0,
+				Suffix:   " px",
 			},
 			declarative.CheckBox{
 				Name:    "XIsAVar",
@@ -51,6 +52,7 @@ var DragTemplate = []declarative.Widget{
 				Value:    declarative.Bind("Y"),
 				Visible:  declarative.Bind("!YIsAVar.Checked"),
 				Decimals: 0,
+				Suffix:   " px",
 			},
 			declarative.CheckBox{
 				Name:    "YIsAVar",
