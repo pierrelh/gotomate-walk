@@ -14,7 +14,7 @@ var ArrayTemplate = []declarative.Widget{
 		CompactHeight: true,
 	},
 	declarative.GroupBox{
-		Title:  "Values (separated by ',' without spaces):",
+		Title:  "Values (separated by ',' without spaces)",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -23,9 +23,8 @@ var ArrayTemplate = []declarative.Widget{
 				CompactHeight: true,
 			},
 			declarative.TextEdit{
-				Text:               declarative.Bind("Value"),
-				Visible:            declarative.Bind("!IsAVar.Checked"),
-				AlwaysConsumeSpace: true,
+				Text:    declarative.Bind("Value"),
+				Visible: declarative.Bind("!IsAVar.Checked"),
 			},
 			declarative.CheckBox{
 				Name:    "IsAVar",
@@ -46,7 +45,7 @@ var BoolTemplate = []declarative.Widget{
 		CompactHeight: true,
 	},
 	declarative.GroupBox{
-		Title:  "Value:",
+		Title:  "Value",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -79,7 +78,7 @@ var FloatTemplate = []declarative.Widget{
 		CompactHeight: true,
 	},
 	declarative.GroupBox{
-		Title:  "Value:",
+		Title:  "Value",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -111,7 +110,7 @@ var IntTemplate = []declarative.Widget{
 		CompactHeight: true,
 	},
 	declarative.GroupBox{
-		Title:  "Value:",
+		Title:  "Value",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -143,7 +142,7 @@ var StringTemplate = []declarative.Widget{
 		CompactHeight: true,
 	},
 	declarative.GroupBox{
-		Title:  "Value:",
+		Title:  "Value",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -152,9 +151,8 @@ var StringTemplate = []declarative.Widget{
 				CompactHeight: true,
 			},
 			declarative.TextEdit{
-				Text:          declarative.Bind("Value"),
-				Visible:       declarative.Bind("!IsAVar.Checked"),
-				CompactHeight: true,
+				Text:    declarative.Bind("Value"),
+				Visible: declarative.Bind("!IsAVar.Checked"),
 			},
 			declarative.CheckBox{
 				Name:    "IsAVar",

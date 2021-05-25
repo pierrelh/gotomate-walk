@@ -98,9 +98,8 @@ var PartScreenShotTemplate = []declarative.Widget{
 				CompactHeight: true,
 			},
 			declarative.TextEdit{
-				Text:          declarative.Bind("Path"),
-				Visible:       declarative.Bind("!PathIsAVar.Checked"),
-				CompactHeight: true,
+				Text:    declarative.Bind("Path"),
+				Visible: declarative.Bind("!PathIsAVar.Checked"),
 			},
 			declarative.CheckBox{
 				Name:    "PathIsAVar",
@@ -207,9 +206,8 @@ var ScreenShotTemplate = []declarative.Widget{
 				CompactHeight: true,
 			},
 			declarative.TextEdit{
-				Text:          declarative.Bind("Path"),
-				Visible:       declarative.Bind("!PathIsAVar.Checked"),
-				CompactHeight: true,
+				Text:    declarative.Bind("Path"),
+				Visible: declarative.Bind("!PathIsAVar.Checked"),
 			},
 			declarative.CheckBox{
 				Name:    "PathIsAVar",

@@ -35,9 +35,8 @@ var CreateTemplate = []declarative.Widget{
 				CompactHeight: true,
 			},
 			declarative.TextEdit{
-				Text:          declarative.Bind("Message"),
-				Visible:       declarative.Bind("!MessageIsAVar.Checked"),
-				CompactHeight: true,
+				Text:    declarative.Bind("Message"),
+				Visible: declarative.Bind("!MessageIsAVar.Checked"),
 			},
 			declarative.CheckBox{
 				Name:    "MessageIsAVar",

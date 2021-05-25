@@ -5,7 +5,7 @@ import "github.com/lxn/walk/declarative"
 // CreateTemplate Dialog's Create Template
 var CreateTemplate = []declarative.Widget{
 	declarative.GroupBox{
-		Title:  "Path:",
+		Title:  "Path",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -29,7 +29,7 @@ var CreateTemplate = []declarative.Widget{
 // DeleteTemplate Dialog's Delete Template
 var DeleteTemplate = []declarative.Widget{
 	declarative.GroupBox{
-		Title:  "Path:",
+		Title:  "Path",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -53,7 +53,7 @@ var DeleteTemplate = []declarative.Widget{
 // ReadTemplate Dialog's Read Template
 var ReadTemplate = []declarative.Widget{
 	declarative.GroupBox{
-		Title:  "Path:",
+		Title:  "Path",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -84,7 +84,7 @@ var ReadTemplate = []declarative.Widget{
 // WriteTemplate Dialog's Write Template
 var WriteTemplate = []declarative.Widget{
 	declarative.GroupBox{
-		Title:  "Path:",
+		Title:  "Path",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -104,7 +104,7 @@ var WriteTemplate = []declarative.Widget{
 		},
 	},
 	declarative.GroupBox{
-		Title:  "Content:",
+		Title:  "Content",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{

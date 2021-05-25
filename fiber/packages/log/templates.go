@@ -14,9 +14,8 @@ var PrintTemplate = []declarative.Widget{
 				CompactHeight: true,
 			},
 			declarative.TextEdit{
-				Text:          declarative.Bind("Log"),
-				Visible:       declarative.Bind("!IsAVar.Checked"),
-				CompactHeight: true,
+				Text:    declarative.Bind("Log"),
+				Visible: declarative.Bind("!IsAVar.Checked"),
 			},
 			declarative.CheckBox{
 				Name:    "IsAVar",

@@ -5,7 +5,7 @@ import "github.com/lxn/walk/declarative"
 // GetArrayLengthTemplate Dialog's GetArrayLength Template
 var GetArrayLengthTemplate = []declarative.Widget{
 	declarative.GroupBox{
-		Title:  "Array:",
+		Title:  "Array",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -31,7 +31,7 @@ var GetArrayLengthTemplate = []declarative.Widget{
 // GetValueTemplate Dialog's GetValue Template
 var GetValueTemplate = []declarative.Widget{
 	declarative.GroupBox{
-		Title:  "Array:",
+		Title:  "Array",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -46,7 +46,7 @@ var GetValueTemplate = []declarative.Widget{
 		},
 	},
 	declarative.GroupBox{
-		Title:  "Index to get:",
+		Title:  "Index to get",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -78,7 +78,7 @@ var GetValueTemplate = []declarative.Widget{
 // PopAtTemplate Dialog's PopAt Template
 var PopAtTemplate = []declarative.Widget{
 	declarative.GroupBox{
-		Title:  "Array:",
+		Title:  "Array",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -93,7 +93,7 @@ var PopAtTemplate = []declarative.Widget{
 		},
 	},
 	declarative.GroupBox{
-		Title:  "Index to pop:",
+		Title:  "Index to pop",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -125,7 +125,7 @@ var PopAtTemplate = []declarative.Widget{
 // PopLastTemplate Dialog's PopLast Template
 var PopLastTemplate = []declarative.Widget{
 	declarative.GroupBox{
-		Title:  "Array:",
+		Title:  "Array",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -151,7 +151,7 @@ var PopLastTemplate = []declarative.Widget{
 // PushAtTemplate Dialog's PushAt Template
 var PushAtTemplate = []declarative.Widget{
 	declarative.GroupBox{
-		Title:  "Array:",
+		Title:  "Array",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -166,7 +166,7 @@ var PushAtTemplate = []declarative.Widget{
 		},
 	},
 	declarative.GroupBox{
-		Title:  "Index to push at:",
+		Title:  "Index to push at",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -187,7 +187,7 @@ var PushAtTemplate = []declarative.Widget{
 		},
 	},
 	declarative.GroupBox{
-		Title:  "Value to push:",
+		Title:  "Value to push",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -206,7 +206,7 @@ var PushAtTemplate = []declarative.Widget{
 // PushLastTemplate Dialog's PushLast Template
 var PushLastTemplate = []declarative.Widget{
 	declarative.GroupBox{
-		Title:  "Array:",
+		Title:  "Array",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -221,7 +221,7 @@ var PushLastTemplate = []declarative.Widget{
 		},
 	},
 	declarative.GroupBox{
-		Title:  "Value to push:",
+		Title:  "Value to push",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -240,7 +240,7 @@ var PushLastTemplate = []declarative.Widget{
 // RemoveAtTemplate Dialog's RemoveAt Template
 var RemoveAtTemplate = []declarative.Widget{
 	declarative.GroupBox{
-		Title:  "Array:",
+		Title:  "Array",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -255,7 +255,7 @@ var RemoveAtTemplate = []declarative.Widget{
 		},
 	},
 	declarative.GroupBox{
-		Title:  "Index to remove:",
+		Title:  "Index to remove",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -280,7 +280,7 @@ var RemoveAtTemplate = []declarative.Widget{
 // RemoveLastTemplate Dialog's RemoveLast Template
 var RemoveLastTemplate = []declarative.Widget{
 	declarative.GroupBox{
-		Title:  "Array:",
+		Title:  "Array",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -299,7 +299,7 @@ var RemoveLastTemplate = []declarative.Widget{
 // ShuffleTemplate Dialog's Shuffle Template
 var ShuffleTemplate = []declarative.Widget{
 	declarative.GroupBox{
-		Title:  "Array:",
+		Title:  "Array",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -318,7 +318,7 @@ var ShuffleTemplate = []declarative.Widget{
 // UpdateValueTemplate Dialog's UpdateValue Template
 var UpdateValueTemplate = []declarative.Widget{
 	declarative.GroupBox{
-		Title:  "Array:",
+		Title:  "Array",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -333,7 +333,7 @@ var UpdateValueTemplate = []declarative.Widget{
 		},
 	},
 	declarative.GroupBox{
-		Title:  "Index to update:",
+		Title:  "Index to update",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
@@ -354,7 +354,7 @@ var UpdateValueTemplate = []declarative.Widget{
 		},
 	},
 	declarative.GroupBox{
-		Title:  "New value:",
+		Title:  "New value",
 		Layout: declarative.HBox{},
 		Children: []declarative.Widget{
 			declarative.TextEdit{
