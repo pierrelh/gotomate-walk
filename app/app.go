@@ -23,6 +23,8 @@ var newFiber = fiber.NewFiber
 
 // CreateApp Initiate the app
 func CreateApp() {
+	walk.NewImageFromFile(walk.Resources.RootDirPath() + "/img/background.png")
+	bmp, _ := walk.NewBitmapFromFileForDPI(walk.Resources.RootDirPath()+"/img/background.png", 96)
 
 	if err := (declarative.MainWindow{
 		AssignTo:   &aw.MainWindow,
@@ -222,9 +224,10 @@ func CreateApp() {
 				},
 			},
 			declarative.ScrollView{
-				AssignTo:        &aw.ScrollView,
-				Layout:          declarative.Grid{Columns: 1, Margins: declarative.Margins{Bottom: 2000, Right: 2000}},
-				Background:      declarative.SolidColorBrush{Color: walk.RGB(11, 11, 11)},
+				AssignTo:   &aw.ScrollView,
+				Layout:     declarative.Grid{Columns: 1, Margins: declarative.Margins{Bottom: 2000, Right: 2000}},
+				Background: declarative.BitmapBrush{Image: bmp},
+				// Background:      declarative.SolidColorBrush{Color: walk.RGB(11, 11, 11)},
 				HorizontalFixed: false,
 				VerticalFixed:   false,
 			},
