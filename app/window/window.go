@@ -109,13 +109,13 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 		Layout: declarative.Grid{
 			Columns: 1,
 			Margins: declarative.Margins{
-				Left:   walk.IntTo96DPI(15, dpi),
-				Top:    walk.IntTo96DPI(15, dpi),
-				Right:  walk.IntTo96DPI(15, dpi),
-				Bottom: walk.IntTo96DPI(10, dpi)},
+				Left:   walk.IntTo96DPI(10, dpi),
+				Top:    walk.IntTo96DPI(10, dpi),
+				Right:  walk.IntTo96DPI(10, dpi),
+				Bottom: walk.IntTo96DPI(5, dpi)},
 			SpacingZero: true,
 		},
-		MinSize:    declarative.Size{Width: walk.IntTo96DPI(330, dpi), Height: walk.IntTo96DPI(165, dpi)},
+		MinSize:    declarative.Size{Width: walk.IntTo96DPI(325, dpi), Height: walk.IntTo96DPI(175, dpi)},
 		Row:        row,
 		Background: declarative.BitmapBrush{Image: bmp},
 		OnMouseDown: func(x, y int, button walk.MouseButton) {
@@ -128,7 +128,7 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 				difX := clientX - mx
 				difY := clientY - my
 				moved = true
-				if difX < -50 || difX > 50 {
+				if difX < -20 || difX > 20 {
 					if fb.Composite.XPixels()-difX < 0 {
 						fb.Composite.SetXPixels(0)
 						instruction.X = 0
@@ -136,16 +136,16 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 						fb.Composite.SetX(aw.ScrollView.Layout().Margins().HFar)
 						instruction.X = aw.ScrollView.Layout().Margins().HFar
 					} else {
-						if difX > 50 {
-							fb.Composite.SetXPixels(fb.Composite.XPixels() - 55)
+						if difX > 20 {
+							fb.Composite.SetXPixels(fb.Composite.XPixels() - 25)
 						} else {
-							fb.Composite.SetXPixels(fb.Composite.XPixels() + 55)
+							fb.Composite.SetXPixels(fb.Composite.XPixels() + 25)
 						}
 						instruction.X = fb.Composite.XPixels()
 						clientX, _ = robotgo.GetMousePos()
 					}
 				}
-				if difY < -50 || difY > 50 {
+				if difY < -20 || difY > 20 {
 					if fb.Composite.YPixels()-difY < 0 {
 						fb.Composite.SetYPixels(0)
 						instruction.Y = 0
@@ -153,10 +153,10 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 						fb.Composite.SetY(aw.ScrollView.Layout().Margins().VFar)
 						instruction.Y = aw.ScrollView.Layout().Margins().VFar
 					} else {
-						if difY > 50 {
-							fb.Composite.SetYPixels(fb.Composite.YPixels() - 55)
+						if difY > 20 {
+							fb.Composite.SetYPixels(fb.Composite.YPixels() - 25)
 						} else {
-							fb.Composite.SetYPixels(fb.Composite.YPixels() + 55)
+							fb.Composite.SetYPixels(fb.Composite.YPixels() + 25)
 						}
 						instruction.Y = fb.Composite.YPixels()
 						_, clientY = robotgo.GetMousePos()
@@ -186,14 +186,14 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 		Children: []declarative.Widget{
 			declarative.LinkLabel{
 				AssignTo:  &fb.IDLabel,
-				MinSize:   declarative.Size{Width: walk.IntTo96DPI(300, dpi), Height: walk.IntTo96DPI(50, dpi)},
+				MinSize:   declarative.Size{Width: walk.IntTo96DPI(300, dpi), Height: walk.IntTo96DPI(70, dpi)},
 				Font:      declarative.Font{PointSize: walk.IntTo96DPI(9, dpi)},
 				Text:      strconv.Itoa(instruction.ID),
 				Alignment: declarative.Alignment2D(walk.AlignHNearVNear),
 			},
 			declarative.LinkLabel{
 				AssignTo:  &fb.FuncLabel,
-				MinSize:   declarative.Size{Width: walk.IntTo96DPI(300, dpi), Height: walk.IntTo96DPI(50, dpi)},
+				MinSize:   declarative.Size{Width: walk.IntTo96DPI(300, dpi), Height: walk.IntTo96DPI(40, dpi)},
 				Font:      declarative.Font{PointSize: walk.IntTo96DPI(10, dpi), Bold: true},
 				Text:      instruction.FuncName,
 				Alignment: declarative.Alignment2D(walk.AlignHCenterVCenter),
@@ -202,7 +202,7 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 				AssignTo:           &fb.NextIDComposite,
 				AlwaysConsumeSpace: true,
 				Alignment:          declarative.Alignment2D(walk.AlignHCenterVCenter),
-				MinSize:            declarative.Size{Width: walk.IntTo96DPI(300, dpi), Height: walk.IntTo96DPI(40, dpi)},
+				MinSize:            declarative.Size{Width: walk.IntTo96DPI(300, dpi), Height: walk.IntTo96DPI(50, dpi)},
 				Layout:             declarative.HBox{MarginsZero: true, SpacingZero: true},
 				Children: []declarative.Widget{
 					declarative.Label{
@@ -314,11 +314,12 @@ func (aw *Window) Clear() {
 
 // CleanScrollView Dispose & recreate the MainWindow's ScrollView & empty the NewButtons slice
 func (aw *Window) CleanScrollView() error {
+	bmp, _ := walk.NewBitmapFromFileForDPI(walk.Resources.RootDirPath()+"/img/background.png", 96)
 	aw.ScrollView.Dispose()
 	if err := (declarative.ScrollView{
 		AssignTo:        &aw.ScrollView,
 		Layout:          declarative.Grid{Columns: 1, Margins: declarative.Margins{Bottom: 2000, Right: 2000}},
-		Background:      declarative.SolidColorBrush{Color: walk.RGB(11, 11, 11)},
+		Background:      declarative.BitmapBrush{Image: bmp},
 		HorizontalFixed: false,
 		VerticalFixed:   false,
 	}).Create(declarative.NewBuilder(aw.MainWindow)); err != nil {
