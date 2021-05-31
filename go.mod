@@ -14,7 +14,7 @@ require (
 	github.com/jpillora/overseer v1.1.6
 	github.com/kr/text v0.2.0 // indirect
 	github.com/lxn/walk v0.0.0-20210112085537-c389da54e794
-	github.com/lxn/win v0.0.0-20210218163916-a377121e959e // indirect
+	github.com/lxn/win v0.0.0-20210218163916-a377121e959e
 	github.com/otiai10/mint v1.3.2 // indirect
 	github.com/psimoesSsimoes/i-brightness v0.0.0-20171126121719-72ae2db95555 // indirect
 	github.com/psimoesSsimoes/mbair-brightness v0.0.0-20171126121719-72ae2db95555

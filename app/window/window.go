@@ -44,6 +44,7 @@ type Window struct {
 	RunButton        *walk.PushButton
 	StopButton       *walk.PushButton
 	ScrollView       *walk.ScrollView
+	DPI              int
 }
 
 //PlbItemActivated Fill the Secondary list when an element of the Primary is activated
@@ -94,6 +95,7 @@ func (aw *Window) SlbItemActivated(currentFiber *fiber.Fiber) {
 // CreateFiberButton Create a new Fiberbutton in the fiber
 func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *packages.Dialog, isDeletable bool) error {
 	fb := new(button.Button)
+	var dpi = aw.MainWindow.DPI()
 	NewButtons.Buttons = append(NewButtons.Buttons, fb)
 	fb.Dialog = dialog
 	bmp, err := walk.NewBitmapFromFileForDPI(walk.Resources.RootDirPath()+"/fiber/packages/"+instruction.Package+"/icon.png", 96)
@@ -102,10 +104,18 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 	}
 
 	if err := (declarative.Composite{
-		AssignTo:   &fb.Composite,
-		Layout:     declarative.Grid{Columns: 1, Margins: declarative.Margins{Left: 10, Top: 10, Right: 10, Bottom: 5}, SpacingZero: true},
-		MinSize:    declarative.Size{Width: 300, Height: 150},
-		MaxSize:    declarative.Size{Width: 300, Height: 150},
+		AssignTo: &fb.Composite,
+		Font:     declarative.Font{Family: "Roboto"},
+		Layout: declarative.Grid{
+			Columns: 1,
+			Margins: declarative.Margins{
+				Left:   walk.IntTo96DPI(15, dpi),
+				Top:    walk.IntTo96DPI(15, dpi),
+				Right:  walk.IntTo96DPI(15, dpi),
+				Bottom: walk.IntTo96DPI(10, dpi)},
+			SpacingZero: true,
+		},
+		MinSize:    declarative.Size{Width: walk.IntTo96DPI(330, dpi), Height: walk.IntTo96DPI(165, dpi)},
 		Row:        row,
 		Background: declarative.BitmapBrush{Image: bmp},
 		OnMouseDown: func(x, y int, button walk.MouseButton) {
@@ -176,17 +186,15 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 		Children: []declarative.Widget{
 			declarative.LinkLabel{
 				AssignTo:  &fb.IDLabel,
-				MinSize:   declarative.Size{Width: 280, Height: 50},
-				MaxSize:   declarative.Size{Width: 280, Height: 50},
-				Font:      declarative.Font{Family: "Roboto", PointSize: 7},
+				MinSize:   declarative.Size{Width: walk.IntTo96DPI(300, dpi), Height: walk.IntTo96DPI(50, dpi)},
+				Font:      declarative.Font{PointSize: walk.IntTo96DPI(9, dpi)},
 				Text:      strconv.Itoa(instruction.ID),
 				Alignment: declarative.Alignment2D(walk.AlignHNearVNear),
 			},
 			declarative.LinkLabel{
 				AssignTo:  &fb.FuncLabel,
-				MinSize:   declarative.Size{Width: 280, Height: 50},
-				MaxSize:   declarative.Size{Width: 280, Height: 50},
-				Font:      declarative.Font{Family: "Roboto", PointSize: 9, Bold: true},
+				MinSize:   declarative.Size{Width: walk.IntTo96DPI(300, dpi), Height: walk.IntTo96DPI(50, dpi)},
+				Font:      declarative.Font{PointSize: walk.IntTo96DPI(10, dpi), Bold: true},
 				Text:      instruction.FuncName,
 				Alignment: declarative.Alignment2D(walk.AlignHCenterVCenter),
 			},
@@ -194,20 +202,19 @@ func (aw *Window) CreateFiberButton(instruction *fiber.Instruction, dialog *pack
 				AssignTo:           &fb.NextIDComposite,
 				AlwaysConsumeSpace: true,
 				Alignment:          declarative.Alignment2D(walk.AlignHCenterVCenter),
-				MinSize:            declarative.Size{Width: 280, Height: 50},
-				MaxSize:            declarative.Size{Width: 280, Height: 50},
+				MinSize:            declarative.Size{Width: walk.IntTo96DPI(300, dpi), Height: walk.IntTo96DPI(40, dpi)},
 				Layout:             declarative.HBox{MarginsZero: true, SpacingZero: true},
 				Children: []declarative.Widget{
 					declarative.Label{
 						AssignTo:  &fb.NextIDLabel,
 						Text:      "Next:",
-						Font:      declarative.Font{Family: "Roboto", PointSize: 7},
+						Font:      declarative.Font{PointSize: walk.IntTo96DPI(9, dpi)},
 						Alignment: declarative.Alignment2D(walk.AlignHFarVCenter),
 					},
 					declarative.NumberEdit{
 						AssignTo:  &fb.NextID,
-						MaxSize:   declarative.Size{Width: 25},
-						Font:      declarative.Font{Family: "Roboto", PointSize: 7},
+						MaxSize:   declarative.Size{Width: walk.IntTo96DPI(35, dpi)},
+						Font:      declarative.Font{PointSize: walk.IntTo96DPI(9, dpi)},
 						Value:     float64(instruction.NextInstructionID),
 						Decimals:  0,
 						Alignment: declarative.Alignment2D(walk.AlignHNearVCenter),
