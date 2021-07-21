@@ -2,7 +2,7 @@
 
 Gotomate-Walk will no longer be updated, consider using Gotomate-Astilectron instead: https://github.com/pierrelh/gotomate-astilectron
 
-# Gotomate
+# Gotomate-Walk
 
 A Windows automate in Golang
 
@@ -15,7 +15,7 @@ This program currently use go-vgo/robotgo so be sure to have their requirements 
 ## Installation
 
 ```
-go get github.com/pierrelh/gotomate
+go get github.com/pierrelh/gotomate-walk
 ```
 
 ## Build
@@ -27,7 +27,7 @@ go build
 
 ## Update
 ```
-go get -u github.com/pierrelh/gotomate
+go get -u github.com/pierrelh/gotomate-walk
 ```
 
 ## Documentation
