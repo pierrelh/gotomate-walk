@@ -1,3 +1,7 @@
+# Attention
+
+Gotomate-Walk will no longer be updated, consider using Gotomate-Astilectron instead: https://github.com/pierrelh/gotomate-astilectron
+
 # Gotomate
 
 A Windows automate in Golang
