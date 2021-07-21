@@ -48,4 +48,4 @@ https://production-gotomate.herokuapp.com/resources/GetBatStateExemple.json
 
 You can create your own gotomate's packages using this repo:
 
-https://github.com/pierrelh/gotomate-package-template
+https://github.com/pierrelh/gotomate-walk-package-template
